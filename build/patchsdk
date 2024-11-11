@@ -1,0 +1,246 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 722b07b973..e607e21cdd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -16,10 +16,13 @@ endif()
+ if(NOT BOOTLOADER_BUILD)
+ 
+     if(CONFIG_COMPILER_OPTIMIZATION_SIZE)
+-        list(APPEND compile_options "-Os")
+         if(CMAKE_C_COMPILER_ID MATCHES "GNU")
++            list(APPEND compile_options "-Os")
+             list(APPEND compile_options "-freorder-blocks")
+         endif()
++        if(CMAKE_C_COMPILER_ID MATCHES "Clang")
++            list(APPEND compile_options "-Oz")
++        endif()
+     elseif(CONFIG_COMPILER_OPTIMIZATION_DEBUG)
+         list(APPEND compile_options "-Og")
+         if(CMAKE_C_COMPILER_ID MATCHES "GNU" AND NOT CONFIG_IDF_TARGET_LINUX)
+@@ -34,10 +37,13 @@ if(NOT BOOTLOADER_BUILD)
+ else()  # BOOTLOADER_BUILD
+ 
+     if(CONFIG_BOOTLOADER_COMPILER_OPTIMIZATION_SIZE)
+-        list(APPEND compile_options "-Os")
+         if(CMAKE_C_COMPILER_ID MATCHES "GNU")
++            list(APPEND compile_options "-Os")
+             list(APPEND compile_options "-freorder-blocks")
+         endif()
++        if(CMAKE_C_COMPILER_ID MATCHES "Clang")
++            list(APPEND compile_options "-Oz")
++        endif()
+     elseif(CONFIG_BOOTLOADER_COMPILER_OPTIMIZATION_DEBUG)
+         list(APPEND compile_options "-Og")
+         if(CMAKE_C_COMPILER_ID MATCHES "GNU" AND NOT CONFIG_IDF_TARGET_LINUX)
+diff --git a/components/esp_common/include/esp_attr.h b/components/esp_common/include/esp_attr.h
+index ee5a94a310..59aa39f703 100644
+--- a/components/esp_common/include/esp_attr.h
++++ b/components/esp_common/include/esp_attr.h
+@@ -75,7 +75,7 @@ extern "C" {
+ 
+ // Forces a string into DRAM instead of flash
+ // Use as esp_rom_printf(DRAM_STR("Hello world!\n"));
+-#define DRAM_STR(str) (__extension__({static const DRAM_ATTR char __c[] = (str); (const char *)&__c;}))
++#define DRAM_STR(str) (__extension__({static const _SECTION_ATTR_IMPL(".dram1.str", __COUNTER__) char __c[] = (str); (const char *)&__c;}))
+ 
+ #if CONFIG_SOC_RTC_FAST_MEM_SUPPORTED || CONFIG_SOC_RTC_SLOW_MEM_SUPPORTED
+ // Forces data into RTC memory. See "docs/deep-sleep-stub.rst"
+diff --git a/components/freertos/FreeRTOS-Kernel/portable/riscv/portasm.S b/components/freertos/FreeRTOS-Kernel/portable/riscv/portasm.S
+index b737e58d7c..5f32c613a0 100644
+--- a/components/freertos/FreeRTOS-Kernel/portable/riscv/portasm.S
++++ b/components/freertos/FreeRTOS-Kernel/portable/riscv/portasm.S
+@@ -441,7 +441,7 @@ rtos_current_tcb:
+     lw      a0, pxCurrentTCBs
+ #endif /* ( configNUM_CORES > 1 ) */
+     ret
+-    .size, .-rtos_current_tcb
++    .size rtos_current_tcb, .-rtos_current_tcb
+ 
+ 
+ /**
+diff --git a/components/wpa_supplicant/src/tls/asn1.c b/components/wpa_supplicant/src/tls/asn1.c
+index 04d5320490..cdde93e7cf 100644
+--- a/components/wpa_supplicant/src/tls/asn1.c
++++ b/components/wpa_supplicant/src/tls/asn1.c
+@@ -273,6 +273,7 @@ int asn1_get_next(const u8 *buf, size_t len, struct asn1_hdr *hdr)
+ }
+ 
+ 
++#ifdef DEBUG_PRINT
+ void asn1_print_hdr(const struct asn1_hdr *hdr, const char *title)
+ {
+ 	wpa_printf(MSG_DEBUG, "%sclass %d constructed %d tag 0x%x",
+@@ -285,6 +286,7 @@ void asn1_unexpected(const struct asn1_hdr *hdr, const char *title)
+ 	wpa_printf(MSG_DEBUG, "%s - found class %d constructed %d tag 0x%x",
+ 		   title, hdr->class, hdr->constructed, hdr->tag);
+ }
++#endif
+ 
+ 
+ int asn1_parse_oid(const u8 *buf, size_t len, struct asn1_oid *oid)
+diff --git a/components/wpa_supplicant/src/tls/asn1.h b/components/wpa_supplicant/src/tls/asn1.h
+index a4d1be4735..a72c01f3a8 100644
+--- a/components/wpa_supplicant/src/tls/asn1.h
++++ b/components/wpa_supplicant/src/tls/asn1.h
+@@ -60,8 +60,13 @@ struct asn1_oid {
+ 
+ 
+ int asn1_get_next(const u8 *buf, size_t len, struct asn1_hdr *hdr);
++#ifdef DEBUG_PRINT
+ void asn1_print_hdr(const struct asn1_hdr *hdr, const char *title);
+ void asn1_unexpected(const struct asn1_hdr *hdr, const char *title);
++#else /* DEBUG_PRINT */
++#define asn1_print_hdr(...) do {} while(0)
++#define asn1_unexpected(...) do {} while(0)
++#endif /* DEBUG_PRINT */
+ int asn1_parse_oid(const u8 *buf, size_t len, struct asn1_oid *oid);
+ int asn1_get_oid(const u8 *buf, size_t len, struct asn1_oid *oid,
+ 		 const u8 **next);
+diff --git a/components/wpa_supplicant/src/tls/tlsv1_client_ocsp.c b/components/wpa_supplicant/src/tls/tlsv1_client_ocsp.c
+index 128f4b5b9e..291f2d86d2 100644
+--- a/components/wpa_supplicant/src/tls/tlsv1_client_ocsp.c
++++ b/components/wpa_supplicant/src/tls/tlsv1_client_ocsp.c
+@@ -77,28 +77,30 @@ static unsigned int ocsp_hash_data(struct asn1_oid *alg, const u8 *data,
+ 		wpa_hexdump(MSG_MSGDUMP, "OCSP: Hash (SHA1)", hash, 20);
+ 		return 20;
+ 	}
+-
++#ifdef CONFIG_SHA256
+ 	if (x509_sha256_oid(alg)) {
+ 		if (sha256_vector(1, addr, len, hash) < 0)
+ 			return 0;
+ 		wpa_hexdump(MSG_MSGDUMP, "OCSP: Hash (SHA256)", hash, 32);
+ 		return 32;
+ 	}
+-
++#endif /* CONFIG_SHA256 */
++#ifdef CONFIG_INTERNAL_SHA384
+ 	if (x509_sha384_oid(alg)) {
+ 		if (sha384_vector(1, addr, len, hash) < 0)
+ 			return 0;
+ 		wpa_hexdump(MSG_MSGDUMP, "OCSP: Hash (SHA384)", hash, 48);
+ 		return 48;
+ 	}
+-
++#endif /* CONFIG_INTERNAL_SHA384 */
++#ifdef CONFIG_INTERNAL_SHA512
+ 	if (x509_sha512_oid(alg)) {
+ 		if (sha512_vector(1, addr, len, hash) < 0)
+ 			return 0;
+ 		wpa_hexdump(MSG_MSGDUMP, "OCSP: Hash (SHA512)", hash, 64);
+ 		return 64;
+ 	}
+-
++#endif /* CONFIG_INTERNAL_SHA512 */
+ 
+ 	asn1_oid_to_str(alg, buf, sizeof(buf));
+ 	wpa_printf(MSG_DEBUG, "OCSP: Could not calculate hash with alg %s",
+diff --git a/components/wpa_supplicant/src/tls/x509v3.c b/components/wpa_supplicant/src/tls/x509v3.c
+index 1bbd80ade8..07b877d9a4 100644
+--- a/components/wpa_supplicant/src/tls/x509v3.c
++++ b/components/wpa_supplicant/src/tls/x509v3.c
+@@ -1963,7 +1963,7 @@ int x509_check_signature(struct x509_certificate *issuer,
+ 		}
+ 		goto skip_digest_oid;
+ 	}
+-
++#ifdef CONFIG_SHA256
+ 	if (x509_sha256_oid(&oid)) {
+ 		if (signature->oid.oid[6] !=
+ 		    11 /* sha2561WithRSAEncryption */) {
+@@ -1976,7 +1976,8 @@ int x509_check_signature(struct x509_certificate *issuer,
+ 		}
+ 		goto skip_digest_oid;
+ 	}
+-
++#endif /* CONFIG_SHA256 */
++#ifdef CONFIG_INTERNAL_SHA384
+ 	if (x509_sha384_oid(&oid)) {
+ 		if (signature->oid.oid[6] != 12 /* sha384WithRSAEncryption */) {
+ 			wpa_printf(MSG_DEBUG, "X509: digestAlgorithm SHA384 "
+@@ -1988,7 +1989,8 @@ int x509_check_signature(struct x509_certificate *issuer,
+ 		}
+ 		goto skip_digest_oid;
+ 	}
+-
++#endif /* CONFIG_INTERNAL_SHA384 */
++#ifdef CONFIG_INTERNAL_SHA512
+ 	if (x509_sha512_oid(&oid)) {
+ 		if (signature->oid.oid[6] != 13 /* sha512WithRSAEncryption */) {
+ 			wpa_printf(MSG_DEBUG, "X509: digestAlgorithm SHA512 "
+@@ -2000,7 +2002,7 @@ int x509_check_signature(struct x509_certificate *issuer,
+ 		}
+ 		goto skip_digest_oid;
+ 	}
+-
++#endif /* CONFIG_INTERNAL_SHA512 */
+ 	if (!x509_digest_oid(&oid)) {
+ 		wpa_printf(MSG_DEBUG, "X509: Unrecognized digestAlgorithm");
+ 		os_free(data);
+@@ -2052,24 +2054,30 @@ skip_digest_oid:
+ 		wpa_hexdump(MSG_MSGDUMP, "X509: Certificate hash (SHA1)",
+ 			    hash, hash_len);
+ 		break;
++#ifdef CONFIG_SHA256
+ 	case 11: /* sha256WithRSAEncryption */
+ 		sha256_vector(1, addr, len, hash);
+ 		hash_len = 32;
+ 		wpa_hexdump(MSG_MSGDUMP, "X509: Certificate hash (SHA256)",
+ 			    hash, hash_len);
+ 		break;
++#endif /* CONFIG_SHA256 */
++#ifdef CONFIG_INTERNAL_SHA384
+ 	case 12: /* sha384WithRSAEncryption */
+ 		sha384_vector(1, addr, len, hash);
+ 		hash_len = 48;
+ 		wpa_hexdump(MSG_MSGDUMP, "X509: Certificate hash (SHA384)",
+ 			    hash, hash_len);
+ 		break;
++#endif /* CONFIG_INTERNAL_SHA384 */
++#ifdef CONFIG_INTERNAL_SHA512
+ 	case 13: /* sha512WithRSAEncryption */
+ 		sha512_vector(1, addr, len, hash);
+ 		hash_len = 64;
+ 		wpa_hexdump(MSG_MSGDUMP, "X509: Certificate hash (SHA512)",
+ 			    hash, hash_len);
+ 		break;
++#endif /* CONFIG_INTERNAL_SHA512 */
+ 	case 2: /* md2WithRSAEncryption */
+ 	default:
+ 		wpa_printf(MSG_INFO, "X509: Unsupported certificate signature "
+diff --git a/tools/cmake/build.cmake b/tools/cmake/build.cmake
+index 0bafd9fcb1..10abac4a10 100644
+--- a/tools/cmake/build.cmake
++++ b/tools/cmake/build.cmake
+@@ -517,16 +517,9 @@ macro(idf_build_process target)
+ 
+         set(__contents "components:\n")
+         idf_build_get_property(build_component_targets BUILD_COMPONENT_TARGETS)
+-        foreach(__build_component_target ${build_component_targets})
+-            __component_get_property(__component_name ${__build_component_target} COMPONENT_NAME)
+-            __component_get_property(__component_dir ${__build_component_target} COMPONENT_DIR)
+-
+-            # Exclude components could be passed with -DEXCLUDE_COMPONENTS
+-            # after the call to __component_add finished in the last run.
+-            # Need to check if the component is excluded again
+-            if(NOT __component_name IN_LIST EXCLUDE_COMPONENTS)
++        foreach(__component_name ${components})
++            idf_component_get_property(__component_dir ${__component_name} COMPONENT_DIR)
+                 set(__contents "${__contents}  - name: \"${__component_name}\"\n    path: \"${__component_dir}\"\n")
+-            endif()
+         endforeach()
+ 
+         file(WRITE ${local_components_list_file} "${__contents}")
+diff --git a/tools/cmake/third_party/GetGitRevisionDescription.cmake b/tools/cmake/third_party/GetGitRevisionDescription.cmake
+index 53428e2cb8..381d173b30 100644
+--- a/tools/cmake/third_party/GetGitRevisionDescription.cmake
++++ b/tools/cmake/third_party/GetGitRevisionDescription.cmake
+@@ -118,7 +118,7 @@ function(git_describe _var _repo_dir)
+         describe
+         "--always"
+         "--tags"
+-        "--dirty"
++#       "--dirty"
+         ${ARGN}
+         WORKING_DIRECTORY
+         "${CMAKE_CURRENT_SOURCE_DIR}"

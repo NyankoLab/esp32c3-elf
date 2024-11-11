@@ -1,0 +1,41 @@
+#!/bin/bash
+
+GCC_BIN_PATH="../riscv32-esp-elf/bin"
+if [ -d "../BaseSDK/riscv32-esp-elf/bin" ]; then
+  GCC_BIN_PATH="../BaseSDK/riscv32-esp-elf/bin"
+fi
+
+ARGS=""
+while [[ $# > 0 ]] ; do
+    case $1 in
+        -arch_only*)
+        shift ;;
+        -D*)
+        ;;
+        -o*)
+        ;;
+        -L*)
+        ;;
+        -static*)
+        ;;
+        -syslibroot*)
+        shift ;;
+        -filelist*)
+        while read -r line; do
+            ARGS=$line" "$ARGS
+        done < $2
+        shift ;;
+        -V)
+        libtool -V
+        exit 0
+        ;;
+        *)
+        ARGS=$1" "$ARGS
+        ;;
+    esac
+    shift
+done
+
+echo $GCC_BIN_PATH/riscv32-esp-elf-ar $ARGS
+$GCC_BIN_PATH/riscv32-esp-elf-ar r $ARGS
+exit $?

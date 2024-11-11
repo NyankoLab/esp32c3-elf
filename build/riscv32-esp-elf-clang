@@ -1,0 +1,38 @@
+#!/bin/bash
+
+CLANG_BIN_PATH="../esp-clang/bin"
+if [ -d "../BaseSDK/esp-clang/bin" ]; then
+  CLANG_BIN_PATH="../BaseSDK/esp-clang/bin"
+fi
+
+LD=0
+ARGS=""
+while [[ $# > 0 ]] ; do
+    case $1 in
+        -dead_strip*)
+        ;;
+        -F*)
+        ;;
+        -index-store-path*)
+        shift ;;
+        -fuse-ld*)
+        LD=1
+        ARGS=$ARGS" "$1
+        ;;
+        *)
+        ARGS=$ARGS" "$1
+        ;;
+    esac
+    shift
+done
+ARGS=$ARGS" -D__Espressif__ -target riscv32-esp-elf -I"$CLANG_BIN_PATH"/../../riscv32-esp-elf/riscv32-esp-elf/include"
+
+if [ $LD -eq 0 ]; then
+  echo /opt/homebrew/opt/llvm/bin/clang $ARGS
+  /opt/homebrew/opt/llvm/bin/clang $ARGS
+  exit $?
+else
+  echo $CLANG_BIN_PATH/clang-17 $ARGS
+  $CLANG_BIN_PATH/clang-17 $ARGS
+  exit $?
+fi

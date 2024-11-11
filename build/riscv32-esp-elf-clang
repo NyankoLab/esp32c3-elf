@@ -32,7 +32,7 @@ if [ $LD -eq 0 ]; then
   /opt/homebrew/opt/llvm/bin/clang $ARGS
   exit $?
 else
-  echo $CLANG_BIN_PATH/clang-17 $ARGS
-  $CLANG_BIN_PATH/clang-17 $ARGS
+  echo $CLANG_BIN_PATH/clang-18 $ARGS
+  $CLANG_BIN_PATH/clang-18 $ARGS
   exit $?
 fi

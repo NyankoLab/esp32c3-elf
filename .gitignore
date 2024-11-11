@@ -1,0 +1,7 @@
+.DS_Store
+build/hello_world/
+build/patchsdk.ok
+build/*.tar.gz
+build/*.tar.xz
+esp-clang/
+riscv32-esp-elf/

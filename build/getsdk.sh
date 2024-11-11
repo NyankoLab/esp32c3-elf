@@ -1,23 +1,12 @@
 #!/bin/bash
 
-if [ ! -f "riscv32-esp-elf-13.2.0_20240530-aarch64-apple-darwin.tar.xz" ]; then 
-  wget -N https://github.com/espressif/crosstool-NG/releases/download/esp-13.2.0_20240530/riscv32-esp-elf-13.2.0_20240530-aarch64-apple-darwin.tar.xz
-fi
-
-if [ ! -f "clang-esp-17.0.1_20240419-aarch64-apple-darwin.tar.xz" ]; then 
-  wget -N https://github.com/espressif/llvm-project/releases/download/esp-17.0.1_20240419/clang-esp-17.0.1_20240419-aarch64-apple-darwin.tar.xz
-fi
-
-if [ ! -d "../riscv32-esp-elf" ]; then
-  cd ..
-  tar xvf build/riscv32-esp-elf-13.2.0_20240530-aarch64-apple-darwin.tar.xz
-  xattr -r -d com.apple.quarantine riscv32-esp-elf
-  cd build
+if [ ! -f "clang-esp-18.1.2_20240912-aarch64-apple-darwin.tar.xz" ]; then 
+  wget -N https://github.com/espressif/llvm-project/releases/download/esp-18.1.2_20240912/clang-esp-18.1.2_20240912-aarch64-apple-darwin.tar.xz
 fi
 
 if [ ! -d "../esp-clang" ]; then
   cd ..
-  tar xvf build/clang-esp-17.0.1_20240419-aarch64-apple-darwin.tar.xz
+  tar xvf build/clang-esp-18.1.2_20240912-aarch64-apple-darwin.tar.xz
   xattr -r -d com.apple.quarantine esp-clang
   mkdir esp-clang/include/c++
   ln -s /opt/homebrew/opt/llvm/include/c++/v1 esp-clang/include/c++/v1

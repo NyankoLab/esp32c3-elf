@@ -1,7 +1,12 @@
 .DS_Store
+bin/
 build/hello_world/
 build/patchsdk.ok
+build/temp/
 build/*.tar.gz
 build/*.tar.xz
 esp-clang/
-riscv32-esp-elf/
+IDEWorkspaceChecks.plist
+xcschememanagement.plist
+*.xcscheme
+*.xcuserstate

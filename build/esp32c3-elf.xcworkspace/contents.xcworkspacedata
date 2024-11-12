@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "container:esp32c3-elf.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "container:freertos-mqtt.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "container:littlefs.xcodeproj">
+   </FileRef>
+</Workspace>

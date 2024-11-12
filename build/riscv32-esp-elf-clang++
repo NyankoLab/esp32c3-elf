@@ -1,9 +1,6 @@
 #!/bin/bash
 
 CLANG_BIN_PATH="../esp-clang/bin"
-if [ -d "../BaseSDK/esp-clang/bin" ]; then
-  CLANG_BIN_PATH="../BaseSDK/esp-clang/bin"
-fi
 
 LD=0
 ARGS=""
@@ -25,7 +22,7 @@ while [[ $# > 0 ]] ; do
     esac
     shift
 done
-ARGS=$ARGS" -D__Espressif__ -target riscv32-esp-elf -I"$CLANG_BIN_PATH"/../../riscv32-esp-elf/riscv32-esp-elf/include"
+ARGS=$ARGS" -D__Espressif__ -target riscv32-esp-elf"
 
 if [ $LD -eq 0 ]; then
   echo /opt/homebrew/opt/llvm/bin/clang++ $ARGS

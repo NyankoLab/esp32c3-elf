@@ -13,12 +13,15 @@
 #include "esp_chip_info.h"
 #include "esp_flash.h"
 #include "esp_system.h"
+#include "elf_loader/include/esp_elf.h"
+#include "module/fs.h"
 
 // Application version info
-const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc = {
+const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc =
+{
     .magic_word = ESP_APP_DESC_MAGIC_WORD,
     .secure_version = 0,
-    .version = "1.00",
+    .version = __XSTRING(ELF_LOADER_VER_MAJOR) "." __XSTRING(ELF_LOADER_VER_MINOR) "." __XSTRING(ELF_LOADER_VER_PATCH) " ",
     .project_name = "esp32c3-elf",
     .time = __TIME__,
     .date = __DATE__,
@@ -54,6 +57,41 @@ void app_main(void)
            (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
     printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
+
+    /* File System */
+    fs_init();
+
+    /* Execute ELF */
+    esp_elf_t elf;
+    if (esp_elf_init(&elf) == 0) {
+        const char* filename = "main.elf";
+        uint8_t* buffer = NULL;
+
+        int size = fs_stat(filename);
+        if (size > 0) {
+            int fd = fs_open(filename, "rb");
+            if (fd > 0) {
+                buffer = malloc(size);
+                if (buffer) {
+                    fs_read(buffer, size, fd);
+                }
+                fs_close(fd);
+            }
+        }
+
+        if (buffer) {
+            printf("Start to relocate ELF file");
+            int ret = esp_elf_relocate(&elf, buffer);
+            free(buffer);
+            if (ret == 0) {
+                printf("Start to run ELF file");
+                esp_elf_request(&elf, 0, 0, NULL);
+                printf("Success to exit from ELF file");
+            }
+        }
+
+        esp_elf_deinit(&elf);
+    }
 
     for (int i = 10; i >= 0; i--) {
         printf("Restarting in %d seconds...\n", i);

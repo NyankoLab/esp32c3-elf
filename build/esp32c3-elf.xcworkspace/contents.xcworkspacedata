@@ -5,9 +5,15 @@
       location = "container:esp32c3-elf.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:elf_loader.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "container:freertos-mqtt.xcodeproj">
    </FileRef>
    <FileRef
       location = "container:littlefs.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:hello.xcodeproj">
    </FileRef>
 </Workspace>

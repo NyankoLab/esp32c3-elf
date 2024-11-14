@@ -1,7 +1,5 @@
 #!/bin/bash
 
-CLANG_BIN_PATH="../esp-clang/bin"
-
 ARGS=""
 while [[ $# > 0 ]] ; do
     case $1 in
@@ -34,6 +32,6 @@ while [[ $# > 0 ]] ; do
 done
 ARGS="r "$ARGS
 
-echo $CLANG_BIN_PATH/llvm-ar $ARGS
-$CLANG_BIN_PATH/llvm-ar $ARGS
+echo /opt/homebrew/opt/llvm/bin/llvm-ar $ARGS
+/opt/homebrew/opt/llvm/bin/llvm-ar $ARGS
 exit $?

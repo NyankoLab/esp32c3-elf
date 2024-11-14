@@ -5,19 +5,31 @@ CLANG_BIN_PATH="../esp-clang/bin"
 ARGS=""
 while [[ $# > 0 ]] ; do
     case $1 in
-        -dead_strip*)
+        -arch)
+        shift ;;
+        -dead_strip)
+        ;;
+        -dynamic)
         ;;
         -F*)
         ;;
-        -filelist*)
+        -filelist)
         while read -r line; do
             ARGS=$ARGS" "$line
         done < $2
         shift ;;
-        -no_deduplicate*)
+        -lSystem)
         ;;
-        -reproducible*)
+        -lto_library)
+        shift ;;
+        -no_deduplicate)
         ;;
+        -platform_version)
+        shift 3 ;;
+        -reproducible)
+        ;;
+        -syslibroot)
+        shift ;;
         *)
         ARGS=$ARGS" "$1
         ;;

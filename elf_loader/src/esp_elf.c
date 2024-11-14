@@ -10,6 +10,7 @@
 #include <sys/errno.h>
 #include <sys/param.h>
 
+#include "esp_elf.h"
 #include "esp_log.h"
 
 #include "private/elf_symbol.h"
@@ -17,8 +18,7 @@
 
 #define stype(_s, _t)               ((_s)->type == (_t))
 #define sflags(_s, _f)              (((_s)->flags & (_f)) == (_f))
-
-static const char *TAG = "ELF";
+#define TAG                         "ELF"
 
 /**
  * @brief Map symbol's address of ELF to physic space.

@@ -8,6 +8,10 @@
 
 #include "private/elf_types.h"
 
+#define ELF_LOADER_VER_MAJOR        0
+#define ELF_LOADER_VER_MINOR        1
+#define ELF_LOADER_VER_PATCH        0
+
 #ifdef __cplusplus
 extern "C" {
 #endif

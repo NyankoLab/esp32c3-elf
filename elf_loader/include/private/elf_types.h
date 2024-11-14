@@ -10,7 +10,6 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include "sdkconfig.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -6,6 +6,7 @@ DYLIB_CURRENT_VERSION =
 EFFECTIVE_PLATFORM_NAME = -esp32c3
 EXECUTABLE_EXTENSION = so
 EXECUTABLE_PREFIX = lib
+GCC_OPTIMIZATION_LEVEL[config=Release] = z
 
 CC = $CLANGPLATFORM_DIR/riscv32-esp-elf-clang
 CXX = $CLANGPLATFORM_DIR/riscv32-esp-elf-clang++
@@ -19,9 +20,9 @@ ALTERNATE_LINKER = $CLANGPLATFORM_DIR/riscv32-esp-elf-lld
 
 GCC_PREFIX_HEADER = $CLANGPLATFORM_DIR/hello_world/build/config/sdkconfig.h
 
-HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-clang/lib/clang-runtimes/riscv32-esp-unknown-elf/rv32imc-zicsr-zifencei_ilp32_no-rtti/include
-
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-clang/include/c++/v1
+
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-clang/lib/clang-runtimes/riscv32-esp-unknown-elf/rv32imc-zicsr-zifencei_ilp32_no-rtti/include
 
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/.
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/app_update/include
@@ -38,6 +39,7 @@ HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_partition/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_ringbuf/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_rom/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_rom/include/esp32c3
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_rom/esp32c3
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_system/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_timer/include
@@ -77,6 +79,7 @@ HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/wpa_
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hap_apple_profiles/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hap_core/include
 
+//LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-clang/lib/clang-runtimes/riscv32-esp-unknown-elf/rv32imc-zicsr-zifencei_ilp32_no-rtti/lib
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/hello_world/build/esp-idf/app_update
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/hello_world/build/esp-idf/bootloader_support
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/hello_world/build/esp-idf/cxx
@@ -133,12 +136,17 @@ LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/hello_world/build/esp-idf
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/hello_world/build/esp-idf/json_parser
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/hello_world/build/esp-idf/mu_srp
 
-OTHER_CFLAGS = $(inherited) -march=rv32imc -fno-rtti
-OTHER_CFLAGS = $(inherited) -fdata-sections
-OTHER_CFLAGS = $(inherited) -ffunction-sections
+OTHER_CFLAGS = $(inherited) --target=riscv32-esp-elf -march=rv32imc -mabi=ilp32 
+OTHER_CFLAGS = $(inherited) -DCONFIG_ELF_LOADER_LIBC_SYMBOLS
+//OTHER_CFLAGS = $(inherited) -DCONFIG_ELF_LOADER_ESPIDF_SYMBOLS
 OTHER_CFLAGS = $(inherited) -DNDEBUG
 OTHER_CFLAGS = $(inherited) -D__ESP__
+OTHER_CFLAGS = $(inherited) -D__Espressif__
+OTHER_CFLAGS = $(inherited) -fno-rtti
+OTHER_CFLAGS = $(inherited) -fdata-sections
+OTHER_CFLAGS = $(inherited) -ffunction-sections
 
+OTHER_CPLUSPLUSFLAGS = $(inherited) -fno-sized-deallocation -nostdinc++ -v
 OTHER_CPLUSPLUSFLAGS = $(inherited) -D_LIBCPP_AVAILABILITY_HAS_NO_VERBOSE_ABORT
 OTHER_CPLUSPLUSFLAGS = $(inherited) -D_LIBCPP_DISABLE_EXTERN_TEMPLATE
 OTHER_CPLUSPLUSFLAGS = $(inherited) -D_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS
@@ -146,8 +154,10 @@ OTHER_CPLUSPLUSFLAGS = $(inherited) -D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION
 OTHER_CPLUSPLUSFLAGS = $(inherited) -D_LIBCPP_HAS_NO_THREADS
 //OTHER_CPLUSPLUSFLAGS = $(inherited) -D_LIBCPP_HAS_NO_VENDOR_AVAILABILITY_ANNOTATIONS
 
-OTHER_LDFLAGS = $(inherited) -march=rv32imc -fno-rtti
+OTHER_LDFLAGS = $(inherited) --target=riscv32-esp-elf -march=rv32imc -mabi=ilp32
+OTHER_LDFLAGS = $(inherited) -fno-rtti
 OTHER_LDFLAGS = $(inherited) -nostdlib++ -Wl,-static
+OTHER_LDFLAGS = $(inherited) -Wl,--gc-sections
 OTHER_LDFLAGS = $(inherited) -Wl,--defsym=IDF_TARGET_ESP32C3=0
 OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/hello_world/build/esp-idf/esp_system/ld/memory.ld
 OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/hello_world/build/esp-idf/esp_system/ld/sections.ld
@@ -226,8 +236,6 @@ OTHER_LDFLAGS = $(inherited) -ljson_parser
 OTHER_LDFLAGS = $(inherited) -lmu_srp
 
 OTHER_LDFLAGS = $(inherited) -Wl,--end-group
-
-OTHER_LDFLAGS[config=Release] = $(inherited) -Wl,--gc-sections
 
 ARCHS = riscv32
 ARCHS_STANDARD = riscv32

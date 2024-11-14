@@ -32,19 +32,6 @@ index 722b07b973..e607e21cdd 100644
      elseif(CONFIG_BOOTLOADER_COMPILER_OPTIMIZATION_DEBUG)
          list(APPEND compile_options "-Og")
          if(CMAKE_C_COMPILER_ID MATCHES "GNU" AND NOT CONFIG_IDF_TARGET_LINUX)
-diff --git a/components/esp_common/include/esp_attr.h b/components/esp_common/include/esp_attr.h
-index ee5a94a310..59aa39f703 100644
---- a/components/esp_common/include/esp_attr.h
-+++ b/components/esp_common/include/esp_attr.h
-@@ -75,7 +75,7 @@ extern "C" {
- 
- // Forces a string into DRAM instead of flash
- // Use as esp_rom_printf(DRAM_STR("Hello world!\n"));
--#define DRAM_STR(str) (__extension__({static const DRAM_ATTR char __c[] = (str); (const char *)&__c;}))
-+#define DRAM_STR(str) (__extension__({static const _SECTION_ATTR_IMPL(".dram1.str", __COUNTER__) char __c[] = (str); (const char *)&__c;}))
- 
- #if CONFIG_SOC_RTC_FAST_MEM_SUPPORTED || CONFIG_SOC_RTC_SLOW_MEM_SUPPORTED
- // Forces data into RTC memory. See "docs/deep-sleep-stub.rst"
 diff --git a/components/freertos/FreeRTOS-Kernel/portable/riscv/portasm.S b/components/freertos/FreeRTOS-Kernel/portable/riscv/portasm.S
 index b737e58d7c..5f32c613a0 100644
 --- a/components/freertos/FreeRTOS-Kernel/portable/riscv/portasm.S

@@ -8,6 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		D6741A332CE393DD0024FB04 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A322CE393DD0024FB04 /* main.c */; };
+		D6741A642CE5D31A0024FB04 /* libelf_loader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6741A632CE5D31A0024FB04 /* libelf_loader.a */; };
+		D6741A682CE5E4240024FB04 /* fs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A672CE5E4240024FB04 /* fs.c */; };
+		D6741A762CE5EB740024FB04 /* httpd.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A6B2CE5EB740024FB04 /* httpd.c */; };
+		D6741A772CE5EB740024FB04 /* mqtt.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A6E2CE5EB740024FB04 /* mqtt.c */; };
+		D6741A782CE5EB740024FB04 /* fota.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6741A722CE5EB740024FB04 /* fota.cpp */; };
+		D6741A792CE5EB740024FB04 /* https.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A732CE5EB740024FB04 /* https.c */; };
+		D6741A7A2CE5EB740024FB04 /* ota.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A742CE5EB740024FB04 /* ota.c */; };
+		D6741A7B2CE5EB740024FB04 /* temperature.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A752CE5EB740024FB04 /* temperature.c */; };
+		D6741A802CE610650024FB04 /* homekit.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A7D2CE610650024FB04 /* homekit.c */; };
+		D6741A812CE610650024FB04 /* vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A7E2CE610650024FB04 /* vfs.c */; };
+		D6741A822CE610650024FB04 /* nvs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A7F2CE610650024FB04 /* nvs.c */; };
+		D6741A842CE63FBF0024FB04 /* nanosleep.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A832CE63FBF0024FB04 /* nanosleep.c */; };
 		D6865F7029AD085F00EBC297 /* liblittlefs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6865F6F29AD085F00EBC297 /* liblittlefs.a */; };
 		D6865F8529ADF4A200EBC297 /* libfreertos-mqtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6865F8429ADF4A200EBC297 /* libfreertos-mqtt.a */; };
 /* End PBXBuildFile section */
@@ -18,6 +30,25 @@
 		D66C4B1929A860D000F27A29 /* sdkconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sdkconfig.h; path = hello_world/build/config/sdkconfig.h; sourceTree = "<group>"; };
 		D66C4B1C29A864FC00F27A29 /* sdkconfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sdkconfig.h; sourceTree = "<group>"; };
 		D6741A322CE393DD0024FB04 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = ../main.c; sourceTree = "<group>"; };
+		D6741A632CE5D31A0024FB04 /* libelf_loader.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libelf_loader.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6741A672CE5E4240024FB04 /* fs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = fs.c; path = ../module/fs.c; sourceTree = "<group>"; };
+		D6741A692CE5E4BA0024FB04 /* fs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fs.h; path = ../module/fs.h; sourceTree = "<group>"; };
+		D6741A6A2CE5EB740024FB04 /* mqtt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mqtt.h; path = ../module/mqtt.h; sourceTree = "<group>"; };
+		D6741A6B2CE5EB740024FB04 /* httpd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = httpd.c; path = ../module/httpd.c; sourceTree = "<group>"; };
+		D6741A6C2CE5EB740024FB04 /* ota.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ota.h; path = ../module/ota.h; sourceTree = "<group>"; };
+		D6741A6D2CE5EB740024FB04 /* fota.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fota.h; path = ../module/fota.h; sourceTree = "<group>"; };
+		D6741A6E2CE5EB740024FB04 /* mqtt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mqtt.c; path = ../module/mqtt.c; sourceTree = "<group>"; };
+		D6741A6F2CE5EB740024FB04 /* https.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = https.h; path = ../module/https.h; sourceTree = "<group>"; };
+		D6741A702CE5EB740024FB04 /* temperature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = temperature.h; path = ../module/temperature.h; sourceTree = "<group>"; };
+		D6741A712CE5EB740024FB04 /* httpd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = httpd.h; path = ../module/httpd.h; sourceTree = "<group>"; };
+		D6741A722CE5EB740024FB04 /* fota.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fota.cpp; path = ../module/fota.cpp; sourceTree = "<group>"; };
+		D6741A732CE5EB740024FB04 /* https.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = https.c; path = ../module/https.c; sourceTree = "<group>"; };
+		D6741A742CE5EB740024FB04 /* ota.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ota.c; path = ../module/ota.c; sourceTree = "<group>"; };
+		D6741A752CE5EB740024FB04 /* temperature.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = temperature.c; path = ../module/temperature.c; sourceTree = "<group>"; };
+		D6741A7D2CE610650024FB04 /* homekit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = homekit.c; path = ../module/patch/homekit.c; sourceTree = "<group>"; };
+		D6741A7E2CE610650024FB04 /* vfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vfs.c; path = ../module/patch/vfs.c; sourceTree = "<group>"; };
+		D6741A7F2CE610650024FB04 /* nvs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nvs.c; path = ../module/patch/nvs.c; sourceTree = "<group>"; };
+		D6741A832CE63FBF0024FB04 /* nanosleep.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nanosleep.c; path = ../module/patch/nanosleep.c; sourceTree = "<group>"; };
 		D6865F6F29AD085F00EBC297 /* liblittlefs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = liblittlefs.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6865F8429ADF4A200EBC297 /* libfreertos-mqtt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libfreertos-mqtt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -27,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6741A642CE5D31A0024FB04 /* libelf_loader.a in Frameworks */,
 				D6865F8529ADF4A200EBC297 /* libfreertos-mqtt.a in Frameworks */,
 				D6865F7029AD085F00EBC297 /* liblittlefs.a in Frameworks */,
 			);
@@ -38,6 +70,7 @@
 		300264BD24266097004559E0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D6741A632CE5D31A0024FB04 /* libelf_loader.a */,
 				D6865F8429ADF4A200EBC297 /* libfreertos-mqtt.a */,
 				D6865F6F29AD085F00EBC297 /* liblittlefs.a */,
 			);
@@ -57,6 +90,7 @@
 		D644A038231ED82900B75B77 = {
 			isa = PBXGroup;
 			children = (
+				D6741A652CE5E4160024FB04 /* module */,
 				D6741A322CE393DD0024FB04 /* main.c */,
 				CE999BD625D21EC800351116 /* Configs */,
 				D644A042231ED82900B75B77 /* Products */,
@@ -70,6 +104,39 @@
 				30A9A7BB25ADC792000FA104 /* libesp32c3-elf.so */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D6741A652CE5E4160024FB04 /* module */ = {
+			isa = PBXGroup;
+			children = (
+				D6741A7C2CE610470024FB04 /* patch */,
+				D6741A722CE5EB740024FB04 /* fota.cpp */,
+				D6741A6D2CE5EB740024FB04 /* fota.h */,
+				D6741A672CE5E4240024FB04 /* fs.c */,
+				D6741A692CE5E4BA0024FB04 /* fs.h */,
+				D6741A6B2CE5EB740024FB04 /* httpd.c */,
+				D6741A712CE5EB740024FB04 /* httpd.h */,
+				D6741A732CE5EB740024FB04 /* https.c */,
+				D6741A6F2CE5EB740024FB04 /* https.h */,
+				D6741A6E2CE5EB740024FB04 /* mqtt.c */,
+				D6741A6A2CE5EB740024FB04 /* mqtt.h */,
+				D6741A742CE5EB740024FB04 /* ota.c */,
+				D6741A6C2CE5EB740024FB04 /* ota.h */,
+				D6741A752CE5EB740024FB04 /* temperature.c */,
+				D6741A702CE5EB740024FB04 /* temperature.h */,
+			);
+			name = module;
+			sourceTree = "<group>";
+		};
+		D6741A7C2CE610470024FB04 /* patch */ = {
+			isa = PBXGroup;
+			children = (
+				D6741A7D2CE610650024FB04 /* homekit.c */,
+				D6741A832CE63FBF0024FB04 /* nanosleep.c */,
+				D6741A7F2CE610650024FB04 /* nvs.c */,
+				D6741A7E2CE610650024FB04 /* vfs.c */,
+			);
+			name = patch;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -151,6 +218,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6741A822CE610650024FB04 /* nvs.c in Sources */,
+				D6741A762CE5EB740024FB04 /* httpd.c in Sources */,
+				D6741A802CE610650024FB04 /* homekit.c in Sources */,
+				D6741A7A2CE5EB740024FB04 /* ota.c in Sources */,
+				D6741A772CE5EB740024FB04 /* mqtt.c in Sources */,
+				D6741A682CE5E4240024FB04 /* fs.c in Sources */,
+				D6741A812CE610650024FB04 /* vfs.c in Sources */,
+				D6741A7B2CE5EB740024FB04 /* temperature.c in Sources */,
+				D6741A792CE5EB740024FB04 /* https.c in Sources */,
+				D6741A842CE63FBF0024FB04 /* nanosleep.c in Sources */,
+				D6741A782CE5EB740024FB04 /* fota.cpp in Sources */,
 				D6741A332CE393DD0024FB04 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,6 +320,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ..;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = mh_execute;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
@@ -305,6 +384,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ..;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = mh_execute;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;

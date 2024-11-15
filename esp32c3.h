@@ -33,19 +33,10 @@ inline int32_t esp_timer_get_time_us(void)
     return (int32_t)esp_timer_get_time();
 }
 
-extern char thisname[24];
-extern char number[256];
-extern bool debug;
-extern bool wifi_connected;
-extern uint16_t wifi_sta_disconnected;
-extern uint16_t wifi_sta_got_ip;
-
 extern int uart0_tx;
 extern int uart0_rx;
 extern int uart1_tx;
 extern int uart1_rx;
-extern esp_netif_t* ap_netif;
-extern esp_netif_t* sta_netif;
 
 #ifdef __cplusplus
 };

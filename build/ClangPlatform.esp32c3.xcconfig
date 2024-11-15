@@ -138,7 +138,7 @@ LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/hello_world/build/esp-idf
 
 OTHER_CFLAGS = $(inherited) --target=riscv32-esp-elf -march=rv32imc -mabi=ilp32 
 OTHER_CFLAGS = $(inherited) -DCONFIG_ELF_LOADER_LIBC_SYMBOLS
-//OTHER_CFLAGS = $(inherited) -DCONFIG_ELF_LOADER_ESPIDF_SYMBOLS
+OTHER_CFLAGS = $(inherited) -DCONFIG_ELF_LOADER_ESPIDF_SYMBOLS
 OTHER_CFLAGS = $(inherited) -DNDEBUG
 OTHER_CFLAGS = $(inherited) -D__ESP__
 OTHER_CFLAGS = $(inherited) -D__Espressif__
@@ -236,6 +236,17 @@ OTHER_LDFLAGS = $(inherited) -ljson_parser
 OTHER_LDFLAGS = $(inherited) -lmu_srp
 
 OTHER_LDFLAGS = $(inherited) -Wl,--end-group
+
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,_read_r_console
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,_write_r_console
+
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fclose
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fread
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fwrite
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fseek
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,ftell
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fopen
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,stat
 
 ARCHS = riscv32
 ARCHS_STANDARD = riscv32

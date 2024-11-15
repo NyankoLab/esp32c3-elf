@@ -4,21 +4,27 @@
  * SPDX-License-Identifier: CC0-1.0
  */
 
+#include "esp32c3.h"
 #include <stdio.h>
 #include <inttypes.h>
-#include "sdkconfig.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_app_desc.h"
-#include "esp_chip_info.h"
-#include "esp_flash.h"
-#include "esp_system.h"
+#include <sys/stat.h>
+#include <esp_app_desc.h>
+#include <esp_chip_info.h>
+#include <esp_flash.h>
+#include <esp_system.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
+#include <soc/uart_pins.h>
 #include "elf_loader/include/esp_elf.h"
 #include "module/fs.h"
 
+int uart0_tx IRAM_BSS_ATTR = U0TXD_GPIO_NUM;
+int uart0_rx IRAM_BSS_ATTR = U0RXD_GPIO_NUM;
+int uart1_tx IRAM_BSS_ATTR = U1TXD_GPIO_NUM;
+int uart1_rx IRAM_BSS_ATTR = U1RXD_GPIO_NUM;
+
 // Application version info
-const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc =
-{
+const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc = {
     .magic_word = ESP_APP_DESC_MAGIC_WORD,
     .secure_version = 0,
     .version = __XSTRING(ELF_LOADER_VER_MAJOR) "." __XSTRING(ELF_LOADER_VER_MINOR) "." __XSTRING(ELF_LOADER_VER_PATCH) " ",
@@ -31,6 +37,10 @@ const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc =
 
 void app_main(void)
 {
+    /* Initialize Console */
+    extern void init_console(void);
+    init_console();
+
     printf("Hello world!\n");
 
     /* Print chip information */
@@ -58,7 +68,7 @@ void app_main(void)
 
     printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
 
-    /* File System */
+    /* Initialize File System */
     fs_init();
 
     /* Execute ELF */
@@ -67,15 +77,15 @@ void app_main(void)
         const char* filename = "main.elf";
         uint8_t* buffer = NULL;
 
-        int size = fs_stat(filename);
-        if (size > 0) {
-            int fd = fs_open(filename, "rb");
-            if (fd > 0) {
-                buffer = malloc(size);
+        struct stat st;
+        if (stat(filename, &st) == 0 && st.st_size > 0) {
+            FILE* file = fopen(filename, "rb");
+            if (file) {
+                buffer = malloc(st.st_size);
                 if (buffer) {
-                    fs_read(buffer, size, fd);
+                    fread(buffer, 1, st.st_size, file);
                 }
-                fs_close(fd);
+                fclose(file);
             }
         }
 

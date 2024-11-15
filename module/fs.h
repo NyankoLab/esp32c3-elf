@@ -12,7 +12,7 @@ void fs_close(int fd);
 int fs_getc(int fd);
 char* fs_gets(char* buffer, int length, int fd);
 
-void fs_seek(int pos, int fd);
+void fs_seek(int fd, int pos, int type);
 int fs_tell(int fd);
 
 int fs_read(void* buffer, int length, int fd);

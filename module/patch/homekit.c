@@ -12,8 +12,9 @@ int hap_keystore_init(void)
 
 int hap_keystore_get(const char* name_space, const char* key, uint8_t* val, size_t* val_size)
 {
-    sprintf(number, "%s/%s/%s", "hap", name_space, key);
-    int fd = fs_open(number, "rb");
+    char path[256];
+    sprintf(path, "%s/%s/%s", "hap", name_space, key);
+    int fd = fs_open(path, "rb");
     if (fd < 0)
         return HAP_FAIL;
     *val_size = fs_read(val, *val_size, fd);
@@ -28,11 +29,12 @@ int hap_factory_keystore_get(const char* name_space, const char* key, uint8_t* v
 
 int hap_keystore_set(const char* name_space, const char* key, const uint8_t* val, const size_t val_len)
 {
+    char path[256];
     fs_mkdir("hap");
-    sprintf(number, "%s/%s", "hap", name_space);
-    fs_mkdir(number);
-    sprintf(number, "%s/%s/%s", "hap", name_space, key);
-    int fd = fs_open(number, "wb");
+    sprintf(path, "%s/%s", "hap", name_space);
+    fs_mkdir(path);
+    sprintf(path, "%s/%s/%s", "hap", name_space, key);
+    int fd = fs_open(path, "wb");
     if (fd < 0)
         return HAP_FAIL;
     fs_write(val, val_len, fd);
@@ -47,15 +49,17 @@ int hap_factory_keystore_set(const char* name_space, const char* key, const uint
 
 int hap_keystore_delete(const char* name_space, const char* key)
 {
-    sprintf(number, "%s/%s/%s", "hap", name_space, key);
-    fs_remove(number);
+    char path[256];
+    sprintf(path, "%s/%s/%s", "hap", name_space, key);
+    fs_remove(path);
     return HAP_SUCCESS;
 }
 
 int hap_keystore_delete_namespace(const char* name_space)
 {
-    sprintf(number, "%s/%s", "hap", name_space);
-    fs_remove(number);
+    char path[256];
+    sprintf(path, "%s/%s", "hap", name_space);
+    fs_remove(path);
     return HAP_SUCCESS;
 }
 

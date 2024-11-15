@@ -13,12 +13,16 @@ static int udp_fd = -1;
 static struct sockaddr_in udp_sockaddr;
 static _LOCK_RECURSIVE_T write_lock;
 
+void init_console(void)
+{
+    __lock_init_recursive(write_lock);
+}
+
 void init_udp_console(const char* ip)
 {
     udp_fd = lwip_socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (udp_fd < 0)
         return;
-    __lock_init_recursive(write_lock);
     udp_sockaddr.sin_len = sizeof(udp_sockaddr);
     udp_sockaddr.sin_family = AF_INET;
     udp_sockaddr.sin_port = htons(8888);

@@ -78,12 +78,12 @@ static const struct esp_elfsym g_esp_libc_elfsyms[] = {
 
     /* pthread.h */
 
-//  ESP_ELFSYM_EXPORT(pthread_create),
-//  ESP_ELFSYM_EXPORT(pthread_attr_init),
-//  ESP_ELFSYM_EXPORT(pthread_attr_setstacksize),
-//  ESP_ELFSYM_EXPORT(pthread_detach),
-//  ESP_ELFSYM_EXPORT(pthread_join),
-//  ESP_ELFSYM_EXPORT(pthread_exit),
+    ESP_ELFSYM_EXPORT(pthread_create),
+    ESP_ELFSYM_EXPORT(pthread_attr_init),
+    ESP_ELFSYM_EXPORT(pthread_attr_setstacksize),
+    ESP_ELFSYM_EXPORT(pthread_detach),
+    ESP_ELFSYM_EXPORT(pthread_join),
+    ESP_ELFSYM_EXPORT(pthread_exit),
 
     /* newlib */
 

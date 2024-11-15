@@ -11,12 +11,6 @@
 
 static int udp_fd = -1;
 static struct sockaddr_in udp_sockaddr;
-static _LOCK_RECURSIVE_T write_lock;
-
-void init_console(void)
-{
-    __lock_init_recursive(write_lock);
-}
 
 void init_udp_console(const char* ip)
 {
@@ -40,7 +34,12 @@ ssize_t __wrap__read_r_console(struct _reent* r, int fd, const void* data, size_
 
 ssize_t __wrap__write_r_console(struct _reent* r, int fd, const void* data, size_t size)
 {
-    __lock_acquire_recursive(write_lock);
+    static SemaphoreHandle_t lock = NULL;
+    if (lock == NULL) {
+        lock = xSemaphoreCreateRecursiveMutex();
+    }
+    xSemaphoreTake(lock, portMAX_DELAY);
+
     if (fd >= 0) {
         lwip_sendto(udp_fd, data, size, 0, (struct sockaddr*)&udp_sockaddr, sizeof(udp_sockaddr));
     }
@@ -71,6 +70,7 @@ ssize_t __wrap__write_r_console(struct _reent* r, int fd, const void* data, size
         uart_ll_set_baudrate(&UART0, baudrate, esp_clk_apb_freq());
         uart_ll_txfifo_rst(&UART0);
     }
-    __lock_release_recursive(write_lock);
+
+    xSemaphoreGive(lock);
     return size;
 }

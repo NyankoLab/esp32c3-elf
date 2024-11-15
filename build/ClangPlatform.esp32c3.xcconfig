@@ -156,23 +156,25 @@ OTHER_CPLUSPLUSFLAGS = $(inherited) -D_LIBCPP_HAS_NO_THREADS
 
 OTHER_LDFLAGS = $(inherited) --target=riscv32-esp-elf -march=rv32imc -mabi=ilp32
 OTHER_LDFLAGS = $(inherited) -fno-rtti
+OTHER_LDFLAGS = $(inherited) -fno-lto
 OTHER_LDFLAGS = $(inherited) -nostdlib++ -Wl,-static
+OTHER_LDFLAGS = $(inherited) -Wl,--cref
 OTHER_LDFLAGS = $(inherited) -Wl,--gc-sections
 OTHER_LDFLAGS = $(inherited) -Wl,--defsym=IDF_TARGET_ESP32C3=0
-OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/hello_world/build/esp-idf/esp_system/ld/memory.ld
-OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/hello_world/build/esp-idf/esp_system/ld/sections.ld
+OTHER_LDFLAGS = $(inherited) -Wl,-Map,$(TARGET_BUILD_DIR)/$(EXECUTABLE_NAME).map
+OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/riscv/ld/rom.api.ld
+OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/soc/esp32c3/ld/esp32c3.peripherals.ld
 OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/esp_rom/esp32c3/ld/esp32c3.rom.ld
 OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/esp_rom/esp32c3/ld/esp32c3.rom.api.ld
 OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/esp_rom/esp32c3/ld/esp32c3.rom.libgcc.ld
-OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/esp_rom/esp32c3/ld/esp32c3.rom.newlib.ld
-//OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/esp_rom/esp32c3/ld/esp32c3.rom.newlib-nano.ld
-//OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/esp_rom/esp32c3/ld/esp32c3.rom.newlib-time.ld
 OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/esp_rom/esp32c3/ld/esp32c3.rom.version.ld
 OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/esp_rom/esp32c3/ld/esp32c3.rom.eco3.ld
-OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/riscv/ld/rom.api.ld
-OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/soc/esp32c3/ld/esp32c3.peripherals.ld
-OTHER_LDFLAGS = $(inherited) -Wl,-Map,$(TARGET_BUILD_DIR)/$(EXECUTABLE_NAME).map
+OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/../esp-idf/components/esp_rom/esp32c3/ld/esp32c3.rom.newlib.ld
+OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/hello_world/build/esp-idf/esp_system/ld/memory.ld
+OTHER_LDFLAGS = $(inherited) -T $CLANGPLATFORM_DIR/hello_world/build/esp-idf/esp_system/ld/sections.ld
+
 OTHER_LDFLAGS = $(inherited) -Wl,--start-group
+
 OTHER_LDFLAGS = $(inherited) -lm
 OTHER_LDFLAGS = $(inherited) -lcore
 //OTHER_LDFLAGS = $(inherited) -lmesh
@@ -236,6 +238,63 @@ OTHER_LDFLAGS = $(inherited) -ljson_parser
 OTHER_LDFLAGS = $(inherited) -lmu_srp
 
 OTHER_LDFLAGS = $(inherited) -Wl,--end-group
+
+OTHER_LDFLAGS = $(inherited) -u __cxa_guard_dummy
+OTHER_LDFLAGS = $(inherited) -u __cxx_fatal_exception
+OTHER_LDFLAGS = $(inherited) -u __cxx_init_dummy
+OTHER_LDFLAGS = $(inherited) -u __ubsan_include
+OTHER_LDFLAGS = $(inherited) -u app_main
+OTHER_LDFLAGS = $(inherited) -u esp_app_desc
+OTHER_LDFLAGS = $(inherited) -u esp_efuse_startup_include_func
+OTHER_LDFLAGS = $(inherited) -u esp_system_include_startup_funcs
+OTHER_LDFLAGS = $(inherited) -u esp_timer_init_include_func
+OTHER_LDFLAGS = $(inherited) -u include_esp_phy_override
+OTHER_LDFLAGS = $(inherited) -u newlib_include_assert_impl
+OTHER_LDFLAGS = $(inherited) -u newlib_include_heap_impl
+OTHER_LDFLAGS = $(inherited) -u newlib_include_init_funcs
+OTHER_LDFLAGS = $(inherited) -u newlib_include_pthread_impl
+OTHER_LDFLAGS = $(inherited) -u newlib_include_syscalls_impl
+OTHER_LDFLAGS = $(inherited) -u pthread_include_pthread_cond_var_impl
+OTHER_LDFLAGS = $(inherited) -u pthread_include_pthread_impl
+OTHER_LDFLAGS = $(inherited) -u pthread_include_pthread_local_storage_impl
+OTHER_LDFLAGS = $(inherited) -u pthread_include_pthread_rwlock_impl
+OTHER_LDFLAGS = $(inherited) -u pthread_include_pthread_semaphore_impl
+OTHER_LDFLAGS = $(inherited) -u start_app
+OTHER_LDFLAGS = $(inherited) -u usb_serial_jtag_connection_monitor_include
+OTHER_LDFLAGS = $(inherited) -u vfs_include_syscalls_impl
+
+OTHER_LDFLAGS = $(inherited) -Wl,--undefined=FreeRTOS_openocd_params
+
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__cxa_allocate_exception
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__cxa_call_unexpected
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__cxa_throw
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__deregister_frame_info
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__deregister_frame_info_bases
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__gxx_personality_v0
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__register_frame
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__register_frame_info
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__register_frame_info_bases
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__register_frame_info_table
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__register_frame_info_table_bases
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__register_frame_table
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_Backtrace
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_DeleteException
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_Find_FDE
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_FindEnclosingFunction
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_ForcedUnwind
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetCFA
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetDataRelBase
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetGR
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetIP
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetIPInfo
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetLanguageSpecificData
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetRegionStart
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetTextRelBase
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_RaiseException
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_Resume
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_Resume_or_Rethrow
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_SetGR
+OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_SetIP
 
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,_read_r_console
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,_write_r_console

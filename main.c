@@ -37,10 +37,6 @@ const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc =
 
 void app_main(void)
 {
-    /* Initialize Console */
-    extern void init_console(void);
-    init_console();
-
     printf("Hello world!\n");
 
     /* Print chip information */

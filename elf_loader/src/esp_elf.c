@@ -258,50 +258,33 @@ int esp_elf_relocate(esp_elf_t *elf, const uint8_t *pbuf)
             ESP_LOGD(TAG, "Section %s has %d symbol tables", shstrab + pshdr[i].name, (int)nr_reloc);
 
             for (int i = 0; i < nr_reloc; i++) {
-                int type;
-                uintptr_t addr = 0;
                 elf32_rela_t rela_buf;
-
                 memcpy(&rela_buf, &rela[i], sizeof(elf32_rela_t));
 
                 const elf32_sym_t *sym = &symtab[ELF_R_SYM(rela_buf.info)];
+                if (sym->shndx > phdr->shnum) {
+                    ESP_LOGE(TAG, "Out of bound symbol %d", sym->shndx);
+                    esp_elf_free(elf->pdata);
+                    esp_elf_free(elf->ptext);
+                    return -ENOSYS;
+                }
 
-                type = ELF_R_TYPE(rela->info);
-                if (type == STT_COMMON) {
-                    const char *comm_name = strtab + sym->name;
-
-                    if (comm_name[0]) {
-                        addr = elf_find_sym(comm_name);
-
-                        if (!addr) {
-                            ESP_LOGE(TAG, "Can't find common %s", strtab + sym->name);
-                            esp_elf_free(elf->pdata);
-                            esp_elf_free(elf->ptext);
-                            return -ENOSYS;
-                        }
-
-                        ESP_LOGD(TAG, "Find common %s addr=%x", comm_name, addr);
-                    }
-                } else if (type == STT_FILE) {
+                uintptr_t addr = 0;
+                if (sym->shndx == 0) {
                     const char *func_name = strtab + sym->name;
-
-                    if (sym->value) {
-                        addr = esp_elf_map_sym(elf, sym->value);
-                    } else {
-                        addr = elf_find_sym(func_name);
-                    }
-
+                    addr = elf_find_sym(func_name);
                     if (!addr) {
                         ESP_LOGE(TAG, "Can't find symbol %s", func_name);
                         esp_elf_free(elf->pdata);
                         esp_elf_free(elf->ptext);
                         return -ENOSYS;
                     }
-
                     ESP_LOGD(TAG, "Find function %s addr=%x", func_name, addr);
+                } else {
+                    addr = esp_elf_map_sym(elf, pshdr[sym->shndx].addr + sym->value);
                 }
 
-                esp_elf_arch_relocate(elf, &rela_buf, sym, addr);
+                esp_elf_arch_relocate(elf, &rela_buf, addr);
             }
         }
     }

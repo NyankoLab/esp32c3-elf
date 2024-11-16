@@ -48,8 +48,7 @@ void esp_elf_free(void *ptr);
  * 
  * @return ESP_OK if sucess or other if failed.
  */
-int esp_elf_arch_relocate(esp_elf_t *elf, const elf32_rela_t *rela,
-                          const elf32_sym_t *sym, uint32_t addr);
+int esp_elf_arch_relocate(esp_elf_t *elf, const elf32_rela_t *rela, uint32_t addr);
 
 /**
  * @brief Remap symbol from ".data" to ".text" section. 

@@ -67,13 +67,11 @@ static const char *TAG = "elf_arch";
  *
  * @param elf  - ELF object pointer
  * @param rela - Relocated symbol data
- * @param sym  - ELF symbol table
  * @param addr - Jumping target address
  * 
  * @return ESP_OK if sucess or other if failed.
  */
-int esp_elf_arch_relocate(esp_elf_t *elf, const elf32_rela_t *rela,
-                          const elf32_sym_t *sym, uint32_t addr)
+int esp_elf_arch_relocate(esp_elf_t *elf, const elf32_rela_t *rela, uint32_t addr)
 {
     uint32_t val;
     uint32_t *where;

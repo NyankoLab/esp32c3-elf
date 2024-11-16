@@ -41,6 +41,12 @@ int mesh_sta_auth_expire_time(void)
 
 void app_main(void)
 {
+    /* Initialize Component */
+    extern void vfs_init(void);
+    extern void fs_init(void);
+    vfs_init();
+    fs_init();
+
     printf("Hello world!\n");
 
     /* Print chip information */
@@ -68,12 +74,6 @@ void app_main(void)
 
     printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
 
-    /* Initialize Component */
-    extern void vfs_init(void);
-    extern void fs_init(void);
-    vfs_init();
-    fs_init();
-
     /* Execute ELF */
     esp_elf_t elf;
     if (esp_elf_init(&elf) == 0) {
@@ -93,13 +93,15 @@ void app_main(void)
         }
 
         if (buffer) {
-            printf("Start to relocate ELF file");
             int ret = esp_elf_relocate(&elf, buffer);
             free(buffer);
             if (ret == 0) {
-                printf("Start to run ELF file");
+                printf("Start to run ELF file\n");
                 esp_elf_request(&elf, 0, 0, NULL);
-                printf("Success to exit from ELF file");
+                printf("Success to exit from ELF file\n");
+            }
+            else {
+                printf("Fail to relocate FILE file (%d)\n", ret);
             }
         }
 

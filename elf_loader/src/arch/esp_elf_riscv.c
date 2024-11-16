@@ -151,10 +151,9 @@ static uint32_t setLO12_S(uint32_t insn, uint32_t imm)
  * 
  * @return ESP_OK if sucess or other if failed.
  */
-int esp_elf_arch_relocate(esp_elf_t *elf, const elf32_rela_t *rela,
-                          const elf32_sym_t *sym, uint32_t addr)
+int esp_elf_arch_relocate(esp_elf_t *elf, const elf32_rela_t *rela, uint32_t addr)
 {
-    uint32_t val = sym->value + rela->addend;
+    uint32_t val;
     uint32_t *where;
 
     assert(elf && rela);
@@ -166,12 +165,15 @@ int esp_elf_arch_relocate(esp_elf_t *elf, const elf32_rela_t *rela,
         return 0;
     }
 
+    val = addr + rela->addend;
     where = (uint32_t *)esp_elf_map_sym(elf, rela->offset);
 
     switch (ELF_R_TYPE(rela->info)) {
     case R_RISCV_JAL:
     case R_RISCV_BRANCH:
     case R_RISCV_PCREL_HI20:
+    case R_RISCV_PCREL_LO12_I:
+    case R_RISCV_PCREL_LO12_S:
     case R_RISCV_RVC_BRANCH:
     case R_RISCV_RVC_JUMP:
 //  case R_RISCV_32_PCREL:
@@ -182,7 +184,7 @@ int esp_elf_arch_relocate(esp_elf_t *elf, const elf32_rela_t *rela,
         break;
     }
 
-    ESP_LOGD(TAG, "where=%p addr=%x offset=%x val=%x\n", where, (int)addr, (int)rela->offset, (int)val);
+    ESP_LOGD(TAG, "where=%p addr=%x offset=%x val=%x", where, (int)addr, (int)rela->offset, (int)val);
 
     switch (ELF_R_TYPE(rela->info)) {
     case R_RISCV_32:
@@ -256,8 +258,8 @@ int esp_elf_arch_relocate(esp_elf_t *elf, const elf32_rela_t *rela,
     }
     case R_RISCV_CALL:
     case R_RISCV_CALL_PLT: {
-        esp_elf_arch_relocate(elf, &(elf32_rela_t){R_RISCV_PCREL_HI20}, sym, addr);
-        esp_elf_arch_relocate(elf, &(elf32_rela_t){R_RISCV_PCREL_LO12_I}, sym, addr + 4);
+        esp_elf_arch_relocate(elf, &(elf32_rela_t){rela->offset, R_RISCV_PCREL_HI20}, addr);
+        esp_elf_arch_relocate(elf, &(elf32_rela_t){rela->offset + 4, R_RISCV_PCREL_LO12_I}, addr + 4);
         break;
     }
     case R_RISCV_GOT_HI20:

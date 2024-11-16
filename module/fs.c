@@ -141,8 +141,6 @@ int fs_open(const char* name, const char* mode)
     int result = lfs_file_open(&fs, fd, temp, flags);
     if (result != LFS_ERR_OK)
     {
-        ESP_LOGE(TAG, "%s(%p, %p, %s, %d): %d", "lfs_file_open", &fs, fd, name, flags, result);
-
         free(fd);
         fd = (lfs_file_t*)result;
     }

@@ -16,7 +16,6 @@
 #include <freertos/task.h>
 #include <soc/uart_pins.h>
 #include "elf_loader/include/esp_elf.h"
-#include "module/fs.h"
 
 int uart0_tx IRAM_BSS_ATTR = U0TXD_GPIO_NUM;
 int uart0_rx IRAM_BSS_ATTR = U0RXD_GPIO_NUM;
@@ -34,6 +33,11 @@ const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc =
     .idf_ver = "v" __XSTRING(ESP_IDF_VERSION_MAJOR) "." __XSTRING(ESP_IDF_VERSION_MINOR) "." __XSTRING(ESP_IDF_VERSION_PATCH) " "
                "(" "clang version " __XSTRING(__clang_major__) "." __XSTRING(__clang_minor__) "." __XSTRING(__clang_patchlevel__) ")"
 };
+
+int mesh_sta_auth_expire_time(void)
+{
+    return 0;
+}
 
 void app_main(void)
 {
@@ -64,7 +68,10 @@ void app_main(void)
 
     printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
 
-    /* Initialize File System */
+    /* Initialize Component */
+    extern void vfs_init(void);
+    extern void fs_init(void);
+    vfs_init();
     fs_init();
 
     /* Execute ELF */

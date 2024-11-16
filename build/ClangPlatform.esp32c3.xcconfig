@@ -139,6 +139,7 @@ LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/hello_world/build/esp-idf
 OTHER_CFLAGS = $(inherited) --target=riscv32-esp-elf -march=rv32imc -mabi=ilp32 
 OTHER_CFLAGS = $(inherited) -DCONFIG_ELF_LOADER_LIBC_SYMBOLS
 OTHER_CFLAGS = $(inherited) -DCONFIG_ELF_LOADER_ESPIDF_SYMBOLS
+OTHER_CFLAGS = $(inherited) -DCONFIG_ELF_LOADER_CUSTOMER_SYMBOLS
 OTHER_CFLAGS = $(inherited) -DNDEBUG
 OTHER_CFLAGS = $(inherited) -D__ESP__
 OTHER_CFLAGS = $(inherited) -D__Espressif__
@@ -237,7 +238,7 @@ OTHER_LDFLAGS = $(inherited) -ljson_generator
 OTHER_LDFLAGS = $(inherited) -ljson_parser
 OTHER_LDFLAGS = $(inherited) -lmu_srp
 
-OTHER_LDFLAGS = $(inherited) -Wl,--end-group
+//OTHER_LDFLAGS = $(inherited) -Wl,--end-group
 
 OTHER_LDFLAGS = $(inherited) -u __cxa_guard_dummy
 OTHER_LDFLAGS = $(inherited) -u __cxx_fatal_exception

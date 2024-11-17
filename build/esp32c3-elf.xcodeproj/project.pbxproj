@@ -14,7 +14,6 @@
 		D6741A802CE610650024FB04 /* homekit.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A7D2CE610650024FB04 /* homekit.c */; };
 		D6741A812CE610650024FB04 /* vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A7E2CE610650024FB04 /* vfs.c */; };
 		D6741A822CE610650024FB04 /* nvs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A7F2CE610650024FB04 /* nvs.c */; };
-		D6741A842CE63FBF0024FB04 /* nanosleep.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A832CE63FBF0024FB04 /* nanosleep.c */; };
 		D6741A8A2CE7155C0024FB04 /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A892CE7155C0024FB04 /* file.c */; };
 		D6865F7029AD085F00EBC297 /* liblittlefs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6865F6F29AD085F00EBC297 /* liblittlefs.a */; };
 		D6865F8529ADF4A200EBC297 /* libfreertos-mqtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6865F8429ADF4A200EBC297 /* libfreertos-mqtt.a */; };
@@ -33,7 +32,6 @@
 		D6741A7D2CE610650024FB04 /* homekit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = homekit.c; path = ../module/patch/homekit.c; sourceTree = "<group>"; };
 		D6741A7E2CE610650024FB04 /* vfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vfs.c; path = ../module/patch/vfs.c; sourceTree = "<group>"; };
 		D6741A7F2CE610650024FB04 /* nvs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nvs.c; path = ../module/patch/nvs.c; sourceTree = "<group>"; };
-		D6741A832CE63FBF0024FB04 /* nanosleep.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nanosleep.c; path = ../module/patch/nanosleep.c; sourceTree = "<group>"; };
 		D6741A882CE708960024FB04 /* esp32c3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = esp32c3.h; path = ../esp32c3.h; sourceTree = "<group>"; };
 		D6741A892CE7155C0024FB04 /* file.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = file.c; path = ../module/patch/file.c; sourceTree = "<group>"; };
 		D6865F6F29AD085F00EBC297 /* liblittlefs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = liblittlefs.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,7 +108,6 @@
 			children = (
 				D6741A892CE7155C0024FB04 /* file.c */,
 				D6741A7D2CE610650024FB04 /* homekit.c */,
-				D6741A832CE63FBF0024FB04 /* nanosleep.c */,
 				D6741A7F2CE610650024FB04 /* nvs.c */,
 				D6741A7E2CE610650024FB04 /* vfs.c */,
 			);
@@ -202,7 +199,6 @@
 				D65A9C032CE848CC0022B1E0 /* symbols.c in Sources */,
 				D6741A682CE5E4240024FB04 /* fs.c in Sources */,
 				D6741A812CE610650024FB04 /* vfs.c in Sources */,
-				D6741A842CE63FBF0024FB04 /* nanosleep.c in Sources */,
 				D6741A332CE393DD0024FB04 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -41,12 +41,6 @@ int mesh_sta_auth_expire_time(void)
 
 void app_main(void)
 {
-    /* Initialize Component */
-    extern void vfs_init(void);
-    extern void fs_init(void);
-    vfs_init();
-    fs_init();
-
     printf("Hello world!\n");
 
     /* Print chip information */
@@ -73,6 +67,12 @@ void app_main(void)
            (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
     printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
+
+    /* Initialize Component */
+    extern void vfs_init(void);
+    extern void fs_init(void);
+    vfs_init();
+    fs_init();
 
     /* Execute ELF */
     esp_elf_t elf;

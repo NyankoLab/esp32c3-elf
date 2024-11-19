@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <esp_app_desc.h>
 #include <esp_chip_info.h>
+#include <esp_http_server.h>
 #include <esp_flash.h>
 #include <esp_system.h>
 #include <freertos/FreeRTOS.h>
@@ -21,6 +22,9 @@ int uart0_tx IRAM_BSS_ATTR = U0TXD_GPIO_NUM;
 int uart0_rx IRAM_BSS_ATTR = U0RXD_GPIO_NUM;
 int uart1_tx IRAM_BSS_ATTR = U1TXD_GPIO_NUM;
 int uart1_rx IRAM_BSS_ATTR = U1RXD_GPIO_NUM;
+esp_netif_t* ap_netif IRAM_BSS_ATTR;
+esp_netif_t* sta_netif IRAM_BSS_ATTR;
+httpd_handle_t httpd_server IRAM_BSS_ATTR;
 
 // Application version info
 const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc = {
@@ -34,9 +38,32 @@ const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc =
                "(" "clang version " __XSTRING(__clang_major__) "." __XSTRING(__clang_minor__) "." __XSTRING(__clang_patchlevel__) ")"
 };
 
+httpd_handle_t* hap_httpd_get_handle();
+int __real_hap_httpd_start(void);
+int __wrap_hap_httpd_start(void)
+{
+  httpd_handle_t* handle = hap_httpd_get_handle();
+  if (handle) {
+    extern httpd_handle_t httpd_server;
+    (*handle) = httpd_server;
+    return 0;
+  }
+  return __real_hap_httpd_start();
+}
+
 int mesh_sta_auth_expire_time(void)
 {
     return 0;
+}
+
+bool elf_read(void* buffer, size_t size, bool string, const void* data, size_t offset)
+{
+    FILE* file = (FILE*)data;
+    fseek(file, offset, SEEK_SET);
+    if (string) {
+        return fgets(buffer, size, file) ? true : false;
+    }
+    return fread(buffer, 1, size, file) == size ? true : false;
 }
 
 void app_main(void)
@@ -78,30 +105,21 @@ void app_main(void)
     esp_elf_t elf;
     if (esp_elf_init(&elf) == 0) {
         const char* filename = "main.elf";
-        uint8_t* buffer = NULL;
 
         struct stat st;
         if (stat(filename, &st) == 0 && st.st_size > 0) {
             FILE* file = fopen(filename, "rb");
             if (file) {
-                buffer = malloc(st.st_size);
-                if (buffer) {
-                    fread(buffer, 1, st.st_size, file);
-                }
+                int ret = esp_elf_relocate(&elf, elf_read, file);
                 fclose(file);
-            }
-        }
-
-        if (buffer) {
-            int ret = esp_elf_relocate(&elf, buffer);
-            free(buffer);
-            if (ret == 0) {
-                printf("Start to run ELF file\n");
-                esp_elf_request(&elf, 0, 0, NULL);
-                printf("Success to exit from ELF file\n");
-            }
-            else {
-                printf("Fail to relocate FILE file (%d)\n", ret);
+                if (ret == 0) {
+                    printf("Start to run ELF file\n");
+                    esp_elf_request(&elf, 0, 0, NULL);
+                    printf("Success to exit from ELF file\n");
+                }
+                else {
+                    printf("Fail to relocate FILE file (%d)\n", ret);
+                }
             }
         }
 

@@ -1,0 +1,80 @@
+diff --git a/components/homekit/esp_hap_core/src/esp_hap_ip_services.c b/components/homekit/esp_hap_core/src/esp_hap_ip_services.c
+index b8dfb7e..4080f4e 100644
+--- a/components/homekit/esp_hap_core/src/esp_hap_ip_services.c
++++ b/components/homekit/esp_hap_core/src/esp_hap_ip_services.c
+@@ -51,7 +51,7 @@
+ #ifdef ESP_MFI_DEBUG_ENABLE
+ #define ESP_MFI_DEBUG_PLAIN(fmt, ...)   \
+     if (http_debug) {                   \
+-        printf("\e[1;35m" fmt "\e[0m", ##__VA_ARGS__); \
++        printf(fmt, ##__VA_ARGS__); \
+     }
+ #else /* ESP_MFI_DEBUG_ENABLE */
+ #define ESP_MFI_DEBUG_PLAIN(fmt, ...)
+diff --git a/components/homekit/esp_hap_core/src/priv_includes/esp_mfi_debug.h b/components/homekit/esp_hap_core/src/priv_includes/esp_mfi_debug.h
+index 4a37a00..591b391 100644
+--- a/components/homekit/esp_hap_core/src/priv_includes/esp_mfi_debug.h
++++ b/components/homekit/esp_hap_core/src/priv_includes/esp_mfi_debug.h
+@@ -29,24 +29,25 @@
+ #include <stdio.h>
+ #include <esp_idf_version.h>
+ #include <inttypes.h>
++#include <esp_log.h>
+ 
+ #ifdef __cplusplus
+ extern "C"{
+ #endif
+ 
+ #define ESP_MFI_DEBUG_FL "\n"
+-#define CONFIG_ESP_MFI_DEBUG_ENABLE
++/* #define CONFIG_ESP_MFI_DEBUG_ENABLE */
+ #ifdef CONFIG_ESP_MFI_DEBUG_ENABLE
+ #define ESP_MFI_DEBUG_ENABLE
+ #endif /* CONFIG_ESP_MFI_DEBUG_ENABLE */
+ 
+-#define CONFIG_ESP_MFI_ASSERT
++/* #define CONFIG_ESP_MFI_ASSERT */
+ #ifdef CONFIG_ESP_MFI_ASSERT
+ #define ESP_MFI_ASSERT_ENABLE
+ #endif /* CONFIG_ESP_MFI_ASSERT */
+ 
+ #define CONFIG_MFI_DEBUG_LEVEL_INIT 0
+-#define CONFIG_ESP_MFI_ASSERT_BLOCK
++/* #define CONFIG_ESP_MFI_ASSERT_BLOCK */
+ #ifdef CONFIG_ESP_MFI_ASSERT_BLOCK
+ #define ESP_MFI_ASSERT_BLOCK()  while (1)
+ #else /* CONFIG_ESP_MFI_ASSERT_BLOCK */
+@@ -104,16 +105,18 @@ uint32_t esp_mfi_get_debug_level(uint32_t level, uint32_t *color);
+     {                                                                                       \
+         uint32_t __color_LINE;                                                              \
+         if (l > esp_mfi_get_debug_level(l, &__color_LINE)) {                                \
+-            printf("\e[1;%" PRId32 "m" fmt "\e[0m" ESP_MFI_DEBUG_FL,                         \
+-                                __color_LINE,  ##__VA_ARGS__);                              \
++            if (l==ESP_MFI_DEBUG_INFO)        printf("I (%" PRIu32 ") %s: " fmt ESP_MFI_DEBUG_FL, esp_log_timestamp(), __FILE_NAME__, ##__VA_ARGS__); \
++            else if (l==ESP_MFI_DEBUG_WARN)   printf("W (%" PRIu32 ") %s: " fmt ESP_MFI_DEBUG_FL, esp_log_timestamp(), __FILE_NAME__, ##__VA_ARGS__); \
++            else if (l==ESP_MFI_DEBUG_ERR)    printf("E (%" PRIu32 ") %s: " fmt ESP_MFI_DEBUG_FL, esp_log_timestamp(), __FILE_NAME__, ##__VA_ARGS__); \
++            else if (l==ESP_MFI_DEBUG_ASSERT) printf("A (%" PRIu32 ") %s: " fmt ESP_MFI_DEBUG_FL, esp_log_timestamp(), __FILE_NAME__, ##__VA_ARGS__); \
++            else if (l==ESP_MFI_DEBUG_BLOCK)  printf("B (%" PRIu32 ") %s: " fmt ESP_MFI_DEBUG_FL, esp_log_timestamp(), __FILE_NAME__, ##__VA_ARGS__); \
+         }                                                                                   \
+     }
+-#define ESP_MFI_DEBUG_INTR(l, fmt, ...)                                                          \
++#define ESP_MFI_DEBUG_INTR(l, fmt, ...)                                                     \
+     {                                                                                       \
+         uint32_t __color_LINE;                                                              \
+         if (l > esp_mfi_get_debug_level(l, &__color_LINE)) {                                \
+-            esp_intr_printf("\e[1;%dm" fmt "\e[0m" ESP_MFI_DEBUG_FL,                        \
+-                                __color_LINE,  ##__VA_ARGS__);                              \
++            esp_intr_printf("D (%" PRIu32 ") %s: " fmt ESP_MFI_DEBUG_FL, esp_log_timestamp(), __FILE_NAME__, ##__VA_ARGS__);                          \
+         }                                                                                   \
+     }
+ #else /* ESP_MFI_DEBUG_ENABLE */
+@@ -134,8 +137,7 @@ uint32_t esp_mfi_get_debug_level(uint32_t level, uint32_t *color);
+ #define ESP_MFI_ASSERT(cond)                                                                \
+ {                                                                                           \
+     if (!(cond)) {                                                                          \
+-        printf("\e[1;33m" "ESP_MFI assert file %s line %d" ESP_MFI_DEBUG_FL,        \
+-                                __FILE__, __LINE__);                                        \
++        printf("ESP_MFI assert file %s line %d" ESP_MFI_DEBUG_FL, __FILE_NAME__, __LINE__); \
+         ESP_MFI_ASSERT_BLOCK();                                                             \
+     }                                                                                       \
+ }

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D65A9C032CE848CC0022B1E0 /* symbols.c in Sources */ = {isa = PBXBuildFile; fileRef = D65A9C022CE848CC0022B1E0 /* symbols.c */; settings = {COMPILER_FLAGS = "-I../elf_loader/include"; }; };
-		D6741A332CE393DD0024FB04 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A322CE393DD0024FB04 /* main.c */; };
+		D6741A332CE393DD0024FB04 /* app_main.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A322CE393DD0024FB04 /* app_main.c */; };
 		D6741A642CE5D31A0024FB04 /* libelf_loader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6741A632CE5D31A0024FB04 /* libelf_loader.a */; };
 		D6741A682CE5E4240024FB04 /* fs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A672CE5E4240024FB04 /* fs.c */; };
 		D6741A802CE610650024FB04 /* homekit.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A7D2CE610650024FB04 /* homekit.c */; };
@@ -25,7 +25,7 @@
 		D66C4B1829A860C100F27A29 /* ClangPlatform.esp32c3.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ClangPlatform.esp32c3.xcconfig; sourceTree = "<group>"; };
 		D66C4B1929A860D000F27A29 /* sdkconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sdkconfig.h; path = hello_world/build/config/sdkconfig.h; sourceTree = "<group>"; };
 		D66C4B1C29A864FC00F27A29 /* sdkconfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sdkconfig.h; sourceTree = "<group>"; };
-		D6741A322CE393DD0024FB04 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = ../main.c; sourceTree = "<group>"; };
+		D6741A322CE393DD0024FB04 /* app_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = app_main.c; path = ../app_main.c; sourceTree = "<group>"; };
 		D6741A632CE5D31A0024FB04 /* libelf_loader.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libelf_loader.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6741A672CE5E4240024FB04 /* fs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = fs.c; path = ../module/fs.c; sourceTree = "<group>"; };
 		D6741A692CE5E4BA0024FB04 /* fs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fs.h; path = ../module/fs.h; sourceTree = "<group>"; };
@@ -77,7 +77,7 @@
 			children = (
 				D6741A652CE5E4160024FB04 /* module */,
 				D6741A882CE708960024FB04 /* esp32c3.h */,
-				D6741A322CE393DD0024FB04 /* main.c */,
+				D6741A322CE393DD0024FB04 /* app_main.c */,
 				CE999BD625D21EC800351116 /* Configs */,
 				D644A042231ED82900B75B77 /* Products */,
 				300264BD24266097004559E0 /* Frameworks */,
@@ -199,7 +199,7 @@
 				D65A9C032CE848CC0022B1E0 /* symbols.c in Sources */,
 				D6741A682CE5E4240024FB04 /* fs.c in Sources */,
 				D6741A812CE610650024FB04 /* vfs.c in Sources */,
-				D6741A332CE393DD0024FB04 /* main.c in Sources */,
+				D6741A332CE393DD0024FB04 /* app_main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

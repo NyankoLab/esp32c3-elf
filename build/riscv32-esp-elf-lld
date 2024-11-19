@@ -1,7 +1,11 @@
 #!/bin/bash
 
 CLANG_BIN_PATH="../esp-clang/bin"
+if [ -d "esp-clang/bin" ]; then
+  CLANG_BIN_PATH="esp-clang/bin"
+fi
 
+RELOC=0
 ARGS=""
 while [[ $# > 0 ]] ; do
     case $1 in
@@ -10,6 +14,10 @@ while [[ $# > 0 ]] ; do
         -dead_strip)
         ;;
         -dynamic)
+        ;;
+        *elf_loader.ld)
+        RELOC=1
+        ARGS=$ARGS" "$1
         ;;
         -F*)
         ;;
@@ -37,6 +45,12 @@ while [[ $# > 0 ]] ; do
     shift
 done
 
-echo $CLANG_BIN_PATH/riscv32-esp-elf-clang-ld $ARGS
-$CLANG_BIN_PATH/riscv32-esp-elf-clang-ld $ARGS
-exit $?
+if [ $RELOC -eq 0 ]; then
+  echo $CLANG_BIN_PATH/riscv32-esp-elf-clang-ld $ARGS
+  $CLANG_BIN_PATH/riscv32-esp-elf-clang-ld $ARGS
+  exit $?
+else
+  echo /opt/homebrew/opt/lld/bin/ld.lld $ARGS
+  /opt/homebrew/opt/lld/bin/ld.lld $ARGS
+  exit $?
+fi

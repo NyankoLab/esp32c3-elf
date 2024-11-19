@@ -1,6 +1,6 @@
 SECTIONS
 {
-  .text :
+  .text 0x00000000 :
   {
     *(.text)
     *(.text.*)
@@ -16,6 +16,8 @@ SECTIONS
   {
     *(.data)
     *(.data.*)
+    *(.sdata)
+    *(.sdata.*)
   }
 
   .bss :
@@ -24,5 +26,23 @@ SECTIONS
     *(.bss.*)
     *(.sbss)
     *(.sbss.*)
+  }
+
+  .rtc.data :
+  {
+    *(.rtc.data)
+    *(.rtc.data.*)
+  }
+
+  .rela.text :
+  {
+    *(.rela.text)
+    *(.rela.text.*)
+  }
+
+  .rela.rodata :
+  {
+    *(.rela.rodata)
+    *(.rela.rodata.*)
   }
 }

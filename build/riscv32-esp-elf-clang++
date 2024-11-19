@@ -1,6 +1,9 @@
 #!/bin/bash
 
 CLANG_BIN_PATH="../esp-clang/bin"
+if [ -d "esp-clang/bin" ]; then
+  CLANG_BIN_PATH="esp-clang/bin"
+fi
 
 LD=0
 ARGS=""
@@ -24,8 +27,8 @@ while [[ $# > 0 ]] ; do
 done
 
 if [ $LD -eq 0 ]; then
-echo /opt/homebrew/opt/llvm/bin/clang++ $ARGS
-/opt/homebrew/opt/llvm/bin/clang++ $ARGS
+  echo /opt/homebrew/opt/llvm/bin/clang++ $ARGS
+  /opt/homebrew/opt/llvm/bin/clang++ $ARGS
   exit $?
 else
   echo $CLANG_BIN_PATH/clang-18 $ARGS

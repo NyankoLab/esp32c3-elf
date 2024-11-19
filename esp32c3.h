@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma clang diagnostic ignored "-Wstrict-prototypes"
+
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -14,6 +16,7 @@ extern "C" {
 #include <esp_app_desc.h>
 #include <esp_attr.h>
 #include <esp_err.h>
+#include <esp_http_server.h>
 #include <esp_log.h>
 #include <esp_netif.h>
 #include <esp_system.h>
@@ -23,7 +26,6 @@ extern "C" {
 #include <freertos/task.h>
 #include <freertos/timers.h>
 
-extern char* url_decode(char* param);
 inline int32_t esp_timer_get_time_ms(void)
 {
     return (int32_t)(esp_timer_get_time() / 1000);
@@ -37,6 +39,9 @@ extern int uart0_tx;
 extern int uart0_rx;
 extern int uart1_tx;
 extern int uart1_rx;
+extern esp_netif_t* ap_netif;
+extern esp_netif_t* sta_netif;
+extern httpd_handle_t httpd_server;
 
 #ifdef __cplusplus
 };
@@ -44,5 +49,4 @@ extern int uart1_rx;
 
 #ifdef __cplusplus
 #include <string>
-typedef std::string string;
 #endif

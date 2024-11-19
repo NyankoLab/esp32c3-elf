@@ -11,6 +11,22 @@ int __wrap_fclose(FILE* file)
     return 0;
 }
 
+int __real_fgetc(FILE* file);
+int __wrap_fgetc(FILE* file)
+{
+    if (file == stdin || file == stdout || file == stderr)
+        return __real_fgetc(file);
+    return fs_getc((int)file);
+}
+
+char* __real_fgets(char* buffer, int length, FILE* file);
+char* __wrap_fgets(char* buffer, int length, FILE* file)
+{
+    if (file == stdin || file == stdout || file == stderr)
+        return __real_fgets(buffer, length, file);
+    return fs_gets(buffer, length, (int)file);
+}
+
 size_t __real_fread(void* buffer, size_t size, size_t n, FILE* file);
 size_t __wrap_fread(void* buffer, size_t size, size_t n, FILE* file)
 {

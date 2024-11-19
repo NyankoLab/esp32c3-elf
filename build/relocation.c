@@ -282,6 +282,21 @@ int main(int argc, char const* argv[])
         continue;
       }
 
+#if 0
+      if (relotype == R_RISCV_LO12_I && p != begin)
+      {
+        struct elf32_rela* prev = (p - 1);
+        struct elf32_rela* curr = rel;
+        if (prev->offset + 4 == curr->offset && ELF_R_TYPE(prev->info) == R_RISCV_HI20 && ELF_R_SYM(prev->info) == relosym)
+        {
+          (*rel) = (*prev);
+          rel->info &= ~0xFF;
+          rel->info |= R_RISCV_CALL_PLT;
+          p--;
+        }
+      }
+#endif
+
       if (sym->shndx == 0)
       {
         (*p++) = (*rel);

@@ -143,11 +143,18 @@ OTHER_CFLAGS = $(inherited) -DCONFIG_ELF_LOADER_CUSTOMER_SYMBOLS
 OTHER_CFLAGS = $(inherited) -DNDEBUG
 OTHER_CFLAGS = $(inherited) -D__ESP__
 OTHER_CFLAGS = $(inherited) -D__Espressif__
+OTHER_CFLAGS = $(inherited) -Dstrtod_l(a,b,c)=strtod(a,b)
+OTHER_CFLAGS = $(inherited) -Dstrtof_l(a,b,c)=strtof(a,b)
+OTHER_CFLAGS = $(inherited) -Dstrtold_l(a,b,c)=strtold(a,b)
+OTHER_CFLAGS = $(inherited) -Dstrtoll_l(a,b,c,d)=strtoll(a,b,c)
+OTHER_CFLAGS = $(inherited) -Dstrtoull_l(a,b,c,d)=strtoull(a,b,c)
+OTHER_CFLAGS = $(inherited) -Dvasprintf(a,b,c)=0
 OTHER_CFLAGS = $(inherited) -fno-rtti
 OTHER_CFLAGS = $(inherited) -fdata-sections
 OTHER_CFLAGS = $(inherited) -ffunction-sections
 
 OTHER_CPLUSPLUSFLAGS = $(inherited) -fno-sized-deallocation -nostdinc++ -v
+OTHER_CPLUSPLUSFLAGS = $(inherited) -D_LIBCPP_VERBOSE_ABORT=(void)
 OTHER_CPLUSPLUSFLAGS = $(inherited) -D_LIBCPP_AVAILABILITY_HAS_NO_VERBOSE_ABORT
 OTHER_CPLUSPLUSFLAGS = $(inherited) -D_LIBCPP_DISABLE_EXTERN_TEMPLATE
 OTHER_CPLUSPLUSFLAGS = $(inherited) -D_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS
@@ -231,7 +238,7 @@ OTHER_LDFLAGS = $(inherited) -lwpa_supplicant
 OTHER_LDFLAGS = $(inherited) -lesp_hap_apple_profiles
 OTHER_LDFLAGS = $(inherited) -lesp_hap_core
 OTHER_LDFLAGS = $(inherited) -lesp_hap_platform
-//OTHER_LDFLAGS = $(inherited) -lespressif__libsodium
+OTHER_LDFLAGS = $(inherited) -lespressif__libsodium
 OTHER_LDFLAGS = $(inherited) -lespressif__mdns
 OTHER_LDFLAGS = $(inherited) -lhkdf-sha
 OTHER_LDFLAGS = $(inherited) -ljson_generator
@@ -301,12 +308,16 @@ OTHER_LDFLAGS = $(inherited) -Wl,-wrap,_read_r_console
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,_write_r_console
 
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fclose
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fgetc
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fgets
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fread
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fwrite
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fseek
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,ftell
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fopen
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,stat
+
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,hap_httpd_start
 
 ARCHS = riscv32
 ARCHS_STANDARD = riscv32

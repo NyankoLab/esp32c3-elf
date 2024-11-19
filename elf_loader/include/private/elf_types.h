@@ -42,6 +42,15 @@ extern "C" {
 #define SHF_EXECINSTR   4               /*!< machine code */
 #define SHF_MASKPROG    0xf0000000      /*!< reserved for processor-specific semantics */
 
+/** @brief special section indexes */
+#define SHN_UNDEF       0
+#define SHN_LORESERVE   0xff00
+#define SHN_LOPROC      0xff00
+#define SHN_HIPROC      0xff1f
+#define SHN_ABS         0xfff1
+#define SHN_COMMON      0xfff2
+#define SHN_HIRESERVE   0xffff
+
 /** @brief Symbol Types */
 
 #define STT_NOTYPE      0               /*!< symbol type is unspecified */

@@ -39,11 +39,12 @@ int esp_elf_init(esp_elf_t *elf);
  * @brief Decode and relocate ELF data.
  *
  * @param elf - ELF object pointer
- * @param pbuf - ELF data buffer
- * 
+ * @param read - ELF read function
+ * @param data - ELF data buffer
+ *
  * @return ESP_OK if sucess or other if failed.
  */
-int esp_elf_relocate(esp_elf_t *elf, const uint8_t *pbuf);
+int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const void *, size_t), const void *data);
 
 /**
  * @brief Request running relocated ELF function.

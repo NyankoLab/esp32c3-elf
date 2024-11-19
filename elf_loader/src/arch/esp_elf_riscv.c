@@ -166,7 +166,7 @@ int esp_elf_arch_relocate(esp_elf_t *elf, const elf32_rela_t *rela, uint32_t add
     }
 
     val = addr + rela->addend;
-    where = (uint32_t *)esp_elf_map_sym(elf, rela->offset);
+    where = (uint32_t *)rela->offset;
 
     switch (ELF_R_TYPE(rela->info)) {
     case R_RISCV_JAL:

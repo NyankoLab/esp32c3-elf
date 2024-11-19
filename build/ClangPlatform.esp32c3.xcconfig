@@ -78,6 +78,8 @@ HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/wpa_
 
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hap_apple_profiles/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hap_core/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hap_core/src/priv_includes
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/hello_world/managed_components/espressif__mdns/include
 
 //LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-clang/lib/clang-runtimes/riscv32-esp-unknown-elf/rv32imc-zicsr-zifencei_ilp32_no-rtti/lib
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/hello_world/build/esp-idf/app_update

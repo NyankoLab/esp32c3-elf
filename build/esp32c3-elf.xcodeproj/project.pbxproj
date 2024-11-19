@@ -17,6 +17,9 @@
 		D6741A8A2CE7155C0024FB04 /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A892CE7155C0024FB04 /* file.c */; };
 		D6865F7029AD085F00EBC297 /* liblittlefs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6865F6F29AD085F00EBC297 /* liblittlefs.a */; };
 		D6865F8529ADF4A200EBC297 /* libfreertos-mqtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6865F8429ADF4A200EBC297 /* libfreertos-mqtt.a */; };
+		D6FC9A6E2CEB43C9009AF784 /* mqtt.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A682CEB43C8009AF784 /* mqtt.c */; };
+		D6FC9A6F2CEB43C9009AF784 /* https.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A692CEB43C8009AF784 /* https.c */; };
+		D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A6D2CEB43C8009AF784 /* httpd.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +39,12 @@
 		D6741A892CE7155C0024FB04 /* file.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = file.c; path = ../module/patch/file.c; sourceTree = "<group>"; };
 		D6865F6F29AD085F00EBC297 /* liblittlefs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = liblittlefs.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6865F8429ADF4A200EBC297 /* libfreertos-mqtt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libfreertos-mqtt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6FC9A682CEB43C8009AF784 /* mqtt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mqtt.c; path = ../module/mqtt.c; sourceTree = "<group>"; };
+		D6FC9A692CEB43C8009AF784 /* https.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = https.c; path = ../module/https.c; sourceTree = "<group>"; };
+		D6FC9A6A2CEB43C8009AF784 /* https.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = https.h; path = ../module/https.h; sourceTree = "<group>"; };
+		D6FC9A6B2CEB43C8009AF784 /* httpd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = httpd.h; path = ../module/httpd.h; sourceTree = "<group>"; };
+		D6FC9A6C2CEB43C8009AF784 /* mqtt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mqtt.h; path = ../module/mqtt.h; sourceTree = "<group>"; };
+		D6FC9A6D2CEB43C8009AF784 /* httpd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = httpd.c; path = ../module/httpd.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +107,12 @@
 				D6741A7C2CE610470024FB04 /* patch */,
 				D6741A672CE5E4240024FB04 /* fs.c */,
 				D6741A692CE5E4BA0024FB04 /* fs.h */,
+				D6FC9A6D2CEB43C8009AF784 /* httpd.c */,
+				D6FC9A6B2CEB43C8009AF784 /* httpd.h */,
+				D6FC9A692CEB43C8009AF784 /* https.c */,
+				D6FC9A6A2CEB43C8009AF784 /* https.h */,
+				D6FC9A682CEB43C8009AF784 /* mqtt.c */,
+				D6FC9A6C2CEB43C8009AF784 /* mqtt.h */,
 				D65A9C022CE848CC0022B1E0 /* symbols.c */,
 			);
 			name = module;
@@ -196,8 +211,11 @@
 				D6741A822CE610650024FB04 /* nvs.c in Sources */,
 				D6741A802CE610650024FB04 /* homekit.c in Sources */,
 				D6741A8A2CE7155C0024FB04 /* file.c in Sources */,
+				D6FC9A6F2CEB43C9009AF784 /* https.c in Sources */,
+				D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */,
 				D65A9C032CE848CC0022B1E0 /* symbols.c in Sources */,
 				D6741A682CE5E4240024FB04 /* fs.c in Sources */,
+				D6FC9A6E2CEB43C9009AF784 /* mqtt.c in Sources */,
 				D6741A812CE610650024FB04 /* vfs.c in Sources */,
 				D6741A332CE393DD0024FB04 /* app_main.c in Sources */,
 			);

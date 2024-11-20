@@ -76,3 +76,13 @@ int __wrap_stat(const char* name, struct stat* stat)
     stat->st_size = fs_stat(name);
     return stat->st_size >= 0 ? 0 : -1;
 }
+
+int __wrap_remove(const char* name)
+{
+    return fs_remove(name);
+}
+
+int __wrap_mkdir(const char* name, int mode)
+{
+    return fs_mkdir(name);
+}

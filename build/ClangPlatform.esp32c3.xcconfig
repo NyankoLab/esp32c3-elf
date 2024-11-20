@@ -318,6 +318,8 @@ OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fseek
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,ftell
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fopen
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,stat
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,remove
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,mkdir
 
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,hap_httpd_start
 

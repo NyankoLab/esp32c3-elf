@@ -16,6 +16,9 @@
 #include "private/elf_symbol.h"
 #include "private/elf_platform.h"
 
+#define read_binary(_v, _s, _o)     read(_v, _s, false, data, _o)
+#define read_string(_v, _o)         read(_v, sizeof(_v), true, data, _o)
+#define read_struct(_v, _i, _o)     read(&_v, sizeof(_v), false, data, sizeof(_v) * _i + _o)
 #define stype(_s, _t)               ((_s)->type == (_t))
 #define sflags(_s, _f)              (((_s)->flags & (_f)) == (_f))
 #define TAG                         "ELF"
@@ -76,8 +79,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
 
     elf32_hdr_t hdr;
     elf32_shdr_t shdr;
-    if (!read(&hdr, sizeof(hdr), false, data, 0) ||
-        !read(&shdr, sizeof(shdr), false, data, hdr.shoff + sizeof(elf32_shdr_t) * hdr.shstrndx)) {
+    if (!read_struct(hdr, 0, 0) || !read_struct(shdr, hdr.shstrndx, hdr.shoff)) {
         return -ENOEXEC;
     }
     Elf32_Off shstrab = shdr.offset;
@@ -86,8 +88,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
 
     for (int i = 0; i < hdr.shnum; i++) {
         char name[128];
-        if (!read(&shdr, sizeof(shdr), false, data, hdr.shoff + sizeof(elf32_shdr_t) * i) ||
-            !read(name, sizeof(name), true, data, shstrab + shdr.name)) {
+        if (!read_struct(shdr, i, hdr.shoff) || !read_string(name, shstrab + shdr.name)) {
             return -ENOEXEC;
         }
         if (stype(&shdr, SHT_PROGBITS) && sflags(&shdr, SHF_ALLOC)) {
@@ -98,6 +99,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
                 elf->sec[ELF_SEC_TEXT].v_addr  = shdr.addr;
                 elf->sec[ELF_SEC_TEXT].size    = ELF_ALIGN(shdr.size);
                 elf->sec[ELF_SEC_TEXT].offset  = shdr.offset;
+                elf->sec[ELF_SEC_TEXT].index   = i;
 
                 ESP_LOGI(TAG, ".text   offset is 0x%lx size is 0x%x",
                          elf->sec[ELF_SEC_TEXT].offset,
@@ -109,6 +111,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
                 elf->sec[ELF_SEC_DATA].v_addr  = shdr.addr;
                 elf->sec[ELF_SEC_DATA].size    = shdr.size;
                 elf->sec[ELF_SEC_DATA].offset  = shdr.offset;
+                elf->sec[ELF_SEC_DATA].index   = i;
 
                 ESP_LOGI(TAG, ".data   offset is 0x%lx size is 0x%x",
                          elf->sec[ELF_SEC_DATA].offset,
@@ -120,6 +123,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
                 elf->sec[ELF_SEC_RODATA].v_addr  = shdr.addr;
                 elf->sec[ELF_SEC_RODATA].size    = shdr.size;
                 elf->sec[ELF_SEC_RODATA].offset  = shdr.offset;
+                elf->sec[ELF_SEC_RODATA].index   = i;
 
                 ESP_LOGI(TAG, ".rodata offset is 0x%lx size is 0x%x",
                          elf->sec[ELF_SEC_RODATA].offset,
@@ -131,6 +135,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
                 elf->sec[ELF_SEC_DRLRO].v_addr  = shdr.addr;
                 elf->sec[ELF_SEC_DRLRO].size    = shdr.size;
                 elf->sec[ELF_SEC_DRLRO].offset  = shdr.offset;
+                elf->sec[ELF_SEC_DRLRO].index   = i;
 
                 ESP_LOGI(TAG, ".data.rel.ro offset is 0x%lx size is 0x%x",
                          elf->sec[ELF_SEC_DRLRO].offset,
@@ -143,6 +148,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
             elf->sec[ELF_SEC_BSS].v_addr  = shdr.addr;
             elf->sec[ELF_SEC_BSS].size    = shdr.size;
             elf->sec[ELF_SEC_BSS].offset  = shdr.offset;
+            elf->sec[ELF_SEC_BSS].index   = i;
 
             ESP_LOGI(TAG, ".bss    offset is 0x%lx size is 0x%x",
                      elf->sec[ELF_SEC_BSS].offset,
@@ -162,9 +168,9 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
     }
 
     uint32_t size = elf->sec[ELF_SEC_DATA].size +
-           elf->sec[ELF_SEC_RODATA].size +
-           elf->sec[ELF_SEC_BSS].size +
-           elf->sec[ELF_SEC_DRLRO].size;
+                    elf->sec[ELF_SEC_RODATA].size +
+                    elf->sec[ELF_SEC_BSS].size +
+                    elf->sec[ELF_SEC_DRLRO].size;
     if (size) {
         elf->pdata = esp_elf_malloc(size, false);
         if (!elf->pdata) {
@@ -175,7 +181,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
     /* Dump ".text" from ELF to excutable space memory */
 
     elf->sec[ELF_SEC_TEXT].addr = (Elf32_Addr)elf->ptext;
-    if (!read(elf->ptext, elf->sec[ELF_SEC_TEXT].size, false, data, elf->sec[ELF_SEC_TEXT].offset)) {
+    if (!read_binary(elf->ptext, elf->sec[ELF_SEC_TEXT].size, elf->sec[ELF_SEC_TEXT].offset)) {
         return -ENOEXEC;
     }
 
@@ -197,7 +203,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
         if (elf->sec[ELF_SEC_DATA].size) {
             elf->sec[ELF_SEC_DATA].addr = (uint32_t)pdata;
 
-            if (!read(pdata, elf->sec[ELF_SEC_DATA].size, false, data, elf->sec[ELF_SEC_DATA].offset)) {
+            if (!read_binary(pdata, elf->sec[ELF_SEC_DATA].size, elf->sec[ELF_SEC_DATA].offset)) {
                 return -ENOEXEC;
             }
 
@@ -207,7 +213,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
         if (elf->sec[ELF_SEC_RODATA].size) {
             elf->sec[ELF_SEC_RODATA].addr = (uint32_t)pdata;
 
-            if (!read(pdata, elf->sec[ELF_SEC_RODATA].size, false, data, elf->sec[ELF_SEC_RODATA].offset)) {
+            if (!read_binary(pdata, elf->sec[ELF_SEC_RODATA].size, elf->sec[ELF_SEC_RODATA].offset)) {
                 return -ENOEXEC;
             }
 
@@ -217,7 +223,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
         if (elf->sec[ELF_SEC_DRLRO].size) {
             elf->sec[ELF_SEC_DRLRO].addr = (uint32_t)pdata;
 
-            if (!read(pdata, elf->sec[ELF_SEC_DRLRO].size, false, data, elf->sec[ELF_SEC_DRLRO].offset)) {
+            if (!read_binary(pdata, elf->sec[ELF_SEC_DRLRO].size, elf->sec[ELF_SEC_DRLRO].offset)) {
                 return -ENOEXEC;
             }
 
@@ -233,7 +239,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
     /* Set ELF entry */
 
     uint32_t entry = hdr.entry + elf->sec[ELF_SEC_TEXT].addr -
-                          elf->sec[ELF_SEC_TEXT].v_addr;
+                                 elf->sec[ELF_SEC_TEXT].v_addr;
 
 #ifdef CONFIG_ELF_LOADER_CACHE_OFFSET
     elf->entry = (void *)elf_remap_text(elf, (uintptr_t)entry);
@@ -244,13 +250,13 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
     /* Relocation section data */
 
     for (int i = 0; i < hdr.shnum; i++) {
-        if (!read(&shdr, sizeof(shdr), false, data, hdr.shoff + sizeof(elf32_shdr_t) * i)) {
+        if (!read_struct(shdr, i, hdr.shoff)) {
             return -ENOEXEC;
         }
         if (stype(&shdr, SHT_RELA)) {
             char name[128];
             int nr_reloc = shdr.size / sizeof(elf32_rela_t);
-            if (!read(name, sizeof(name), true, data, shstrab + shdr.name)) {
+            if (!read_string(name, shstrab + shdr.name)) {
                 return -ENOEXEC;
             }
             ESP_LOGI(TAG, "Section %s has %d symbol tables", name, nr_reloc);
@@ -272,24 +278,27 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
             }
 
             Elf32_Off rela = shdr.offset;
-            if (!read(&shdr, sizeof(shdr), false, data, hdr.shoff + sizeof(elf32_shdr_t) * shdr.link)) {
+            if (!read_struct(shdr, shdr.link, hdr.shoff)) {
                 return -ENOEXEC;
             }
             Elf32_Off symtab = shdr.offset;
-            if (!read(&shdr, sizeof(shdr), false, data, hdr.shoff + sizeof(elf32_shdr_t) * shdr.link)) {
+            if (!read_struct(shdr, shdr.link, hdr.shoff)) {
                 return -ENOEXEC;
             }
             Elf32_Off strtab = shdr.offset;
 
+            Elf32_Word cache_name = 0;
+            uintptr_t cache_addr = 0;
+
             for (int i = 0; i < nr_reloc; i++) {
                 elf32_rela_t rela_buf;
-                if (!read(&rela_buf, sizeof(rela_buf), false, data, rela + sizeof(elf32_rela_t) * i)) {
+                if (!read_struct(rela_buf, i, rela)) {
                     return -ENOEXEC;
                 }
                 rela_buf.offset += offset;
 
                 elf32_sym_t sym;
-                if (!read(&sym, sizeof(sym), false, data, symtab + sizeof(elf32_sym_t) * ELF_R_SYM(rela_buf.info))) {
+                if (!read_struct(sym, ELF_R_SYM(rela_buf.info), symtab)) {
                     return -ENOEXEC;
                 }
 
@@ -301,22 +310,32 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
                     addr = sym.value;
                     break;
                 case SHN_UNDEF:
-                    if (!read(name, sizeof(name), true, data, strtab + sym.name)) {
-                        return -ENOEXEC;
+                    if (cache_name != sym.name) {
+                        cache_name = sym.name;
+                        if (!read_string(name, strtab + sym.name)) {
+                            return -ENOEXEC;
+                        }
+                        addr = cache_addr = elf_find_sym(name);
+                    } else {
+                        addr = cache_addr;
                     }
-                    addr = elf_find_sym(name);
                     if (!addr) {
                         ESP_LOGE(TAG, "Can't find symbol %s", name);
 
                         for (int j = i + 1; j < nr_reloc; j++) {
-                            if (read(&rela_buf, sizeof(rela_buf), false, data, rela + sizeof(elf32_rela_t) * j) &&
-                                read(&sym, sizeof(sym), false, data, symtab + sizeof(elf32_sym_t) * ELF_R_SYM(rela_buf.info))) {
+                            if (read_struct(rela_buf, j, rela) && read_struct(sym, ELF_R_SYM(rela_buf.info), symtab)) {
                                 if (sym.shndx == SHN_UNDEF) {
-                                    if (read(name, sizeof(name), true, data, strtab + sym.name)) {
-                                        addr = elf_find_sym(name);
-                                        if (!addr) {
-                                            ESP_LOGE(TAG, "Can't find symbol %s", name);
+                                    if (cache_name != sym.name) {
+                                        cache_name = sym.name;
+                                        if (!read_string(name, strtab + sym.name)) {
+                                            continue;
                                         }
+                                        addr = cache_addr = elf_find_sym(name);
+                                    } else {
+                                        addr = cache_addr;
+                                    }
+                                    if (!addr) {
+                                        ESP_LOGE(TAG, "Can't find symbol %s", name);
                                     }
                                 }
                             }
@@ -331,22 +350,18 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
                         ESP_LOGE(TAG, "Out of bound section %d", sym.shndx);
                         return -ENOEXEC;
                     }
-                    if (!read(&shdr, sizeof(shdr), false, data, hdr.shoff + sizeof(elf32_shdr_t) * sym.shndx) ||
-                        !read(name, sizeof(name), true, data, shstrab + shdr.name)) {
-                        return -ENOEXEC;
-                    }
-                    if (!strcmp(ELF_TEXT, name)) {
+                    if (sym.shndx == elf->sec[ELF_SEC_TEXT].index) {
                         addr = sym.value + elf->sec[ELF_SEC_TEXT].addr;
-                    } else if (!strcmp(ELF_DATA, name)) {
+                    } else if (sym.shndx == elf->sec[ELF_SEC_DATA].index) {
                         addr = sym.value + elf->sec[ELF_SEC_DATA].addr;
-                    } else if (!strcmp(ELF_RODATA, name)) {
+                    } else if (sym.shndx == elf->sec[ELF_SEC_RODATA].index) {
                         addr = sym.value + elf->sec[ELF_SEC_RODATA].addr;
-                    } else if (!strcmp(ELF_DATA_REL_RO, name)) {
+                    } else if (sym.shndx == elf->sec[ELF_SEC_DRLRO].index) {
                         addr = sym.value + elf->sec[ELF_SEC_DRLRO].addr;
-                    } else if (!strcmp(ELF_BSS, name)) {
+                    } else if (sym.shndx == elf->sec[ELF_SEC_BSS].index) {
                         addr = sym.value + elf->sec[ELF_SEC_BSS].addr;
-                } else {
-                        ESP_LOGE(TAG, "Unsupported section %s %d", name, sym.value);
+                    } else {
+                        ESP_LOGE(TAG, "Unsupported section %d", sym.value);
                         return -ENOEXEC;
                     }
                     ESP_LOGD(TAG, "Found value %d addr=%x", sym.value, addr);
@@ -413,12 +428,15 @@ void esp_elf_deinit(esp_elf_t *elf)
  * 
  * @return None
  */
-void esp_elf_print_hdr(const uint8_t *pbuf)
+void esp_elf_print_hdr(bool(*read)(void *, size_t, bool, const void *, size_t), const void *data)
 {
     const char *s_bits, *s_endian;
-    const elf32_hdr_t *hdr = (const elf32_hdr_t *)pbuf;
+    elf32_hdr_t hdr;
 
-    switch (hdr->ident[4]) {
+    if (!read_struct(hdr, 0, 0))
+        return;
+
+    switch (hdr.ident[4]) {
     case 1:
         s_bits = "32-bit";
         break;
@@ -430,7 +448,7 @@ void esp_elf_print_hdr(const uint8_t *pbuf)
         break;
     }
 
-    switch (hdr->ident[5]) {
+    switch (hdr.ident[5]) {
     case 1:
         s_endian = "little-endian";
         break;
@@ -442,26 +460,26 @@ void esp_elf_print_hdr(const uint8_t *pbuf)
         break;
     }
 
-    if (hdr->ident[0] == 0x7f) {
-        ESP_LOGI(TAG, "%-40s %c%c%c", "Class:",                     hdr->ident[1], hdr->ident[2], hdr->ident[3]);
+    if (hdr.ident[0] == 0x7f) {
+        ESP_LOGI(TAG, "%-40s %c%c%c", "Class:",                     hdr.ident[1], hdr.ident[2], hdr.ident[3]);
     }
 
     ESP_LOGI(TAG, "%-40s %s, %s", "Format:",                        s_bits, s_endian);
-    ESP_LOGI(TAG, "%-40s %x", "Version(current):",                  hdr->ident[6]);
+    ESP_LOGI(TAG, "%-40s %x", "Version(current):",                  hdr.ident[6]);
 
-    ESP_LOGI(TAG, "%-40s %d", "Type:",                              hdr->type);
-    ESP_LOGI(TAG, "%-40s %d", "Machine:",                           hdr->machine);
-    ESP_LOGI(TAG, "%-40s %x", "Version:",                           hdr->version);
-    ESP_LOGI(TAG, "%-40s %x", "Entry point address:",               hdr->entry);
-    ESP_LOGI(TAG, "%-40s %x", "Start of program headers:",          hdr->phoff);
-    ESP_LOGI(TAG, "%-40s %d", "Start of section headers:",          hdr->shoff);
-    ESP_LOGI(TAG, "%-40s 0x%x", "Flags:",                           hdr->flags);
-    ESP_LOGI(TAG, "%-40s %d", "Size of this header(bytes):",        hdr->ehsize);
-    ESP_LOGI(TAG, "%-40s %d", "Size of program headers(bytes):",    hdr->phentsize);
-    ESP_LOGI(TAG, "%-40s %d", "Number of program headers:",         hdr->phnum);
-    ESP_LOGI(TAG, "%-40s %d", "Size of section headers(bytes):",    hdr->shentsize);
-    ESP_LOGI(TAG, "%-40s %d", "Number of section headers:",         hdr->shnum);
-    ESP_LOGI(TAG, "%-40s %d", "Section header string table i:",     hdr->shstrndx);
+    ESP_LOGI(TAG, "%-40s %d", "Type:",                              hdr.type);
+    ESP_LOGI(TAG, "%-40s %d", "Machine:",                           hdr.machine);
+    ESP_LOGI(TAG, "%-40s %x", "Version:",                           hdr.version);
+    ESP_LOGI(TAG, "%-40s %x", "Entry point address:",               hdr.entry);
+    ESP_LOGI(TAG, "%-40s %x", "Start of program headers:",          hdr.phoff);
+    ESP_LOGI(TAG, "%-40s %d", "Start of section headers:",          hdr.shoff);
+    ESP_LOGI(TAG, "%-40s 0x%x", "Flags:",                           hdr.flags);
+    ESP_LOGI(TAG, "%-40s %d", "Size of this header(bytes):",        hdr.ehsize);
+    ESP_LOGI(TAG, "%-40s %d", "Size of program headers(bytes):",    hdr.phentsize);
+    ESP_LOGI(TAG, "%-40s %d", "Number of program headers:",         hdr.phnum);
+    ESP_LOGI(TAG, "%-40s %d", "Size of section headers(bytes):",    hdr.shentsize);
+    ESP_LOGI(TAG, "%-40s %d", "Number of section headers:",         hdr.shnum);
+    ESP_LOGI(TAG, "%-40s %d", "Section header string table i:",     hdr.shstrndx);
 }
 
 /**
@@ -471,23 +489,27 @@ void esp_elf_print_hdr(const uint8_t *pbuf)
  * 
  * @return None
  */
-void esp_elf_print_shdr(const uint8_t *pbuf)
+void esp_elf_print_shdr(bool(*read)(void *, size_t, bool, const void *, size_t), const void *data)
 {
-    const elf32_hdr_t *phdr = (const elf32_hdr_t *)pbuf;
-    const elf32_shdr_t *pshdr = (const elf32_shdr_t *)((size_t)pbuf + phdr->shoff);
+    elf32_hdr_t hdr;
+    elf32_shdr_t shdr;
 
-    for (int i = 0; i < phdr->shnum; i++) {
-        ESP_LOGI(TAG, "%-40s %d", "name:",                          pshdr->name);
-        ESP_LOGI(TAG, "%-40s %d", "type:",                          pshdr->type);
-        ESP_LOGI(TAG, "%-40s 0x%x", "flags:",                       pshdr->flags);
-        ESP_LOGI(TAG, "%-40s %x", "addr",                           pshdr->addr);
-        ESP_LOGI(TAG, "%-40s %x", "offset:",                        pshdr->offset);
-        ESP_LOGI(TAG, "%-40s %d", "size",                           pshdr->size);
-        ESP_LOGI(TAG, "%-40s 0x%x", "link",                         pshdr->link);
-        ESP_LOGI(TAG, "%-40s %d", "addralign",                      pshdr->addralign);
-        ESP_LOGI(TAG, "%-40s %d", "entsize",                        pshdr->entsize);
+    if (!read_struct(hdr, 0, 0))
+        return;
 
-        pshdr = (const elf32_shdr_t *)((size_t)pshdr + sizeof(elf32_shdr_t));
+    for (int i = 0; i < hdr.shnum; i++) {
+        if (!read_struct(shdr, i, hdr.shoff))
+            continue;
+
+        ESP_LOGI(TAG, "%-40s %d", "name:",                          shdr.name);
+        ESP_LOGI(TAG, "%-40s %d", "type:",                          shdr.type);
+        ESP_LOGI(TAG, "%-40s 0x%x", "flags:",                       shdr.flags);
+        ESP_LOGI(TAG, "%-40s %x", "addr",                           shdr.addr);
+        ESP_LOGI(TAG, "%-40s %x", "offset:",                        shdr.offset);
+        ESP_LOGI(TAG, "%-40s %d", "size",                           shdr.size);
+        ESP_LOGI(TAG, "%-40s 0x%x", "link",                         shdr.link);
+        ESP_LOGI(TAG, "%-40s %d", "addralign",                      shdr.addralign);
+        ESP_LOGI(TAG, "%-40s %d", "entsize",                        shdr.entsize);
     }
 }
 

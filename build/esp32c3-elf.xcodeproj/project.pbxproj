@@ -20,6 +20,8 @@
 		D6FC9A6E2CEB43C9009AF784 /* mqtt.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A682CEB43C8009AF784 /* mqtt.c */; };
 		D6FC9A6F2CEB43C9009AF784 /* https.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A692CEB43C8009AF784 /* https.c */; };
 		D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A6D2CEB43C8009AF784 /* httpd.c */; };
+		D6FC9AA22CECD11B009AF784 /* ota.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A9F2CECD11B009AF784 /* ota.c */; };
+		D6FC9AA32CECD11B009AF784 /* temperature.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9AA02CECD11B009AF784 /* temperature.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,10 @@
 		D6FC9A6B2CEB43C8009AF784 /* httpd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = httpd.h; path = ../module/httpd.h; sourceTree = "<group>"; };
 		D6FC9A6C2CEB43C8009AF784 /* mqtt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mqtt.h; path = ../module/mqtt.h; sourceTree = "<group>"; };
 		D6FC9A6D2CEB43C8009AF784 /* httpd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = httpd.c; path = ../module/httpd.c; sourceTree = "<group>"; };
+		D6FC9A9E2CECD11B009AF784 /* ota.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ota.h; path = ../module/ota.h; sourceTree = "<group>"; };
+		D6FC9A9F2CECD11B009AF784 /* ota.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ota.c; path = ../module/ota.c; sourceTree = "<group>"; };
+		D6FC9AA02CECD11B009AF784 /* temperature.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = temperature.c; path = ../module/temperature.c; sourceTree = "<group>"; };
+		D6FC9AA12CECD11B009AF784 /* temperature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = temperature.h; path = ../module/temperature.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,7 +119,11 @@
 				D6FC9A6A2CEB43C8009AF784 /* https.h */,
 				D6FC9A682CEB43C8009AF784 /* mqtt.c */,
 				D6FC9A6C2CEB43C8009AF784 /* mqtt.h */,
+				D6FC9A9F2CECD11B009AF784 /* ota.c */,
+				D6FC9A9E2CECD11B009AF784 /* ota.h */,
 				D65A9C022CE848CC0022B1E0 /* symbols.c */,
+				D6FC9AA02CECD11B009AF784 /* temperature.c */,
+				D6FC9AA12CECD11B009AF784 /* temperature.h */,
 			);
 			name = module;
 			sourceTree = "<group>";
@@ -208,6 +218,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6FC9AA22CECD11B009AF784 /* ota.c in Sources */,
 				D6741A822CE610650024FB04 /* nvs.c in Sources */,
 				D6741A802CE610650024FB04 /* homekit.c in Sources */,
 				D6741A8A2CE7155C0024FB04 /* file.c in Sources */,
@@ -215,6 +226,7 @@
 				D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */,
 				D65A9C032CE848CC0022B1E0 /* symbols.c in Sources */,
 				D6741A682CE5E4240024FB04 /* fs.c in Sources */,
+				D6FC9AA32CECD11B009AF784 /* temperature.c in Sources */,
 				D6FC9A6E2CEB43C9009AF784 /* mqtt.c in Sources */,
 				D6741A812CE610650024FB04 /* vfs.c in Sources */,
 				D6741A332CE393DD0024FB04 /* app_main.c in Sources */,

@@ -104,25 +104,19 @@ void app_main(void)
     /* Execute ELF */
     esp_elf_t elf;
     if (esp_elf_init(&elf) == 0) {
-        const char* filename = "main.elf";
-
-        struct stat st;
-        if (stat(filename, &st) == 0 && st.st_size > 0) {
-            FILE* file = fopen(filename, "rb");
-            if (file) {
-                int ret = esp_elf_relocate(&elf, elf_read, file);
-                fclose(file);
-                if (ret == 0) {
-                    printf("Start to run ELF file\n");
-                    esp_elf_request(&elf, 0, 0, NULL);
-                    printf("Success to exit from ELF file\n");
-                }
-                else {
-                    printf("Fail to relocate FILE file (%d)\n", ret);
-                }
+        FILE* file = fopen("main.elf", "rb");
+        if (file) {
+            int ret = esp_elf_relocate(&elf, elf_read, file);
+            fclose(file);
+            if (ret == 0) {
+                printf("Start to run ELF file\n");
+                esp_elf_request(&elf, 0, 0, NULL);
+                printf("Success to exit from ELF file\n");
+            }
+            else {
+                printf("Fail to relocate FILE file (%d)\n", ret);
             }
         }
-
         esp_elf_deinit(&elf);
     }
 

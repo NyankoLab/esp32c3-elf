@@ -74,7 +74,7 @@ void esp_elf_deinit(esp_elf_t *elf);
  * 
  * @return None
  */
-void esp_elf_print_hdr(const uint8_t *pbuf);
+void esp_elf_print_hdr(bool(*read)(void *, size_t, bool, const void *, size_t), const void *data);
 
 /**
  * @brief Print section header description information of ELF.
@@ -83,7 +83,7 @@ void esp_elf_print_hdr(const uint8_t *pbuf);
  * 
  * @return None
  */
-void esp_elf_print_shdr(const uint8_t *pbuf);
+void esp_elf_print_shdr(bool(*read)(void *, size_t, bool, const void *, size_t), const void *data);
 
 /**
  * @brief Print section information of ELF.

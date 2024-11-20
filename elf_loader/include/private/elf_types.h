@@ -187,6 +187,7 @@ typedef struct esp_elf_sec {
 
     uintptr_t       addr;               /*!< section physic address in memory */
     size_t          size;               /*!< section size */
+    size_t          index;              /*!< section index */
 } esp_elf_sec_t;
 
 /** @brief ELF object */

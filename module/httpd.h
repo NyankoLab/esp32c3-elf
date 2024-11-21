@@ -34,6 +34,9 @@ esp_err_t httpd_resp_set_hdr(httpd_req_t* r, const char* field, const char* valu
 
 #endif
 
+#define httpd_req_url_decode _httpd_req_url_decode
+char* httpd_req_url_decode(char* param);
+
 #ifdef __cplusplus
 }
 #endif

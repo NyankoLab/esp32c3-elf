@@ -31,6 +31,7 @@ const struct esp_elfsym g_customer_elfsyms[] = {
 
     // c
     ESP_ELFSYM_EXPORT(abort),
+    ESP_ELFSYM_EXPORT(ftell),
     ESP_ELFSYM_EXPORT(fopen),
     ESP_ELFSYM_EXPORT(fclose),
     ESP_ELFSYM_EXPORT(fgetc),
@@ -91,6 +92,7 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(_httpd_resp_set_status),
     ESP_ELFSYM_EXPORT(_httpd_resp_set_type),
     ESP_ELFSYM_EXPORT(_httpd_resp_set_hdr),
+    ESP_ELFSYM_EXPORT(_httpd_req_url_decode),
 
     // https
     ESP_ELFSYM_EXPORT(https_connect),

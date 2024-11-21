@@ -117,49 +117,148 @@ char const* const riscv_type_name[128] =
   [R_RISCV_RELAX        ]   = "RELAX",
 };
 
-static uint32_t _extract_bits(uint32_t num, int low, int size)
+static uint8_t read8(const void *P)
 {
-  return (num & (((1 << size) - 1) << low)) >> low;
+  return *(uint8_t*)P;
 }
 
-static uint32_t _get_val(uint16_t* addr)
+static uint16_t read16le(const void *P)
 {
-  uint32_t ret;
-  ret = *addr | (*(addr + 1)) << 16;
-  return ret;
+  return *(uint16_t*)P;
 }
 
-static void _set_val(uint16_t* addr, uint32_t val)
+static uint32_t read32le(const void *P)
 {
-  *addr       = (val & 0xffff);
-  *(addr + 1) = (val >> 16);
+  return *(uint32_t*)P;
 }
 
-static void _add_val(uint16_t* addr, uint32_t val)
+static void write8(void *P, uint8_t V)
 {
-  uint32_t cur = _get_val(addr);
-  _set_val(addr, cur + val);
+  *(uint8_t*)P = V;
 }
 
-static void _calc_imm(int offset, int* imm_hi, int* imm_lo)
+static void write16le(void *P, uint16_t V)
 {
-  int lo;
-  int hi = offset / 4096;
-  int r  = offset % 4096;
+  *(uint16_t*)P = V;
+}
 
-  if (2047 < r)
+static void write32le(void *P, uint32_t V)
+{
+  *(uint32_t*)P = V;
+}
+
+static uint32_t extractBits(uintptr_t v, uint32_t begin, uint32_t end)
+{
+  return (uint32_t)((v & (((uintptr_t)1 << (begin + 1)) - 1)) >> end);
+}
+
+static uint32_t setLO12_I(uint32_t insn, uint32_t imm)
+{
+  return (insn & 0xfffff) | (imm << 20);
+}
+
+static uint32_t setLO12_S(uint32_t insn, uint32_t imm)
+{
+  return (insn & 0x1fff07f) | (extractBits(imm, 11, 5) << 25) | (extractBits(imm, 4, 0) << 7);
+}
+
+static bool relocate(char* text, struct elf32_rela* rela, uintptr_t addr)
+{
+  uintptr_t val = addr + rela->addend;
+  unsigned int reloctype = ELF_R_TYPE(rela->info);
+  char* where = text + rela->offset;
+
+  switch (reloctype)
   {
-    hi++;
+  case R_RISCV_CALL:
+  case R_RISCV_CALL_PLT:
+  case R_RISCV_BRANCH:
+  case R_RISCV_JAL:
+  case R_RISCV_RVC_JUMP:
+  case R_RISCV_RVC_BRANCH:
+    val -= rela->offset;
   }
-  else if (r < -2048)
+
+  switch (reloctype)
   {
-    hi--;
+  case R_RISCV_CALL:
+  case R_RISCV_CALL_PLT:
+    relocate(text, &(elf32_rela_t){rela->offset, R_RISCV_HI20}, val);
+    relocate(text, &(elf32_rela_t){rela->offset + 4, R_RISCV_LO12_I}, val);
+    break;
+  case R_RISCV_BRANCH:
+  {
+    uint32_t insn = read32le(where) & 0x1FFF07F;
+    uint32_t imm12 = extractBits(val, 12, 12) << 31;
+    uint32_t imm10_5 = extractBits(val, 10, 5) << 25;
+    uint32_t imm4_1 = extractBits(val, 4, 1) << 8;
+    uint32_t imm11 = extractBits(val, 11, 11) << 7;
+    insn |= imm12 | imm10_5 | imm4_1 | imm11;
+
+    write32le(where, insn);
+    break;
   }
+  case R_RISCV_JAL:
+  {
+    uint32_t insn = read32le(where) & 0xFFF;
+    uint32_t imm20 = extractBits(val, 20, 20) << 31;
+    uint32_t imm10_1 = extractBits(val, 10, 1) << 21;
+    uint32_t imm11 = extractBits(val, 11, 11) << 20;
+    uint32_t imm19_12 = extractBits(val, 19, 12) << 12;
+    insn |= imm20 | imm10_1 | imm11 | imm19_12;
 
-  lo = offset - (hi * 4096);
+    write32le(where, insn);
+    break;
+  }
+  case R_RISCV_HI20:
+  {
+    uintptr_t hi = val + 0x800;
 
-  *imm_lo = lo;
-  *imm_hi = hi;
+    write32le(where, (read32le(where) & 0xFFF) | (hi & 0xFFFFF000));
+    break;
+  }
+  case R_RISCV_LO12_I:
+  {
+    uintptr_t hi = (val + 0x800) >> 12;
+    uintptr_t lo = val - (hi << 12);
+
+    write32le(where, setLO12_I(read32le(where), lo & 0xFFF));
+    break;
+  }
+  case R_RISCV_RVC_JUMP:
+  {
+    uint16_t insn = read16le(where) & 0xE003;
+    uint16_t imm11 = extractBits(val, 11, 11) << 12;
+    uint16_t imm4 = extractBits(val, 4, 4) << 11;
+    uint16_t imm9_8 = extractBits(val, 9, 8) << 9;
+    uint16_t imm10 = extractBits(val, 10, 10) << 8;
+    uint16_t imm6 = extractBits(val, 6, 6) << 7;
+    uint16_t imm7 = extractBits(val, 7, 7) << 6;
+    uint16_t imm3_1 = extractBits(val, 3, 1) << 3;
+    uint16_t imm5 = extractBits(val, 5, 5) << 2;
+    insn |= imm11 | imm4 | imm9_8 | imm10 | imm6 | imm7 | imm3_1 | imm5;
+
+    write16le(where, insn);
+    break;
+  }
+  case R_RISCV_RVC_BRANCH:
+  {
+    uint16_t insn = read16le(where) & 0xE383;
+    uint16_t imm8 = extractBits(val, 8, 8) << 12;
+    uint16_t imm4_3 = extractBits(val, 4, 3) << 10;
+    uint16_t imm7_6 = extractBits(val, 7, 6) << 5;
+    uint16_t imm2_1 = extractBits(val, 2, 1) << 3;
+    uint16_t imm5 = extractBits(val, 5, 5) << 2;
+    insn |= imm8 | imm4_3 | imm7_6 | imm2_1 | imm5;
+
+    write16le(where, insn);
+    break;
+  }
+  default:
+    return false;
+    break;
+  }
+  return true;
 }
 
 typedef struct elf32_rela_link
@@ -270,28 +369,28 @@ int main(int argc, char const* argv[])
     }
 
     struct elf32_rela* p = begin;
-    for (struct elf32_rela* rel = begin; rel != end; ++rel)
+    for (struct elf32_rela* rela = begin; rela != end; ++rela)
     {
-      unsigned int addr = rel->offset;
-      unsigned int relotype = ELF_R_TYPE(rel->info);
-      unsigned int relosym = ELF_R_SYM(rel->info);
-      const struct elf32_sym* sym = &symtab[relosym];
+      unsigned int addr = rela->offset;
+      unsigned int reloctype = ELF_R_TYPE(rela->info);
+      unsigned int relocsym = ELF_R_SYM(rela->info);
+      const struct elf32_sym* sym = &symtab[relocsym];
 
-      if (relotype == R_RISCV_ALIGN || relotype == R_RISCV_RELAX)
+      if (reloctype == R_RISCV_ALIGN || reloctype == R_RISCV_RELAX)
       {
         continue;
       }
 
 #if 0
-      if (relotype == R_RISCV_LO12_I && p != begin)
+      if (reloctype == R_RISCV_LO12_I && p != begin)
       {
         struct elf32_rela* prev = (p - 1);
-        struct elf32_rela* curr = rel;
-        if (prev->offset + 4 == curr->offset && ELF_R_TYPE(prev->info) == R_RISCV_HI20 && ELF_R_SYM(prev->info) == relosym)
+        struct elf32_rela* curr = rela;
+        if (prev->offset + 4 == curr->offset && ELF_R_TYPE(prev->info) == R_RISCV_HI20 && ELF_R_SYM(prev->info) == relocsym)
         {
-          (*rel) = (*prev);
-          rel->info &= ~0xFF;
-          rel->info |= R_RISCV_CALL_PLT;
+          (*rela) = (*prev);
+          rela->info &= ~0xFF;
+          rela->info |= R_RISCV_CALL_PLT;
           p--;
         }
       }
@@ -299,107 +398,30 @@ int main(int argc, char const* argv[])
 
       if (sym->shndx == 0)
       {
-        (*p++) = (*rel);
+        (*p++) = (*rela);
         continue;
       }
 
       if (sym->shndx != ndx)
       {
-        (*p++) = (*rel);
+        (*p++) = (*rela);
         continue;
       }
 
-      switch (relotype)
+#if 1
+      if (reloctype == R_RISCV_HI20 || reloctype == R_RISCV_LO12_I)
       {
-      case R_RISCV_CALL:
-      case R_RISCV_CALL_PLT:
-      {
-        int offset = sym->value + rel->addend - addr;
-        int imm_hi;
-        int imm_lo;
-        _calc_imm(offset, &imm_hi, &imm_lo);
-
-        _add_val((uint16_t*)(size_t)(text + addr + 0), imm_hi << 12);
-        _add_val((uint16_t*)(size_t)(text + addr + 4), imm_lo << 20);
-        break;
-      }
-      case R_RISCV_BRANCH:
-      {
-        int offset = sym->value + rel->addend - addr;
-        uint32_t imm12 = _extract_bits(offset, 12, 1) << 31;
-        uint32_t imm10_5 = _extract_bits(offset, 5, 6) << 25;
-        uint32_t imm4_1 = _extract_bits(offset, 1, 4) << 8;
-        uint32_t imm11 = _extract_bits(offset, 11, 1) << 7;
-
-        _add_val((uint16_t*)(size_t)(text + addr), imm12 | imm10_5 | imm4_1 | imm11);
-        break;
-      }
-      case R_RISCV_JAL:
-      {
-        int offset = sym->value + rel->addend - addr;
-        uint32_t imm20 = _extract_bits(offset, 20, 1) << 31;
-        uint32_t imm10_1 = _extract_bits(offset, 1, 10) << 21;
-        uint32_t imm11 = _extract_bits(offset, 11, 1) << 20;
-        uint32_t imm19_12 = _extract_bits(offset, 12, 8) << 12;
-
-        _add_val((uint16_t*)(size_t)(text + addr), imm20 | imm10_1 | imm11 | imm19_12);
-        break;
-      }
-#if 0
-      case R_RISCV_HI20:
-      {
-        int offset = sym->value + rel->addend;
-        int imm_hi;
-        int imm_lo;
-        _calc_imm(offset, &imm_hi, &imm_lo);
-
-        uint32_t insn = _get_val((uint16_t*)(size_t)(text + addr));
-        _set_val((uint16_t*)(size_t)(text + addr), (insn & 0x00000fff) | (imm_hi << 12));
-        break;
-      }
-      case R_RISCV_LO12_I:
-      {
-        int offset = sym->value + rel->addend;
-        int imm_hi;
-        int imm_lo;
-        _calc_imm(offset, &imm_hi, &imm_lo);
-
-        uint32_t insn = _get_val((uint16_t*)(size_t)(text + addr));
-        _set_val((uint16_t*)(size_t)(text + addr), (insn & 0x000fffff) | (imm_lo << 20));
-        break;
+        (*p++) = (*rela);
+        printf("%08x %08x %-16s %s\n", sym->value, sym->size, riscv_type_name[reloctype], strtab + sym->name);
+        continue;
       }
 #endif
-      case R_RISCV_RVC_JUMP:
-      {
-        int offset = sym->value + rel->addend - addr;
-        uint16_t imm11 = _extract_bits(offset, 11, 1) << 12;
-        uint16_t imm4 = _extract_bits(offset, 4, 1) << 11;
-        uint16_t imm9_8 = _extract_bits(offset, 8, 2) << 9;
-        uint16_t imm10 = _extract_bits(offset, 10, 1) << 8;
-        uint16_t imm6 = _extract_bits(offset, 6, 1) << 7;
-        uint16_t imm7 = _extract_bits(offset, 7, 1) << 6;
-        uint16_t imm3_1 = _extract_bits(offset, 1, 3) << 3;
-        uint16_t imm5 = _extract_bits(offset, 5, 1) << 2;
 
-        _add_val((uint16_t*)(size_t)(text + addr), imm11 | imm4 | imm9_8 | imm10 | imm6 | imm7 | imm3_1 | imm5);
-        break;
-      }
-      case R_RISCV_RVC_BRANCH:
+      if (relocate(text, rela, sym->value) == false)
       {
-        int offset = sym->value + rel->addend - addr;
-        uint16_t imm8 = _extract_bits(offset, 8, 1) << 12;
-        uint16_t imm4_3 = _extract_bits(offset, 3, 2) << 10;
-        uint16_t imm7_6 = _extract_bits(offset, 6, 2) << 5;
-        uint16_t imm2_1 = _extract_bits(offset, 1, 2) << 3;
-        uint16_t imm5 = _extract_bits(offset, 5, 1) << 2;
-
-        _add_val((uint16_t*)(size_t)(text + addr), imm8 | imm4_3 | imm7_6 | imm2_1 | imm5);
-        break;
-      }
-      default:
-        (*p++) = (*rel);
-        printf("%08x %08x %-16s %s\n", sym->value, sym->size, riscv_type_name[relotype], strtab + sym->name);
-        break;
+        (*p++) = (*rela);
+        printf("%08x %08x %-16s %s\n", sym->value, sym->size, riscv_type_name[reloctype], strtab + sym->name);
+        continue;
       }
     }
 

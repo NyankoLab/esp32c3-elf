@@ -258,8 +258,8 @@ int esp_elf_arch_relocate(esp_elf_t *elf, const elf32_rela_t *rela, uint32_t add
     }
     case R_RISCV_CALL:
     case R_RISCV_CALL_PLT: {
-        esp_elf_arch_relocate(elf, &(elf32_rela_t){rela->offset, R_RISCV_PCREL_HI20}, addr);
-        esp_elf_arch_relocate(elf, &(elf32_rela_t){rela->offset + 4, R_RISCV_PCREL_LO12_I}, addr + 4);
+        esp_elf_arch_relocate(elf, &(elf32_rela_t){rela->offset, R_RISCV_HI20}, val);
+        esp_elf_arch_relocate(elf, &(elf32_rela_t){rela->offset + 4, R_RISCV_LO12_I}, val);
         break;
     }
     case R_RISCV_GOT_HI20:

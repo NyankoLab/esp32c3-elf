@@ -309,6 +309,18 @@ OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_SetIP
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,_read_r_console
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,_write_r_console
 
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,sha1_vector
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,sha256_vector
+
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,SHA1Transform
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,SHA1Init
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,SHA1Update
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,SHA1Final
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,sha256_compress
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,sha256_init
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,sha256_process
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,sha256_done
+
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fclose
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fgetc
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,fgets

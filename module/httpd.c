@@ -111,20 +111,63 @@ static void httpd_handler(void* arg)
                                 req->method = fd;
                                 for (int i = 0; i < HTTPD_MAX_URI_LEN; ++i)
                                 {
+                                    length = i;
                                     char c = buf[i + 4];
-                                    if (c == 0 || c == ' ')
-                                        break;
+                                    if (c == ' ')
+                                        c = 0;
                                     ((char*)req->uri)[i] = c;
+                                    if (c == 0)
+                                        break;
                                 }
                                 struct httpd_uri_node* node = uri_node;
                                 while (node)
                                 {
-                                    if (strncmp(req->uri, node->uri_handler.uri, strlen(node->uri_handler.uri)) == 0)
+                                    int left = length;
+                                    int right = strlen(node->uri_handler.uri);
+                                    if ((left == right || right > 1) && strncmp(req->uri, node->uri_handler.uri, right) == 0)
                                     {
                                         req->sess_ctx = &node->uri_handler;
                                         break;
                                     }
                                     node = node->next;
+                                }
+                                if (req->sess_ctx == NULL && strstr(req->uri, "..") == NULL)
+                                {
+                                    int ext = 0;
+                                    if (strstr(req->uri, ".css"))
+                                        ext = '.css';
+                                    else if (strstr(req->uri, ".svg"))
+                                        ext = '.svg';
+                                    if (ext)
+                                    {
+                                        snprintf(buf, 1536, "www%s", req->uri);
+                                        httpd_req_url_decode(buf);
+                                        FILE* file = fopen(buf, "rb");
+                                        if (file)
+                                        {
+                                            httpd_uri_t dummy = {};
+                                            req->sess_ctx = &dummy;
+                                            switch (ext)
+                                            {
+                                            case '.css':
+                                                httpd_resp_set_type(req, "text/css");
+                                                break;
+                                            case '.svg':
+                                                httpd_resp_set_type(req, "image/svg+xml");
+                                                break;
+                                            }
+                                            for (;;)
+                                            {
+                                                int length = fread(buf, 1, 1536, file);
+                                                if (length == 0)
+                                                    break;
+                                                httpd_resp_send_chunk(req, buf, length);
+                                            }
+                                            fclose(file);
+                                            httpd_resp_send_chunk(req, NULL, 0);
+                                            req->sess_ctx = NULL;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -263,9 +306,12 @@ esp_err_t httpd_resp_send(httpd_req_t* r, const char* buf, ssize_t buf_len)
                               "Content-Type: %s\r\n"
                               "%s%s"
                               "%s%s"
+                              "%s%s"
                               "\r\n",
                               r->aux ? (char*)r->aux : "200 OK",
                               uri->user_ctx ? (char*)uri->user_ctx : "text/html",
+                              uri->user_ctx ? "Cache-Control: max-age=86400" : "",
+                              uri->user_ctx ? "\r\n" : "",
                               r->user_ctx ? (char*)r->user_ctx : "",
                               r->user_ctx ? "\r\n" : "",
                               "", "");
@@ -304,9 +350,12 @@ esp_err_t httpd_resp_send_chunk(httpd_req_t* r, const char* buf, ssize_t buf_len
                               "Content-Type: %s\r\n"
                               "%s%s"
                               "%s%s"
+                              "%s%s"
                               "\r\n",
                               r->aux ? (char*)r->aux : "200 OK",
                               uri->user_ctx ? (char*)uri->user_ctx : "text/html",
+                              uri->user_ctx ? "Cache-Control: max-age=86400" : "",
+                              uri->user_ctx ? "\r\n" : "",
                               r->user_ctx ? (char*)r->user_ctx : "",
                               r->user_ctx ? "\r\n" : "",
                               "Transfer-Encoding: chunked", "\r\n");
@@ -366,3 +415,21 @@ esp_err_t httpd_resp_set_hdr(httpd_req_t* r, const char* field, const char* valu
 }
 
 #endif
+
+char* httpd_req_url_decode(char* param)
+{
+    int l = 0;
+    int r = 0;
+    for (;;) {
+        char c = param[r++];
+        if (c == '%') {
+            char temp[3] = { param[r], param[r + 1] };
+            c = strtol(temp, 0, 16);
+            r += 2;
+        }
+        param[l++] = c;
+        if (c == 0)
+            break;
+    }
+    return param;
+}

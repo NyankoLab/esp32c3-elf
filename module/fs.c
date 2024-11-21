@@ -169,7 +169,7 @@ int fs_getc(int fd)
 char* fs_gets(char* buffer, int length, int fd)
 {
     if (fd <= 0)
-        return NULL;
+        return "";
 
     int pos = lfs_file_tell(&fs, (lfs_file_t*)fd);
     length = lfs_file_read(&fs, (lfs_file_t*)fd, buffer, length - 1);

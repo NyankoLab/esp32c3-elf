@@ -83,7 +83,8 @@ static void httpd_handler(void* arg)
             }
         }
 
-        char* buf = malloc(1536);
+        const int buf_size = 1440;
+        char* buf = malloc(buf_size);
         for (int i = 0; i < HTTPD_MAX_CONNECTIONS; ++i)
         {
             int fd = fds[i];
@@ -92,7 +93,7 @@ static void httpd_handler(void* arg)
                 if (FD_ISSET(fd, &set))
                 {
                     bool closed = false;
-                    int length = lwip_recv(fd, buf, 1536, 0);
+                    int length = lwip_recv(fd, buf, buf_size, 0);
                     if (length <= 0)
                     {
                         closed = true;
@@ -129,7 +130,7 @@ static void httpd_handler(void* arg)
                                         ext = '.svg';
                                     if (ext)
                                     {
-                                        snprintf(buf, 1536, "www%s", req->uri);
+                                        snprintf(buf, buf_size, "www%s", req->uri);
                                         httpd_req_url_decode(buf);
                                         FILE* file = fopen(buf, "rb");
                                         if (file)
@@ -147,7 +148,7 @@ static void httpd_handler(void* arg)
                                             }
                                             for (;;)
                                             {
-                                                int length = fread(buf, 1, 1536, file);
+                                                int length = fread(buf, 1, buf_size, file);
                                                 if (length == 0)
                                                     break;
                                                 httpd_resp_send_chunk(req, buf, length);

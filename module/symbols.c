@@ -360,6 +360,7 @@ const struct esp_elfsym g_customer_elfsyms[] = {
 
     // freertos
     ESP_ELFSYM_EXPORT(vTaskDelay),
+    ESP_ELFSYM_EXPORT(vTaskDelete),
     ESP_ELFSYM_EXPORT(xTaskCreatePinnedToCore),
     ESP_ELFSYM_EXPORT(xTaskGetTickCount),
     ESP_ELFSYM_EXPORT(xTimerCreate),

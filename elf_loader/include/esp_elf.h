@@ -56,7 +56,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
  * 
  * @return ESP_OK if sucess or other if failed.
  */
-int esp_elf_request(esp_elf_t *elf, int opt, int argc, char *argv[]);
+int esp_elf_request(esp_elf_t *elf, int opt, int argc, char *const argv[]);
 
 /**
  * @brief Deinitialize ELF object.

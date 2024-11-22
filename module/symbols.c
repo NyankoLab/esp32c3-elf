@@ -56,6 +56,7 @@ const struct esp_elfsym g_customer_elfsyms[] = {
 
     // common
     ESP_ELFSYM_EXPORT(init_udp_console),
+    ESP_ELFSYM_EXPORT(execv),
     ESP_ELFSYM_EXPORT(uart0_tx),
     ESP_ELFSYM_EXPORT(uart0_rx),
     ESP_ELFSYM_EXPORT(uart1_tx),

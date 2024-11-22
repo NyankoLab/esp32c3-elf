@@ -120,18 +120,7 @@ static void httpd_handler(void* arg)
                                         break;
                                 }
                                 struct httpd_uri_node* node = uri_node;
-                                while (node)
-                                {
-                                    int left = length;
-                                    int right = strlen(node->uri_handler.uri);
-                                    if ((left == right || right > 1) && strncmp(req->uri, node->uri_handler.uri, right) == 0)
-                                    {
-                                        req->sess_ctx = &node->uri_handler;
-                                        break;
-                                    }
-                                    node = node->next;
-                                }
-                                if (req->sess_ctx == NULL && strstr(req->uri, "..") == NULL)
+                                if (strstr(req->uri, "..") == NULL)
                                 {
                                     int ext = 0;
                                     if (strstr(req->uri, ".css"))
@@ -166,8 +155,20 @@ static void httpd_handler(void* arg)
                                             fclose(file);
                                             httpd_resp_send_chunk(req, NULL, 0);
                                             req->sess_ctx = NULL;
+                                            node = NULL;
                                         }
                                     }
+                                }
+                                while (node)
+                                {
+                                    int left = length;
+                                    int right = strlen(node->uri_handler.uri);
+                                    if ((left == right || right > 1) && strncmp(req->uri, node->uri_handler.uri, right) == 0)
+                                    {
+                                        req->sess_ctx = &node->uri_handler;
+                                        break;
+                                    }
+                                    node = node->next;
                                 }
                             }
                         }

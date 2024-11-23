@@ -12,6 +12,7 @@
 #include <hap_apple_servs.h>
 #include <esp_hap_controllers.h>
 #include <esp_hap_database.h>
+#include "dlfcn.h"
 #include "httpd.h"
 #include "https.h"
 #include "mqtt.h"
@@ -31,6 +32,9 @@ const struct esp_elfsym g_customer_elfsyms[] = {
 
     // c
     ESP_ELFSYM_EXPORT(abort),
+    ESP_ELFSYM_EXPORT(dlopen),
+    ESP_ELFSYM_EXPORT(dlsym),
+    ESP_ELFSYM_EXPORT(dlclose),
     ESP_ELFSYM_EXPORT(ftell),
     ESP_ELFSYM_EXPORT(fopen),
     ESP_ELFSYM_EXPORT(fclose),
@@ -87,13 +91,14 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(_httpd_unregister_uri_handler),
     ESP_ELFSYM_EXPORT(_httpd_req_get_url_query_len),
     ESP_ELFSYM_EXPORT(_httpd_req_get_url_query_str),
+    ESP_ELFSYM_EXPORT(_httpd_req_url_decode),
     ESP_ELFSYM_EXPORT(_httpd_query_key_value),
+    ESP_ELFSYM_EXPORT(_httpd_query_decode_key_value),
     ESP_ELFSYM_EXPORT(_httpd_resp_send),
     ESP_ELFSYM_EXPORT(_httpd_resp_send_chunk),
     ESP_ELFSYM_EXPORT(_httpd_resp_set_status),
     ESP_ELFSYM_EXPORT(_httpd_resp_set_type),
     ESP_ELFSYM_EXPORT(_httpd_resp_set_hdr),
-    ESP_ELFSYM_EXPORT(_httpd_req_url_decode),
 
     // https
     ESP_ELFSYM_EXPORT(https_connect),

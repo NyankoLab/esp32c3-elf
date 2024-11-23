@@ -17,6 +17,7 @@
 #include <freertos/task.h>
 #include <soc/uart_pins.h>
 #include "elf_loader/include/esp_elf.h"
+#include "module/dlfcn.h"
 
 int uart0_tx IRAM_BSS_ATTR = U0TXD_GPIO_NUM;
 int uart0_rx IRAM_BSS_ATTR = U0RXD_GPIO_NUM;
@@ -54,47 +55,6 @@ int __wrap_hap_httpd_start(void)
 int mesh_sta_auth_expire_time(void)
 {
     return 0;
-}
-
-bool elf_read(void* buffer, size_t size, bool string, const void* data, size_t offset)
-{
-    FILE* file = (FILE*)data;
-    fseek(file, offset, SEEK_SET);
-    if (string) {
-        return fgets(buffer, size, file) ? true : false;
-    }
-    return fread(buffer, 1, size, file) == size ? true : false;
-}
-
-int execv(const char* path, char* const argv[])
-{
-    int ret = 0;
-
-    esp_elf_t elf;
-    if (esp_elf_init(&elf) == 0) {
-        FILE* file = fopen(path, "rb");
-        if (file) {
-            ret = esp_elf_relocate(&elf, elf_read, file);
-            fclose(file);
-            if (ret == 0) {
-                int argc = 0;
-                if (argv) {
-                    for (argc = 0; argv[argc]; ++argc) {
-                        
-                    }
-                }
-                printf("Start to run ELF file\n");
-                ret = esp_elf_request(&elf, 0, argc, argv);
-                printf("Success to exit from ELF file\n");
-            }
-            else {
-                printf("Fail to relocate FILE file (%d)\n", ret);
-            }
-        }
-        esp_elf_deinit(&elf);
-    }
-
-    return ret;
 }
 
 void app_main(void)

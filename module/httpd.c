@@ -422,9 +422,11 @@ char* httpd_req_url_decode(char* param)
 {
     int l = 0;
     int r = 0;
-    for (;;) {
+    for (;;)
+    {
         char c = param[r++];
-        if (c == '%') {
+        if (c == '%') 
+        {
             char temp[3] = { param[r], param[r + 1] };
             c = strtol(temp, 0, 16);
             r += 2;
@@ -434,4 +436,11 @@ char* httpd_req_url_decode(char* param)
             break;
     }
     return param;
+}
+
+char* httpd_query_decode_key_value(const char* qry, const char* key, char* val, size_t val_size)
+{
+  val[0] = 0;
+  httpd_query_key_value(qry, key, val, val_size);
+  return httpd_req_url_decode(val);
 }

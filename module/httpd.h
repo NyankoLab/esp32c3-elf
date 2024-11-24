@@ -6,6 +6,7 @@
 extern "C" {
 #endif
 
+#define HTTPD_FULL
 #ifndef HTTPD_FULL
 
 #define httpd_start _httpd_start
@@ -19,6 +20,9 @@ extern "C" {
 #define httpd_resp_set_status _httpd_resp_set_status
 #define httpd_resp_set_type _httpd_resp_set_type
 #define httpd_resp_set_hdr _httpd_resp_set_hdr
+
+#define httpd_req_url_decode _httpd_req_url_decode
+#define httpd_query_decode_key_value _httpd_query_decode_key_value
 
 esp_err_t httpd_start(httpd_handle_t* handle, const httpd_config_t* config);
 esp_err_t httpd_register_uri_handler(httpd_handle_t handle, const httpd_uri_t* uri_handler);
@@ -34,10 +38,8 @@ esp_err_t httpd_resp_set_hdr(httpd_req_t* r, const char* field, const char* valu
 
 #endif
 
-#define httpd_req_url_decode _httpd_req_url_decode
-#define httpd_query_decode_key_value _httpd_query_decode_key_value
 char* httpd_req_url_decode(char* param);
-char* httpd_query_decode_key_value(const char* qry, const char* key, char* val, size_t val_size);
+char* httpd_query_decode_key_value(httpd_req_t* r, const char* key, char* val, size_t val_size);
 
 #ifdef __cplusplus
 }

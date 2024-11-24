@@ -438,9 +438,12 @@ char* httpd_req_url_decode(char* param)
     return param;
 }
 
-char* httpd_query_decode_key_value(const char* qry, const char* key, char* val, size_t val_size)
+char* httpd_query_decode_key_value(httpd_req_t* r, const char* key, char* val, size_t val_size)
 {
-  val[0] = 0;
-  httpd_query_key_value(qry, key, val, val_size);
-  return httpd_req_url_decode(val);
+    val[0] = 0;
+    const char* qry = strchr(r->uri, '?');
+    if (qry == NULL)
+        return val;
+    httpd_query_key_value(qry + 1, key, val, val_size);
+    return httpd_req_url_decode(val);
 }

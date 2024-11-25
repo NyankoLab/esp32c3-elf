@@ -447,3 +447,10 @@ char* httpd_query_decode_key_value(httpd_req_t* r, const char* key, char* val, s
     httpd_query_key_value(qry + 1, key, val, val_size);
     return httpd_req_url_decode(val);
 }
+
+esp_err_t httpd_resp_redirect(httpd_req_t* r, const char* url)
+{
+    httpd_resp_set_status(r, "302 Found");
+    httpd_resp_set_hdr(r, "Location", url);
+    return httpd_resp_send(r, NULL, 0);
+}

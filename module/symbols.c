@@ -94,6 +94,7 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(httpd_req_url_decode),
     ESP_ELFSYM_EXPORT(httpd_query_key_value),
     ESP_ELFSYM_EXPORT(httpd_query_decode_key_value),
+    ESP_ELFSYM_EXPORT(httpd_resp_redirect),
     ESP_ELFSYM_EXPORT(httpd_resp_send),
     ESP_ELFSYM_EXPORT(httpd_resp_send_chunk),
     ESP_ELFSYM_EXPORT(httpd_resp_set_status),

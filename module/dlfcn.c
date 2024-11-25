@@ -58,12 +58,16 @@ int execv(const char* path, char* const argv[])
     int ret = 0;
 
     void* handle = dlopen(path, 0);
-    if (handle) {
-        int (*entry)(int argc, char *const argv[]) = dlsym(handle, NULL);
-        if (entry) {
+    if (handle)
+    {
+        int (*entry)(int argc, char* const argv[]) = dlsym(handle, NULL);
+        if (entry)
+        {
             int argc = 0;
-            if (argv) {
-                for (argc = 0; argv[argc]; ++argc) {
+            if (argv)
+            {
+                for (argc = 0; argv[argc]; ++argc)
+                {
                     
                 }
             }

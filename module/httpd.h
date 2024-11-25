@@ -23,6 +23,7 @@ extern "C" {
 
 #define httpd_req_url_decode _httpd_req_url_decode
 #define httpd_query_decode_key_value _httpd_query_decode_key_value
+#define httpd_resp_redirect _httpd_resp_redirect
 
 esp_err_t httpd_start(httpd_handle_t* handle, const httpd_config_t* config);
 esp_err_t httpd_register_uri_handler(httpd_handle_t handle, const httpd_uri_t* uri_handler);
@@ -40,6 +41,7 @@ esp_err_t httpd_resp_set_hdr(httpd_req_t* r, const char* field, const char* valu
 
 char* httpd_req_url_decode(char* param);
 char* httpd_query_decode_key_value(httpd_req_t* r, const char* key, char* val, size_t val_size);
+esp_err_t httpd_resp_redirect(httpd_req_t* r, const char* url);
 
 #ifdef __cplusplus
 }

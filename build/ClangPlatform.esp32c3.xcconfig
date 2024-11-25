@@ -151,7 +151,9 @@ OTHER_CFLAGS = $(inherited) -Dstrtold_l(a,b,c)=strtold(a,b)
 OTHER_CFLAGS = $(inherited) -Dstrtoll_l(a,b,c,d)=strtoll(a,b,c)
 OTHER_CFLAGS = $(inherited) -Dstrtoull_l(a,b,c,d)=strtoull(a,b,c)
 OTHER_CFLAGS = $(inherited) -Dvasprintf(a,b,c)=0
+OTHER_CFLAGS = $(inherited) -fno-unroll-loops
 OTHER_CFLAGS = $(inherited) -fno-rtti
+OTHER_CFLAGS = $(inherited) -fno-jump-tables
 OTHER_CFLAGS = $(inherited) -fdata-sections
 OTHER_CFLAGS = $(inherited) -ffunction-sections
 

@@ -28,6 +28,7 @@ void* dlopen(const char* filename, int flags)
         {
             printf("Fail to relocate FILE file (%d)\n", ret);
             esp_elf_deinit(elf);
+            free(elf);
             elf = NULL;
         }
     }

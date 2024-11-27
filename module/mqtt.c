@@ -20,11 +20,12 @@
 
 #if USE_ESP_MQTT
 static esp_mqtt_client_handle_t mqtt_client IRAM_BSS_ATTR;
+static const char* mqtt_client_id IRAM_BSS_ATTR;
 #else
 static void* mqtt_client IRAM_BSS_ATTR;
+static mqtt_connect_info_t mqtt_info IRAM_BSS_ATTR;
 #endif
 static const char* mqtt_app_version = "Unknown";
-static mqtt_connect_info_t mqtt_info IRAM_BSS_ATTR;
 static void (*mqtt_receive_callback)(const char* topic, uint32_t topic_len, const char* data, uint32_t length) IRAM_BSS_ATTR;
 static bool mqtt_is_connected;
 
@@ -117,7 +118,11 @@ char* mqtt_prefix(char* buf, size_t size, char const* prefix, ...)
 {
     va_list args;
     va_start(args, prefix);
+#if USE_ESP_MQTT
+    int index = snprintf(buf, size, "%s/%s", mqtt_client_id ? mqtt_client_id : "Unknown", prefix);
+#else
     int index = snprintf(buf, size, "%s/%s", mqtt_info.client_id ? mqtt_info.client_id : "Unknown", prefix);
+#endif
     for (size_t i = 0; i < size; ++i)
     {
         char c = buf[i];
@@ -167,12 +172,16 @@ static void mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
     switch (event->event_id)
     {
     case MQTT_EVENT_CONNECTED:
+    {
         ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
         mqtt_is_connected = client;
-        esp_mqtt_client_publish(client, mqtt_prefix(number, "connected", 0), "true", 4, 0, 1);
-        esp_mqtt_client_subscribe(client, mqtt_prefix(number, "set", "#", 0), 0);
-        mqtt_information();
+        char* buffer = malloc(256);
+        esp_mqtt_client_publish(client, mqtt_prefix(buffer, 256, "connected", 0), "true", 4, 0, 1);
+        esp_mqtt_client_subscribe(client, mqtt_prefix(buffer, 256, "set", "#", 0), 0);
+        mqtt_information(buffer, 256);
+        free(buffer);
         break;
+    }
     case MQTT_EVENT_DISCONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
         mqtt_is_connected = NULL;
@@ -263,17 +272,19 @@ void mqtt_setup(const char* hostname, const char* version, const char* ip, int p
             return;
 
 #if USE_ESP_MQTT
+        char buffer[256];
         esp_mqtt_client_config_t mqtt_cfg =
         {
             .broker.address.uri = ip,
             .broker.address.port = (uint32_t)port,
-            .credentials.client_id = thisname,
-            .session.last_will.topic = mqtt_prefix(number, "connected", 0),
+            .credentials.client_id = hostname,
+            .session.last_will.topic = mqtt_prefix(buffer, sizeof(buffer), "connected", 0),
             .session.last_will.msg = "false",
             .session.last_will.retain = 1,
         };
 
         mqtt_client = esp_mqtt_client_init(&mqtt_cfg);
+        mqtt_client_id = hostname;
         esp_mqtt_client_register_event(mqtt_client, (esp_mqtt_event_id_t)ESP_EVENT_ANY_ID, mqtt_event_handler, mqtt_client);
         esp_mqtt_client_start(mqtt_client);
 #else
@@ -308,10 +319,18 @@ bool mqtt_connected(void)
 
 bool mqtt_connected_internal(void)
 {
+#if USE_ESP_MQTT
+    return mqtt_is_connected;
+#else
     return mqtt_connected_unused();
+#endif
 }
 
 bool mqtt_ready_internal(void)
 {
+#if USE_ESP_MQTT
+    return mqtt_is_connected;
+#else
     return mqtt_ready_unused();
+#endif
 }

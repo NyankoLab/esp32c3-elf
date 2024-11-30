@@ -32,6 +32,7 @@
 		D6741A8A2CE7155C0024FB04 /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A892CE7155C0024FB04 /* file.c */; };
 		D6865F7029AD085F00EBC297 /* liblittlefs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6865F6F29AD085F00EBC297 /* liblittlefs.a */; };
 		D6865F8529ADF4A200EBC297 /* libfreertos-mqtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6865F8429ADF4A200EBC297 /* libfreertos-mqtt.a */; };
+		D6F99D142CFB172500D7FD48 /* sha384.c in Sources */ = {isa = PBXBuildFile; fileRef = D6F99D132CFB172500D7FD48 /* sha384.c */; };
 		D6FC9A6E2CEB43C9009AF784 /* mqtt.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A682CEB43C8009AF784 /* mqtt.c */; };
 		D6FC9A6F2CEB43C9009AF784 /* https.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A692CEB43C8009AF784 /* https.c */; };
 		D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A6D2CEB43C8009AF784 /* httpd.c */; };
@@ -74,6 +75,7 @@
 		D6741A892CE7155C0024FB04 /* file.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = file.c; path = ../module/patch/file.c; sourceTree = "<group>"; };
 		D6865F6F29AD085F00EBC297 /* liblittlefs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = liblittlefs.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6865F8429ADF4A200EBC297 /* libfreertos-mqtt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libfreertos-mqtt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6F99D132CFB172500D7FD48 /* sha384.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha384.c; path = ../module/crypto/sha384.c; sourceTree = "<group>"; };
 		D6FC9A682CEB43C8009AF784 /* mqtt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mqtt.c; path = ../module/mqtt.c; sourceTree = "<group>"; };
 		D6FC9A692CEB43C8009AF784 /* https.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = https.c; path = ../module/https.c; sourceTree = "<group>"; };
 		D6FC9A6A2CEB43C8009AF784 /* https.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = https.h; path = ../module/https.h; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				D6170A552CEF73F9001C8439 /* sha.h */,
 				D6170A612CEF73F9001C8439 /* sha1-internal.c */,
 				D6170A5B2CEF73F9001C8439 /* sha256-internal.c */,
+				D6F99D132CFB172500D7FD48 /* sha384.c */,
 			);
 			name = crypto;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 				D6170A6F2CEF73F9001C8439 /* sha1-internal.c in Sources */,
 				D6170A662CEF73F9001C8439 /* aes-cbc.c in Sources */,
 				D6FC9AA22CECD11B009AF784 /* ota.c in Sources */,
+				D6F99D142CFB172500D7FD48 /* sha384.c in Sources */,
 				D6741A822CE610650024FB04 /* nvs.c in Sources */,
 				D6170A652CEF73F9001C8439 /* sha.c in Sources */,
 				D6170A642CEF73F9001C8439 /* aes-internal-enc.c in Sources */,

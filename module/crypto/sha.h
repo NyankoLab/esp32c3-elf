@@ -12,6 +12,8 @@
 #include <string.h>
 #include <hal/sha_hal.h>
 
+#define HMAC_VECTOR_MAX_ELEM 11
+
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;

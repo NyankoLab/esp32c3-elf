@@ -19,8 +19,8 @@
  * @data_len: Length of data in bytes
  * Returns: 0 on success, Negative value on failure
  */
-int aes_ctr_encrypt(const u8 *key, size_t key_len, const u8 *nonce,
-                    u8 *data, size_t data_len)
+int __wrap_aes_ctr_encrypt(const u8 *key, size_t key_len, const u8 *nonce,
+                           u8 *data, size_t data_len)
 {
     size_t j, len, left = data_len;
     int i;
@@ -59,8 +59,8 @@ int aes_ctr_encrypt(const u8 *key, size_t key_len, const u8 *nonce,
  * @data_len: Length of data in bytes
  * Returns: 0 on success, -1 on failure
  */
-int aes_128_ctr_encrypt(const u8 *key, const u8 *nonce,
-                        u8 *data, size_t data_len)
+int __wrap_aes_128_ctr_encrypt(const u8 *key, const u8 *nonce,
+                               u8 *data, size_t data_len)
 {
-    return aes_ctr_encrypt(key, 16, nonce, data, data_len);
+    return __wrap_aes_ctr_encrypt(key, 16, nonce, data, data_len);
 }

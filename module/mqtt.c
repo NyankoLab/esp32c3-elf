@@ -25,6 +25,7 @@ static const char* mqtt_client_id IRAM_BSS_ATTR;
 static void* mqtt_client IRAM_BSS_ATTR;
 static mqtt_connect_info_t mqtt_info IRAM_BSS_ATTR;
 #endif
+static const char* mqtt_app_build = "Unknown";
 static const char* mqtt_app_version = "Unknown";
 static void (*mqtt_receive_callback)(const char* topic, uint32_t topic_len, const char* data, uint32_t length) IRAM_BSS_ATTR;
 static bool mqtt_is_connected;
@@ -40,8 +41,7 @@ static void mqtt_information(char* buffer, size_t size)
     mqtt_publish(mqtt_prefix(buffer, size, "ESP", "ELF Version", 0), esp_app_desc.version, 0, 0);
     mqtt_publish(mqtt_prefix(buffer, size, "ESP", "CPU Frequency", 0), itoa(esp_clk_cpu_freq() / 1000000, buffer + 64, 10), 0, 0);
 
-    snprintf(buffer + 64, size - 64, "%s %s", esp_app_desc.date, esp_app_desc.time);
-    mqtt_publish(mqtt_prefix(buffer, size, "ESP", "Build", 0), buffer + 64, 0, 0);
+    mqtt_publish(mqtt_prefix(buffer, size, "ESP", "Build", 0), mqtt_app_build, 0, 0);
     mqtt_publish(mqtt_prefix(buffer, size, "ESP", "Version", 0), mqtt_app_version, 0, 1);
 
     esp_netif_ip_info_t ip_info = {};
@@ -264,12 +264,15 @@ static void mqtt_event_handler(mqtt_event_data_t* event)
 }
 #endif
 
-void mqtt_setup(const char* hostname, const char* version, const char* ip, int port)
+void mqtt_setup(const char* hostname, const char* build, const char* version, const char* ip, int port)
 {
     if (mqtt_client == NULL)
     {
         if (ip == NULL || ip[0] == 0)
             return;
+
+        mqtt_app_build = build;
+        mqtt_app_version = version;
 
 #if USE_ESP_MQTT
         char buffer[256];
@@ -290,8 +293,6 @@ void mqtt_setup(const char* hostname, const char* version, const char* ip, int p
 #else
         ip_addr_t ip_addr;
         lwip_inet_pton(AF_INET, ip, &ip_addr);
-
-        mqtt_app_version = version;
 
         char buffer[256];
         mqtt_info.client_id = hostname;

@@ -117,9 +117,9 @@ static void aes_ccm_decr_auth(size_t M, u8 *a, const u8 *auth, u8 *t)
 
 
 /* AES-CCM with fixed L=2 and aad_len <= 30 assumption */
-int aes_ccm_ae(const u8 *key, size_t key_len, const u8 *nonce,
-               size_t M, const u8 *plain, size_t plain_len,
-               const u8 *aad, size_t aad_len, u8 *crypt, u8 *auth)
+int __wrap_aes_ccm_ae(const u8 *key, size_t key_len, const u8 *nonce,
+                      size_t M, const u8 *plain, size_t plain_len,
+                      const u8 *aad, size_t aad_len, u8 *crypt, u8 *auth)
 {
     const size_t L = 2;
     u8 x[AES_BLOCK_SIZE], a[AES_BLOCK_SIZE];
@@ -145,9 +145,9 @@ int aes_ccm_ae(const u8 *key, size_t key_len, const u8 *nonce,
 
 
 /* AES-CCM with fixed L=2 and aad_len <= 30 assumption */
-int aes_ccm_ad(const u8 *key, size_t key_len, const u8 *nonce,
-               size_t M, const u8 *crypt, size_t crypt_len,
-               const u8 *aad, size_t aad_len, const u8 *auth, u8 *plain)
+int __wrap_aes_ccm_ad(const u8 *key, size_t key_len, const u8 *nonce,
+                      size_t M, const u8 *crypt, size_t crypt_len,
+                      const u8 *aad, size_t aad_len, const u8 *auth, u8 *plain)
 {
     const size_t L = 2;
     u8 x[AES_BLOCK_SIZE], a[AES_BLOCK_SIZE];

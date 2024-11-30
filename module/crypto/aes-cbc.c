@@ -18,7 +18,7 @@
  * @data_len: Length of data in bytes (must be divisible by 16)
  * Returns: 0 on success, -1 on failure
  */
-int aes_128_cbc_encrypt(const u8 *key, const u8 *iv, u8 *data, size_t data_len)
+int __wrap_aes_128_cbc_encrypt(const u8 *key, const u8 *iv, u8 *data, size_t data_len)
 {
     uint32_t iv_words[4] = { iv[0], iv[1], iv[2], iv[3] };
     uint32_t *data_words = (uint32_t *)data;
@@ -48,7 +48,7 @@ int aes_128_cbc_encrypt(const u8 *key, const u8 *iv, u8 *data, size_t data_len)
  * @data_len: Length of data in bytes (must be divisible by 16)
  * Returns: 0 on success, -1 on failure
  */
-int aes_128_cbc_decrypt(const u8 *key, const u8 *iv, u8 *data, size_t data_len)
+int __wrap_aes_128_cbc_decrypt(const u8 *key, const u8 *iv, u8 *data, size_t data_len)
 {
     uint32_t iv_words[4] = { iv[0], iv[1], iv[2], iv[3] };
     uint32_t *data_words = (uint32_t *)data;

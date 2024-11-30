@@ -311,6 +311,29 @@ OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_SetIP
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,_read_r_console
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,_write_r_console
 
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_128_cbc_decrypt
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_128_cbc_encrypt
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_128_ctr_encrypt
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_ccm_ad
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_ccm_ae
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_ctr_encrypt
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_gcm_ad
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_gcm_ae
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_gmac
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_unwrap
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_wrap
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,omac1_aes_128
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,omac1_aes_128_vector
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,omac1_aes_256
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,omac1_aes_vector
+
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_decrypt_init
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_decrypt
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_decrypt_deinit
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_encrypt_init
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_encrypt
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,aes_encrypt_deinit
+
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,sha1_vector
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,sha256_vector
 

@@ -18,7 +18,7 @@
 #include <stdlib.h>
 
 
-void * aes_decrypt_init(const u8 *key, size_t len)
+void * __wrap_aes_decrypt_init(const u8 *key, size_t len)
 {
     size_t *context = malloc(sizeof(size_t) + len);
     context[0] = len;
@@ -27,7 +27,7 @@ void * aes_decrypt_init(const u8 *key, size_t len)
 }
 
 
-int aes_decrypt(void *ctx, const u8 *crypt, u8 *plain)
+int __wrap_aes_decrypt(void *ctx, const u8 *crypt, u8 *plain)
 {
     size_t *context = ctx;
     esp_aes_acquire_hardware();
@@ -38,7 +38,7 @@ int aes_decrypt(void *ctx, const u8 *crypt, u8 *plain)
 }
 
 
-void aes_decrypt_deinit(void *ctx)
+void __wrap_aes_decrypt_deinit(void *ctx)
 {
     free(ctx);
 }

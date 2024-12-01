@@ -27,7 +27,7 @@ extern "C" {
  * 
  * @return Memory pointer if success or NULL if failed.
  */
-void *esp_elf_malloc(uint32_t n, bool exec);
+void *esp_elf_malloc(uint32_t n, int type);
 
 /**
  * @brief Free block of memory.

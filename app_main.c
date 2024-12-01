@@ -19,6 +19,8 @@
 #include "elf_loader/include/esp_elf.h"
 #include "module/dlfcn.h"
 
+#define TAG __FILE_NAME__
+
 int uart0_tx IRAM_BSS_ATTR = U0TXD_GPIO_NUM;
 int uart0_rx IRAM_BSS_ATTR = U0RXD_GPIO_NUM;
 int uart1_tx IRAM_BSS_ATTR = U1TXD_GPIO_NUM;
@@ -39,19 +41,6 @@ const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc =
                "(" "clang version " __XSTRING(__clang_major__) "." __XSTRING(__clang_minor__) "." __XSTRING(__clang_patchlevel__) ")"
 };
 
-httpd_handle_t* hap_httpd_get_handle();
-int __real_hap_httpd_start(void);
-int __wrap_hap_httpd_start(void)
-{
-  httpd_handle_t* handle = hap_httpd_get_handle();
-  if (handle) {
-    extern httpd_handle_t httpd_server;
-    (*handle) = httpd_server;
-    return 0;
-  }
-  return __real_hap_httpd_start();
-}
-
 int mesh_sta_auth_expire_time(void)
 {
     return 0;
@@ -59,8 +48,7 @@ int mesh_sta_auth_expire_time(void)
 
 void app_main(void)
 {
-    printf("Hello world!\n");
-
+#if 0
     /* Print chip information */
     esp_chip_info_t chip_info;
     uint32_t flash_size;
@@ -83,8 +71,8 @@ void app_main(void)
 
     printf("%" PRIu32 "MB %s flash\n", flash_size / (uint32_t)(1024 * 1024),
            (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
-
-    printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
+#endif
+    ESP_LOGI(TAG, "Minimum free heap size: %" PRIu32 " bytes", esp_get_minimum_free_heap_size());
 
     /* Initialize Component */
     extern void vfs_init(void);
@@ -96,10 +84,9 @@ void app_main(void)
     execv("main.elf", NULL);
 
     for (int i = 10; i >= 0; i--) {
-        printf("Restarting in %d seconds...\n", i);
+        ESP_LOGI(TAG, "Restarting in %d seconds...", i);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
-    printf("Restarting now.\n");
-    fflush(stdout);
+    ESP_LOGI(TAG, "Restarting now.");
     esp_restart();
 }

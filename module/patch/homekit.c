@@ -5,6 +5,19 @@
 #define HAP_FAIL    -1
 #define TAG         __FILE_NAME__
 
+httpd_handle_t* hap_httpd_get_handle();
+int __real_hap_httpd_start(void);
+int __wrap_hap_httpd_start(void)
+{
+    httpd_handle_t* handle = hap_httpd_get_handle();
+    if (handle) {
+        extern httpd_handle_t httpd_server;
+        (*handle) = httpd_server;
+        return 0;
+    }
+    return __real_hap_httpd_start();
+}
+
 int hap_keystore_init(void)
 {
     return HAP_SUCCESS;

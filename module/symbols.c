@@ -27,6 +27,7 @@ void _ZdlPv(void* p) { free(p); }
 
 void init_udp_console(const char* ip);
 BaseType_t xTaskCreatePinnedToCore(TaskFunction_t, const char* const, const configSTACK_DEPTH_TYPE, void* const, UBaseType_t, TaskHandle_t* const, const BaseType_t);
+extern esp_app_desc_t esp_app_desc;
 
 const struct esp_elfsym g_customer_elfsyms[] = {
 
@@ -70,6 +71,7 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(httpd_server),
 
     // other
+    ESP_ELFSYM_EXPORT(esp_app_desc),
     ESP_ELFSYM_EXPORT(esp_clk_apb_freq),
     ESP_ELFSYM_EXPORT(esp_get_idf_version),
     ESP_ELFSYM_EXPORT(esp_restart),

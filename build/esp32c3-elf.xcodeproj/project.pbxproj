@@ -76,6 +76,7 @@
 		D6865F6F29AD085F00EBC297 /* liblittlefs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = liblittlefs.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6865F8429ADF4A200EBC297 /* libfreertos-mqtt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libfreertos-mqtt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6F99D132CFB172500D7FD48 /* sha384.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha384.c; path = ../module/crypto/sha384.c; sourceTree = "<group>"; };
+		D6F99D152CFC321E00D7FD48 /* helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = helper.h; path = ../helper.h; sourceTree = "<group>"; };
 		D6FC9A682CEB43C8009AF784 /* mqtt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mqtt.c; path = ../module/mqtt.c; sourceTree = "<group>"; };
 		D6FC9A692CEB43C8009AF784 /* https.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = https.c; path = ../module/https.c; sourceTree = "<group>"; };
 		D6FC9A6A2CEB43C8009AF784 /* https.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = https.h; path = ../module/https.h; sourceTree = "<group>"; };
@@ -150,8 +151,9 @@
 			isa = PBXGroup;
 			children = (
 				D6741A652CE5E4160024FB04 /* module */,
-				D6741A882CE708960024FB04 /* esp32c3.h */,
 				D6741A322CE393DD0024FB04 /* app_main.c */,
+				D6741A882CE708960024FB04 /* esp32c3.h */,
+				D6F99D152CFC321E00D7FD48 /* helper.h */,
 				CE999BD625D21EC800351116 /* Configs */,
 				D644A042231ED82900B75B77 /* Products */,
 				300264BD24266097004559E0 /* Frameworks */,

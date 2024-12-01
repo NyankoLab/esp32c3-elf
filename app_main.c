@@ -18,6 +18,7 @@
 #include <soc/uart_pins.h>
 #include "elf_loader/include/esp_elf.h"
 #include "module/dlfcn.h"
+#include "helper.h"
 
 #define TAG __FILE_NAME__
 
@@ -33,7 +34,7 @@ httpd_handle_t httpd_server IRAM_BSS_ATTR;
 const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc = {
     .magic_word = ESP_APP_DESC_MAGIC_WORD,
     .secure_version = 0,
-    .version = __XSTRING(ELF_LOADER_VER_MAJOR) "." __XSTRING(ELF_LOADER_VER_MINOR) "." __XSTRING(ELF_LOADER_VER_PATCH) " ",
+    .version = { VersionHelper },
     .project_name = "esp32c3-elf",
     .time = __TIME__,
     .date = __DATE__,

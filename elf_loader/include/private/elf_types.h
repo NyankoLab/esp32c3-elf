@@ -90,7 +90,7 @@ extern "C" {
 #define ELF_SYMTAB      ".symtab"       /*!< symbol table */
 #define ELF_TEXT        ".text"         /*!< code */
 #define ELF_DATA_REL_RO ".data.rel.ro"  /*!< dynamic read-only data */
-#define ELF_RTC_DATA    ".rtc.data"     /*!< rtc data */
+#define ELF_RTC         ".rtc"          /*!< rtc */
 
 /** @brief ELF section and symbol operation */
 
@@ -99,7 +99,7 @@ extern "C" {
 #define ELF_SEC_DATA            2
 #define ELF_SEC_RODATA          3
 #define ELF_SEC_DRLRO           4
-#define ELF_SEC_RTC_DATA        5
+#define ELF_SEC_RTC             5
 #define ELF_SECS                6
 
 #define ELF_ST_BIND(_i)         ((_i) >> 4)

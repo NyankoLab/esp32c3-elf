@@ -24,6 +24,24 @@ void* _Znaj(unsigned int s) { return malloc(s); }
 void* _Znwj(unsigned int s) { return malloc(s); }
 void _ZdaPv(void* p) { free(p); }
 void _ZdlPv(void* p) { free(p); }
+void _ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findEcj();
+void _ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findEPKcj();
+void _ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findERKS5_j();
+void _ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE5emptyEv();
+void _ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6substrEjj();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE5clearEv();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6__initEPKcj();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKc();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKcj();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendERKS5_();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6assignEPKc();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6resizeEj();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7replaceEjjPKc();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE9push_backEc();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEaSEOS5_();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2ILi0EEEPKc();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED1Ev();
+void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED2Ev();
 
 void init_udp_console(const char* ip);
 BaseType_t xTaskCreatePinnedToCore(TaskFunction_t, const char* const, const configSTACK_DEPTH_TYPE, void* const, UBaseType_t, TaskHandle_t* const, const BaseType_t);
@@ -58,6 +76,24 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(_Znwj),
     ESP_ELFSYM_EXPORT(_ZdaPv),
     ESP_ELFSYM_EXPORT(_ZdlPv),
+    ESP_ELFSYM_EXPORT(_ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findEcj),
+    ESP_ELFSYM_EXPORT(_ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findEPKcj),
+    ESP_ELFSYM_EXPORT(_ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findERKS5_j),
+    ESP_ELFSYM_EXPORT(_ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE5emptyEv),
+    ESP_ELFSYM_EXPORT(_ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6substrEjj),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE5clearEv),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6__initEPKcj),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKc),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKcj),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendERKS5_),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6assignEPKc),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6resizeEj),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7replaceEjjPKc),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE9push_backEc),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEaSEOS5_),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2ILi0EEEPKc),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED1Ev),
+    ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED2Ev),
 
     // common
     ESP_ELFSYM_EXPORT(init_udp_console),

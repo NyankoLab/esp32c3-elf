@@ -1,6 +1,11 @@
 SECTIONS
 {
-  .text 0x00000000 :
+  .stl :
+  {
+    *(.text.*St3__112basic_string*)
+  }
+
+  .text :
   {
     *(.text)
     *(.text.*)
@@ -20,7 +25,7 @@ SECTIONS
     *(.sdata.*)
   }
 
-  .bss :
+  .bss (NOLOAD) :
   {
     *(.bss)
     *(.bss.*)
@@ -28,10 +33,17 @@ SECTIONS
     *(.sbss.*)
   }
 
-  .rtc.data :
+  .rtc (NOLOAD) :
   {
+    *(.rtc.bss)
+    *(.rtc.bss.*)
     *(.rtc.data)
     *(.rtc.data.*)
+  }
+
+  .rela.stl :
+  {
+    *(.rela.text.*St3__112basic_string*)
   }
 
   .rela.text :

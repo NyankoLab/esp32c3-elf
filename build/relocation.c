@@ -317,6 +317,7 @@ int main(int argc, char const* argv[])
   // Section Header
   struct elf32_shdr* section = (struct elf32_shdr*)(memory + elf->shoff);
   char* strndx = memory + section[elf->shstrndx].offset;
+  Elf32_Half stl = 0;
   for (Elf32_Half i = 0; i < elf->shnum; ++i)
   {
     if (strstr(strndx + section[i].name, ".rela") == strndx + section[i].name)
@@ -337,6 +338,11 @@ int main(int argc, char const* argv[])
     if (strstr(strndx + section[i].name, ".strtab") == strndx + section[i].name)
     {
       strtab = (memory + section[i].offset);
+    }
+    if (strstr(strndx + section[i].name, ".stl") == strndx + section[i].name)
+    {
+      stl = i;
+      printf("Found : %s (%d)\n", ".stl", stl);
     }
   } 
 
@@ -374,7 +380,7 @@ int main(int argc, char const* argv[])
       unsigned int addr = rela->offset;
       unsigned int reloctype = ELF_R_TYPE(rela->info);
       unsigned int relocsym = ELF_R_SYM(rela->info);
-      const struct elf32_sym* sym = &symtab[relocsym];
+      struct elf32_sym* sym = &symtab[relocsym];
 
       if (reloctype == R_RISCV_ALIGN || reloctype == R_RISCV_RELAX)
       {
@@ -440,6 +446,10 @@ int main(int argc, char const* argv[])
   // Symbol
   for (struct elf32_sym* r = symtab; r != symtab_end; ++r)
   {
+    if (r->shndx == stl)
+    {
+      r->shndx = 0;
+    }
     if (r->shndx == 0)
     {
       continue;

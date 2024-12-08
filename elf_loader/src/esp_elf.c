@@ -125,33 +125,35 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
                          name,
                          elf->sec[ELF_SEC_DRLRO].offset,
                          elf->sec[ELF_SEC_DRLRO].size);
-            } else if (!strcmp(ELF_RTC_DATA, name)) {
+            }
+        } else if (stype(&shdr, SHT_NOBITS) && sflags(&shdr, SHF_ALLOC | SHF_WRITE)) {
+            if (!strcmp(ELF_BSS, name)) {
                 ESP_LOGI(TAG, "%-16s sec addr=0x%08x size=0x%08x offset=0x%08x",
                          name, shdr.addr, shdr.size, shdr.offset);
 
-                elf->sec[ELF_SEC_RTC_DATA].v_addr  = shdr.addr;
-                elf->sec[ELF_SEC_RTC_DATA].size    = shdr.size;
-                elf->sec[ELF_SEC_RTC_DATA].offset  = shdr.offset;
-                elf->sec[ELF_SEC_RTC_DATA].index   = i;
+                elf->sec[ELF_SEC_BSS].v_addr  = shdr.addr;
+                elf->sec[ELF_SEC_BSS].size    = shdr.size;
+                elf->sec[ELF_SEC_BSS].offset  = shdr.offset;
+                elf->sec[ELF_SEC_BSS].index   = i;
 
                 ESP_LOGI(TAG, "%-16s offset is 0x%lx size is 0x%x",
                          name,
-                         elf->sec[ELF_SEC_RTC_DATA].offset,
-                         elf->sec[ELF_SEC_RTC_DATA].size);
+                         elf->sec[ELF_SEC_BSS].offset,
+                         elf->sec[ELF_SEC_BSS].size);
+            } else if (!strcmp(ELF_RTC, name)) {
+                ESP_LOGI(TAG, "%-16s sec addr=0x%08x size=0x%08x offset=0x%08x",
+                         name, shdr.addr, shdr.size, shdr.offset);
+
+                elf->sec[ELF_SEC_RTC].v_addr  = shdr.addr;
+                elf->sec[ELF_SEC_RTC].size    = shdr.size;
+                elf->sec[ELF_SEC_RTC].offset  = shdr.offset;
+                elf->sec[ELF_SEC_RTC].index   = i;
+
+                ESP_LOGI(TAG, "%-16s offset is 0x%lx size is 0x%x",
+                         name,
+                         elf->sec[ELF_SEC_RTC].offset,
+                         elf->sec[ELF_SEC_RTC].size);
             }
-        } else if (stype(&shdr, SHT_NOBITS) && sflags(&shdr, SHF_ALLOC | SHF_WRITE) && !strcmp(ELF_BSS, name)) {
-            ESP_LOGI(TAG, "%-16s sec addr=0x%08x size=0x%08x offset=0x%08x",
-                     name, shdr.addr, shdr.size, shdr.offset);
-
-            elf->sec[ELF_SEC_BSS].v_addr  = shdr.addr;
-            elf->sec[ELF_SEC_BSS].size    = shdr.size;
-            elf->sec[ELF_SEC_BSS].offset  = shdr.offset;
-            elf->sec[ELF_SEC_BSS].index   = i;
-
-            ESP_LOGI(TAG, "%-16s offset is 0x%lx size is 0x%x",
-                     name,
-                     elf->sec[ELF_SEC_BSS].offset,
-                     elf->sec[ELF_SEC_BSS].size);
         }
     }
 
@@ -177,8 +179,8 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
         }
     }
 
-    if (elf->sec[ELF_SEC_RTC_DATA].size) {
-        elf->rtcdata = esp_elf_malloc(elf->sec[ELF_SEC_RTC_DATA].size, 2);
+    if (elf->sec[ELF_SEC_RTC].size) {
+        elf->rtcdata = esp_elf_malloc(elf->sec[ELF_SEC_RTC].size, 2);
         if (!elf->rtcdata) {
             return -ENOMEM;
         }
@@ -244,7 +246,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
 
     /* rtc data */
 
-    elf->sec[ELF_SEC_RTC_DATA].addr = (Elf32_Addr)elf->rtcdata;
+    elf->sec[ELF_SEC_RTC].addr = (Elf32_Addr)elf->rtcdata;
 
     /* Set ELF entry */
 
@@ -282,8 +284,8 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
                 offset = elf->sec[ELF_SEC_DRLRO].addr;
             } else if (strstr(name, ELF_BSS)) {
                 offset = elf->sec[ELF_SEC_BSS].addr;
-            } else if (strstr(name, ELF_RTC_DATA)) {
-                offset = elf->sec[ELF_SEC_RTC_DATA].addr;
+            } else if (strstr(name, ELF_RTC)) {
+                offset = elf->sec[ELF_SEC_RTC].addr;
             } else {
                 ESP_LOGE(TAG, "Unsupported section %s", name);
                 return -ENOEXEC;
@@ -372,10 +374,10 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
                         addr = sym.value + elf->sec[ELF_SEC_DRLRO].addr;
                     } else if (sym.shndx == elf->sec[ELF_SEC_BSS].index) {
                         addr = sym.value + elf->sec[ELF_SEC_BSS].addr;
-                    } else if (sym.shndx == elf->sec[ELF_SEC_RTC_DATA].index) {
-                        addr = sym.value + elf->sec[ELF_SEC_RTC_DATA].addr;
+                    } else if (sym.shndx == elf->sec[ELF_SEC_RTC].index) {
+                        addr = sym.value + elf->sec[ELF_SEC_RTC].addr;
                     } else {
-                        ESP_LOGE(TAG, "Unsupported section %d", sym.value);
+                        ESP_LOGE(TAG, "Unsupported section index %d", sym.shndx);
                         return -ENOEXEC;
                     }
                     ESP_LOGD(TAG, "Found value %d addr=%x", sym.value, addr);

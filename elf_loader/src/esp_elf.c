@@ -364,21 +364,15 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
                         ESP_LOGE(TAG, "Out of bound section %d", sym.shndx);
                         return -ENOEXEC;
                     }
-                    if (sym.shndx == elf->sec[ELF_SEC_TEXT].index) {
-                        addr = sym.value + elf->sec[ELF_SEC_TEXT].addr;
-                    } else if (sym.shndx == elf->sec[ELF_SEC_DATA].index) {
-                        addr = sym.value + elf->sec[ELF_SEC_DATA].addr;
-                    } else if (sym.shndx == elf->sec[ELF_SEC_RODATA].index) {
-                        addr = sym.value + elf->sec[ELF_SEC_RODATA].addr;
-                    } else if (sym.shndx == elf->sec[ELF_SEC_DRLRO].index) {
-                        addr = sym.value + elf->sec[ELF_SEC_DRLRO].addr;
-                    } else if (sym.shndx == elf->sec[ELF_SEC_BSS].index) {
-                        addr = sym.value + elf->sec[ELF_SEC_BSS].addr;
-                    } else if (sym.shndx == elf->sec[ELF_SEC_RTC].index) {
-                        addr = sym.value + elf->sec[ELF_SEC_RTC].addr;
-                    } else {
+                    for (int i = 0; i < ELF_SECS; ++i) {
+                        if (sym.shndx == elf->sec[i].index) {
+                            addr = sym.value + elf->sec[i].addr;
+                            break;
+                        }
+                        if (i == (ELF_SECS - 1)) {
                         ESP_LOGE(TAG, "Unsupported section index %d", sym.shndx);
                         return -ENOEXEC;
+                    }
                     }
                     ESP_LOGD(TAG, "Found value %d addr=%x", sym.value, addr);
                     break;

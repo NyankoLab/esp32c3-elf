@@ -84,7 +84,42 @@ void app_main(void)
     /* Execute ELF */
     execv("main.elf", NULL);
 
-    for (int i = 10; i >= 0; i--) {
+    /* Fallback */
+    ESP_ERROR_CHECK(esp_netif_init());
+    ESP_ERROR_CHECK(esp_event_loop_create_default());
+    ap_netif = esp_netif_create_default_wifi_ap();
+
+    // WiFi
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    ESP_ERROR_CHECK(esp_wifi_init(&cfg));
+    ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
+    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
+
+    // MAC
+    uint8_t macaddr[6] = {};
+    esp_wifi_get_mac(WIFI_IF_AP, macaddr);
+
+    // Soft AP
+    char hostname[24];
+    wifi_config_t config = {};
+    snprintf((char*)config.ap.ssid, sizeof(config.ap.ssid), "%s-%02X%02X%02X", "ESP32C3", macaddr[3], macaddr[4], macaddr[5]);
+    snprintf((char*)config.ap.password, sizeof(config.ap.password), "%s-%02X%02X%02X", "ESP32C3", macaddr[3], macaddr[4], macaddr[5]);
+    strcpy(hostname, (char*)config.ap.ssid);
+    config.ap.ssid_len = strlen((char*)config.ap.ssid);
+    config.ap.channel = 1;
+    config.ap.authmode = WIFI_AUTH_WPA_WPA2_PSK;
+    config.ap.ssid_hidden = 0;
+    config.ap.max_connection = 4;
+    config.ap.beacon_interval = 100;
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &config));
+    ESP_ERROR_CHECK(esp_wifi_start());
+    esp_netif_set_hostname(ap_netif, hostname);
+
+    /* OTA */
+    extern void ota_init(int);
+    ota_init(8685);
+
+    for (int i = 100; i >= 0; i--) {
         ESP_LOGI(TAG, "Restarting in %d seconds...", i);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }

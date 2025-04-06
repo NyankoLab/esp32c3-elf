@@ -7,33 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D6170A622CEF73F9001C8439 /* aes-ccm.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A522CEF73F9001C8439 /* aes-ccm.c */; };
-		D6170A632CEF73F9001C8439 /* aes-internal-dec.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A532CEF73F9001C8439 /* aes-internal-dec.c */; };
-		D6170A642CEF73F9001C8439 /* aes-internal-enc.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A542CEF73F9001C8439 /* aes-internal-enc.c */; };
-		D6170A652CEF73F9001C8439 /* sha.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A562CEF73F9001C8439 /* sha.c */; };
-		D6170A662CEF73F9001C8439 /* aes-cbc.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A572CEF73F9001C8439 /* aes-cbc.c */; };
-		D6170A672CEF73F9001C8439 /* aes-ctr.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A582CEF73F9001C8439 /* aes-ctr.c */; };
-		D6170A682CEF73F9001C8439 /* aes-gcm.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A5A2CEF73F9001C8439 /* aes-gcm.c */; };
-		D6170A692CEF73F9001C8439 /* sha256-internal.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A5B2CEF73F9001C8439 /* sha256-internal.c */; };
-		D6170A6A2CEF73F9001C8439 /* aes-omac1.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A5C2CEF73F9001C8439 /* aes-omac1.c */; };
-		D6170A6B2CEF73F9001C8439 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A5D2CEF73F9001C8439 /* aes.c */; };
-		D6170A6C2CEF73F9001C8439 /* bignum.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A5E2CEF73F9001C8439 /* bignum.c */; };
-		D6170A6D2CEF73F9001C8439 /* aes-unwrap.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A5F2CEF73F9001C8439 /* aes-unwrap.c */; };
-		D6170A6E2CEF73F9001C8439 /* aes-wrap.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A602CEF73F9001C8439 /* aes-wrap.c */; };
-		D6170A6F2CEF73F9001C8439 /* sha1-internal.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A612CEF73F9001C8439 /* sha1-internal.c */; };
 		D6170A7B2CF22403001C8439 /* dlfcn.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A7A2CF22403001C8439 /* dlfcn.c */; };
 		D65A9C032CE848CC0022B1E0 /* symbols.c in Sources */ = {isa = PBXBuildFile; fileRef = D65A9C022CE848CC0022B1E0 /* symbols.c */; settings = {COMPILER_FLAGS = "-I../elf_loader/include"; }; };
+		D6619E312DA23013001C8599 /* aes-ctr.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E242DA23013001C8599 /* aes-ctr.c */; };
+		D6619E322DA23013001C8599 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E212DA23013001C8599 /* aes.c */; };
+		D6619E332DA23013001C8599 /* bignum.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E2B2DA23013001C8599 /* bignum.c */; };
+		D6619E342DA23013001C8599 /* sha384.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E302DA23013001C8599 /* sha384.c */; };
+		D6619E352DA23013001C8599 /* aes-internal-dec.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E262DA23013001C8599 /* aes-internal-dec.c */; };
+		D6619E362DA23013001C8599 /* aes-omac1.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E282DA23013001C8599 /* aes-omac1.c */; };
+		D6619E372DA23013001C8599 /* aes-unwrap.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E292DA23013001C8599 /* aes-unwrap.c */; };
+		D6619E382DA23013001C8599 /* aes-gcm.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E252DA23013001C8599 /* aes-gcm.c */; };
+		D6619E392DA23013001C8599 /* aes-ccm.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E232DA23013001C8599 /* aes-ccm.c */; };
+		D6619E3A2DA23013001C8599 /* sha.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E2D2DA23013001C8599 /* sha.c */; };
+		D6619E3B2DA23013001C8599 /* aes-cbc.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E222DA23013001C8599 /* aes-cbc.c */; };
+		D6619E3C2DA23013001C8599 /* sha1-internal.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E2E2DA23013001C8599 /* sha1-internal.c */; };
+		D6619E3D2DA23013001C8599 /* aes-internal-enc.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E272DA23013001C8599 /* aes-internal-enc.c */; };
+		D6619E3E2DA23013001C8599 /* aes-wrap.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E2A2DA23013001C8599 /* aes-wrap.c */; };
+		D6619E3F2DA23013001C8599 /* sha256-internal.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E2F2DA23013001C8599 /* sha256-internal.c */; };
+		D6619E452DA2303F001C8599 /* homekit.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E422DA2303F001C8599 /* homekit.c */; };
+		D6619E462DA2303F001C8599 /* nvs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E432DA2303F001C8599 /* nvs.c */; };
+		D6619E472DA2303F001C8599 /* vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E442DA2303F001C8599 /* vfs.c */; };
+		D6619E482DA2303F001C8599 /* cxx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6619E402DA2303F001C8599 /* cxx.cpp */; };
+		D6619E492DA2303F001C8599 /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E412DA2303F001C8599 /* file.c */; };
+		D6619E572DA2451D001C8599 /* esp_eth_mac_enc28j60.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E552DA2451D001C8599 /* esp_eth_mac_enc28j60.c */; };
+		D6619E582DA2451D001C8599 /* esp_eth_phy_enc28j60.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E562DA2451D001C8599 /* esp_eth_phy_enc28j60.c */; };
+		D6619E5C2DA2731D001C8599 /* enc28j60.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E5B2DA2731D001C8599 /* enc28j60.c */; };
 		D6741A332CE393DD0024FB04 /* app_main.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A322CE393DD0024FB04 /* app_main.c */; };
 		D6741A642CE5D31A0024FB04 /* libelf_loader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6741A632CE5D31A0024FB04 /* libelf_loader.a */; };
 		D6741A682CE5E4240024FB04 /* fs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A672CE5E4240024FB04 /* fs.c */; };
-		D6741A802CE610650024FB04 /* homekit.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A7D2CE610650024FB04 /* homekit.c */; };
-		D6741A812CE610650024FB04 /* vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A7E2CE610650024FB04 /* vfs.c */; };
-		D6741A822CE610650024FB04 /* nvs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A7F2CE610650024FB04 /* nvs.c */; };
-		D6741A8A2CE7155C0024FB04 /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A892CE7155C0024FB04 /* file.c */; };
 		D6865F7029AD085F00EBC297 /* liblittlefs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6865F6F29AD085F00EBC297 /* liblittlefs.a */; };
 		D6865F8529ADF4A200EBC297 /* libfreertos-mqtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6865F8429ADF4A200EBC297 /* libfreertos-mqtt.a */; };
-		D6EBF8842D0595740063CD1C /* cxx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6EBF8832D0595740063CD1C /* cxx.cpp */; };
-		D6F99D142CFB172500D7FD48 /* sha384.c in Sources */ = {isa = PBXBuildFile; fileRef = D6F99D132CFB172500D7FD48 /* sha384.c */; };
 		D6FC9A6E2CEB43C9009AF784 /* mqtt.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A682CEB43C8009AF784 /* mqtt.c */; };
 		D6FC9A6F2CEB43C9009AF784 /* https.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A692CEB43C8009AF784 /* https.c */; };
 		D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A6D2CEB43C8009AF784 /* httpd.c */; };
@@ -43,25 +46,37 @@
 
 /* Begin PBXFileReference section */
 		30A9A7BB25ADC792000FA104 /* libesp32c3-elf.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "libesp32c3-elf.so"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D6170A522CEF73F9001C8439 /* aes-ccm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "aes-ccm.c"; path = "../module/crypto/aes-ccm.c"; sourceTree = "<group>"; };
-		D6170A532CEF73F9001C8439 /* aes-internal-dec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "aes-internal-dec.c"; path = "../module/crypto/aes-internal-dec.c"; sourceTree = "<group>"; };
-		D6170A542CEF73F9001C8439 /* aes-internal-enc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "aes-internal-enc.c"; path = "../module/crypto/aes-internal-enc.c"; sourceTree = "<group>"; };
-		D6170A552CEF73F9001C8439 /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha.h; path = ../module/crypto/sha.h; sourceTree = "<group>"; };
-		D6170A562CEF73F9001C8439 /* sha.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha.c; path = ../module/crypto/sha.c; sourceTree = "<group>"; };
-		D6170A572CEF73F9001C8439 /* aes-cbc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "aes-cbc.c"; path = "../module/crypto/aes-cbc.c"; sourceTree = "<group>"; };
-		D6170A582CEF73F9001C8439 /* aes-ctr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "aes-ctr.c"; path = "../module/crypto/aes-ctr.c"; sourceTree = "<group>"; };
-		D6170A592CEF73F9001C8439 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aes.h; path = ../module/crypto/aes.h; sourceTree = "<group>"; };
-		D6170A5A2CEF73F9001C8439 /* aes-gcm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "aes-gcm.c"; path = "../module/crypto/aes-gcm.c"; sourceTree = "<group>"; };
-		D6170A5B2CEF73F9001C8439 /* sha256-internal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "sha256-internal.c"; path = "../module/crypto/sha256-internal.c"; sourceTree = "<group>"; };
-		D6170A5C2CEF73F9001C8439 /* aes-omac1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "aes-omac1.c"; path = "../module/crypto/aes-omac1.c"; sourceTree = "<group>"; };
-		D6170A5D2CEF73F9001C8439 /* aes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = aes.c; path = ../module/crypto/aes.c; sourceTree = "<group>"; };
-		D6170A5E2CEF73F9001C8439 /* bignum.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bignum.c; path = ../module/crypto/bignum.c; sourceTree = "<group>"; };
-		D6170A5F2CEF73F9001C8439 /* aes-unwrap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "aes-unwrap.c"; path = "../module/crypto/aes-unwrap.c"; sourceTree = "<group>"; };
-		D6170A602CEF73F9001C8439 /* aes-wrap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "aes-wrap.c"; path = "../module/crypto/aes-wrap.c"; sourceTree = "<group>"; };
-		D6170A612CEF73F9001C8439 /* sha1-internal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "sha1-internal.c"; path = "../module/crypto/sha1-internal.c"; sourceTree = "<group>"; };
 		D6170A792CF22403001C8439 /* dlfcn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dlfcn.h; path = ../module/dlfcn.h; sourceTree = "<group>"; };
 		D6170A7A2CF22403001C8439 /* dlfcn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dlfcn.c; path = ../module/dlfcn.c; sourceTree = "<group>"; };
 		D65A9C022CE848CC0022B1E0 /* symbols.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = symbols.c; path = ../module/symbols.c; sourceTree = "<group>"; };
+		D6619E202DA23013001C8599 /* aes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		D6619E212DA23013001C8599 /* aes.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = aes.c; sourceTree = "<group>"; };
+		D6619E222DA23013001C8599 /* aes-cbc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-cbc.c"; sourceTree = "<group>"; };
+		D6619E232DA23013001C8599 /* aes-ccm.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-ccm.c"; sourceTree = "<group>"; };
+		D6619E242DA23013001C8599 /* aes-ctr.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-ctr.c"; sourceTree = "<group>"; };
+		D6619E252DA23013001C8599 /* aes-gcm.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-gcm.c"; sourceTree = "<group>"; };
+		D6619E262DA23013001C8599 /* aes-internal-dec.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-internal-dec.c"; sourceTree = "<group>"; };
+		D6619E272DA23013001C8599 /* aes-internal-enc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-internal-enc.c"; sourceTree = "<group>"; };
+		D6619E282DA23013001C8599 /* aes-omac1.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-omac1.c"; sourceTree = "<group>"; };
+		D6619E292DA23013001C8599 /* aes-unwrap.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-unwrap.c"; sourceTree = "<group>"; };
+		D6619E2A2DA23013001C8599 /* aes-wrap.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-wrap.c"; sourceTree = "<group>"; };
+		D6619E2B2DA23013001C8599 /* bignum.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bignum.c; sourceTree = "<group>"; };
+		D6619E2C2DA23013001C8599 /* sha.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sha.h; sourceTree = "<group>"; };
+		D6619E2D2DA23013001C8599 /* sha.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = sha.c; sourceTree = "<group>"; };
+		D6619E2E2DA23013001C8599 /* sha1-internal.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "sha1-internal.c"; sourceTree = "<group>"; };
+		D6619E2F2DA23013001C8599 /* sha256-internal.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "sha256-internal.c"; sourceTree = "<group>"; };
+		D6619E302DA23013001C8599 /* sha384.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = sha384.c; sourceTree = "<group>"; };
+		D6619E402DA2303F001C8599 /* cxx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cxx.cpp; sourceTree = "<group>"; };
+		D6619E412DA2303F001C8599 /* file.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = file.c; sourceTree = "<group>"; };
+		D6619E422DA2303F001C8599 /* homekit.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = homekit.c; sourceTree = "<group>"; };
+		D6619E432DA2303F001C8599 /* nvs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = nvs.c; sourceTree = "<group>"; };
+		D6619E442DA2303F001C8599 /* vfs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = vfs.c; sourceTree = "<group>"; };
+		D6619E532DA2451D001C8599 /* enc28j60.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = enc28j60.h; sourceTree = "<group>"; };
+		D6619E542DA2451D001C8599 /* esp_eth_enc28j60.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = esp_eth_enc28j60.h; sourceTree = "<group>"; };
+		D6619E552DA2451D001C8599 /* esp_eth_mac_enc28j60.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = esp_eth_mac_enc28j60.c; sourceTree = "<group>"; };
+		D6619E562DA2451D001C8599 /* esp_eth_phy_enc28j60.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = esp_eth_phy_enc28j60.c; sourceTree = "<group>"; };
+		D6619E5B2DA2731D001C8599 /* enc28j60.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = enc28j60.c; sourceTree = "<group>"; };
+		D6619E5D2DA27A56001C8599 /* enc28j60.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = enc28j60.h; sourceTree = "<group>"; };
 		D66C4B1829A860C100F27A29 /* ClangPlatform.esp32c3.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ClangPlatform.esp32c3.xcconfig; sourceTree = "<group>"; };
 		D66C4B1929A860D000F27A29 /* sdkconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sdkconfig.h; path = hello_world/build/config/sdkconfig.h; sourceTree = "<group>"; };
 		D66C4B1C29A864FC00F27A29 /* sdkconfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sdkconfig.h; sourceTree = "<group>"; };
@@ -69,15 +84,9 @@
 		D6741A632CE5D31A0024FB04 /* libelf_loader.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libelf_loader.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6741A672CE5E4240024FB04 /* fs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = fs.c; path = ../module/fs.c; sourceTree = "<group>"; };
 		D6741A692CE5E4BA0024FB04 /* fs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fs.h; path = ../module/fs.h; sourceTree = "<group>"; };
-		D6741A7D2CE610650024FB04 /* homekit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = homekit.c; path = ../module/patch/homekit.c; sourceTree = "<group>"; };
-		D6741A7E2CE610650024FB04 /* vfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vfs.c; path = ../module/patch/vfs.c; sourceTree = "<group>"; };
-		D6741A7F2CE610650024FB04 /* nvs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = nvs.c; path = ../module/patch/nvs.c; sourceTree = "<group>"; };
 		D6741A882CE708960024FB04 /* esp32c3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = esp32c3.h; path = ../esp32c3.h; sourceTree = "<group>"; };
-		D6741A892CE7155C0024FB04 /* file.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = file.c; path = ../module/patch/file.c; sourceTree = "<group>"; };
 		D6865F6F29AD085F00EBC297 /* liblittlefs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = liblittlefs.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6865F8429ADF4A200EBC297 /* libfreertos-mqtt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libfreertos-mqtt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D6EBF8832D0595740063CD1C /* cxx.cpp */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = cxx.cpp; path = ../module/patch/cxx.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; };
-		D6F99D132CFB172500D7FD48 /* sha384.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha384.c; path = ../module/crypto/sha384.c; sourceTree = "<group>"; };
 		D6F99D152CFC321E00D7FD48 /* helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = helper.h; path = ../helper.h; sourceTree = "<group>"; };
 		D6FC9A682CEB43C8009AF784 /* mqtt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mqtt.c; path = ../module/mqtt.c; sourceTree = "<group>"; };
 		D6FC9A692CEB43C8009AF784 /* https.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = https.c; path = ../module/https.c; sourceTree = "<group>"; };
@@ -128,25 +137,25 @@
 		D6170A512CEF73EA001C8439 /* crypto */ = {
 			isa = PBXGroup;
 			children = (
-				D6170A572CEF73F9001C8439 /* aes-cbc.c */,
-				D6170A522CEF73F9001C8439 /* aes-ccm.c */,
-				D6170A582CEF73F9001C8439 /* aes-ctr.c */,
-				D6170A5A2CEF73F9001C8439 /* aes-gcm.c */,
-				D6170A532CEF73F9001C8439 /* aes-internal-dec.c */,
-				D6170A542CEF73F9001C8439 /* aes-internal-enc.c */,
-				D6170A5C2CEF73F9001C8439 /* aes-omac1.c */,
-				D6170A5F2CEF73F9001C8439 /* aes-unwrap.c */,
-				D6170A602CEF73F9001C8439 /* aes-wrap.c */,
-				D6170A5D2CEF73F9001C8439 /* aes.c */,
-				D6170A592CEF73F9001C8439 /* aes.h */,
-				D6170A5E2CEF73F9001C8439 /* bignum.c */,
-				D6170A562CEF73F9001C8439 /* sha.c */,
-				D6170A552CEF73F9001C8439 /* sha.h */,
-				D6170A612CEF73F9001C8439 /* sha1-internal.c */,
-				D6170A5B2CEF73F9001C8439 /* sha256-internal.c */,
-				D6F99D132CFB172500D7FD48 /* sha384.c */,
+				D6619E212DA23013001C8599 /* aes.c */,
+				D6619E202DA23013001C8599 /* aes.h */,
+				D6619E222DA23013001C8599 /* aes-cbc.c */,
+				D6619E232DA23013001C8599 /* aes-ccm.c */,
+				D6619E242DA23013001C8599 /* aes-ctr.c */,
+				D6619E252DA23013001C8599 /* aes-gcm.c */,
+				D6619E262DA23013001C8599 /* aes-internal-dec.c */,
+				D6619E272DA23013001C8599 /* aes-internal-enc.c */,
+				D6619E282DA23013001C8599 /* aes-omac1.c */,
+				D6619E292DA23013001C8599 /* aes-unwrap.c */,
+				D6619E2A2DA23013001C8599 /* aes-wrap.c */,
+				D6619E2B2DA23013001C8599 /* bignum.c */,
+				D6619E2D2DA23013001C8599 /* sha.c */,
+				D6619E2C2DA23013001C8599 /* sha.h */,
+				D6619E2E2DA23013001C8599 /* sha1-internal.c */,
+				D6619E2F2DA23013001C8599 /* sha256-internal.c */,
+				D6619E302DA23013001C8599 /* sha384.c */,
 			);
-			name = crypto;
+			path = crypto;
 			sourceTree = "<group>";
 		};
 		D644A038231ED82900B75B77 = {
@@ -170,13 +179,28 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D6619E522DA244F4001C8599 /* enc28j60 */ = {
+			isa = PBXGroup;
+			children = (
+				D6619E532DA2451D001C8599 /* enc28j60.h */,
+				D6619E542DA2451D001C8599 /* esp_eth_enc28j60.h */,
+				D6619E552DA2451D001C8599 /* esp_eth_mac_enc28j60.c */,
+				D6619E562DA2451D001C8599 /* esp_eth_phy_enc28j60.c */,
+			);
+			name = enc28j60;
+			path = "../esp-idf/examples/ethernet/enc28j60/components/eth_enc28j60";
+			sourceTree = "<group>";
+		};
 		D6741A652CE5E4160024FB04 /* module */ = {
 			isa = PBXGroup;
 			children = (
+				D6619E522DA244F4001C8599 /* enc28j60 */,
 				D6170A512CEF73EA001C8439 /* crypto */,
 				D6741A7C2CE610470024FB04 /* patch */,
 				D6170A7A2CF22403001C8439 /* dlfcn.c */,
 				D6170A792CF22403001C8439 /* dlfcn.h */,
+				D6619E5B2DA2731D001C8599 /* enc28j60.c */,
+				D6619E5D2DA27A56001C8599 /* enc28j60.h */,
 				D6741A672CE5E4240024FB04 /* fs.c */,
 				D6741A692CE5E4BA0024FB04 /* fs.h */,
 				D6FC9A6D2CEB43C8009AF784 /* httpd.c */,
@@ -192,18 +216,19 @@
 				D6FC9AA12CECD11B009AF784 /* temperature.h */,
 			);
 			name = module;
+			path = ../module;
 			sourceTree = "<group>";
 		};
 		D6741A7C2CE610470024FB04 /* patch */ = {
 			isa = PBXGroup;
 			children = (
-				D6EBF8832D0595740063CD1C /* cxx.cpp */,
-				D6741A892CE7155C0024FB04 /* file.c */,
-				D6741A7D2CE610650024FB04 /* homekit.c */,
-				D6741A7F2CE610650024FB04 /* nvs.c */,
-				D6741A7E2CE610650024FB04 /* vfs.c */,
+				D6619E402DA2303F001C8599 /* cxx.cpp */,
+				D6619E412DA2303F001C8599 /* file.c */,
+				D6619E422DA2303F001C8599 /* homekit.c */,
+				D6619E432DA2303F001C8599 /* nvs.c */,
+				D6619E442DA2303F001C8599 /* vfs.c */,
 			);
-			name = patch;
+			path = patch;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,34 +310,37 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6170A6D2CEF73F9001C8439 /* aes-unwrap.c in Sources */,
-				D6170A6F2CEF73F9001C8439 /* sha1-internal.c in Sources */,
-				D6170A662CEF73F9001C8439 /* aes-cbc.c in Sources */,
 				D6FC9AA22CECD11B009AF784 /* ota.c in Sources */,
-				D6F99D142CFB172500D7FD48 /* sha384.c in Sources */,
-				D6741A822CE610650024FB04 /* nvs.c in Sources */,
-				D6170A652CEF73F9001C8439 /* sha.c in Sources */,
-				D6170A642CEF73F9001C8439 /* aes-internal-enc.c in Sources */,
-				D6170A692CEF73F9001C8439 /* sha256-internal.c in Sources */,
-				D6741A802CE610650024FB04 /* homekit.c in Sources */,
-				D6170A6C2CEF73F9001C8439 /* bignum.c in Sources */,
-				D6741A8A2CE7155C0024FB04 /* file.c in Sources */,
+				D6619E312DA23013001C8599 /* aes-ctr.c in Sources */,
+				D6619E322DA23013001C8599 /* aes.c in Sources */,
+				D6619E332DA23013001C8599 /* bignum.c in Sources */,
+				D6619E342DA23013001C8599 /* sha384.c in Sources */,
+				D6619E352DA23013001C8599 /* aes-internal-dec.c in Sources */,
+				D6619E362DA23013001C8599 /* aes-omac1.c in Sources */,
+				D6619E372DA23013001C8599 /* aes-unwrap.c in Sources */,
+				D6619E382DA23013001C8599 /* aes-gcm.c in Sources */,
+				D6619E392DA23013001C8599 /* aes-ccm.c in Sources */,
+				D6619E3A2DA23013001C8599 /* sha.c in Sources */,
+				D6619E5C2DA2731D001C8599 /* enc28j60.c in Sources */,
+				D6619E3B2DA23013001C8599 /* aes-cbc.c in Sources */,
+				D6619E572DA2451D001C8599 /* esp_eth_mac_enc28j60.c in Sources */,
+				D6619E582DA2451D001C8599 /* esp_eth_phy_enc28j60.c in Sources */,
+				D6619E3C2DA23013001C8599 /* sha1-internal.c in Sources */,
+				D6619E3D2DA23013001C8599 /* aes-internal-enc.c in Sources */,
+				D6619E3E2DA23013001C8599 /* aes-wrap.c in Sources */,
+				D6619E3F2DA23013001C8599 /* sha256-internal.c in Sources */,
+				D6619E452DA2303F001C8599 /* homekit.c in Sources */,
+				D6619E462DA2303F001C8599 /* nvs.c in Sources */,
+				D6619E472DA2303F001C8599 /* vfs.c in Sources */,
+				D6619E482DA2303F001C8599 /* cxx.cpp in Sources */,
+				D6619E492DA2303F001C8599 /* file.c in Sources */,
 				D6FC9A6F2CEB43C9009AF784 /* https.c in Sources */,
 				D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */,
 				D65A9C032CE848CC0022B1E0 /* symbols.c in Sources */,
-				D6170A6B2CEF73F9001C8439 /* aes.c in Sources */,
-				D6170A632CEF73F9001C8439 /* aes-internal-dec.c in Sources */,
-				D6170A672CEF73F9001C8439 /* aes-ctr.c in Sources */,
-				D6170A622CEF73F9001C8439 /* aes-ccm.c in Sources */,
-				D6EBF8842D0595740063CD1C /* cxx.cpp in Sources */,
 				D6741A682CE5E4240024FB04 /* fs.c in Sources */,
-				D6170A6E2CEF73F9001C8439 /* aes-wrap.c in Sources */,
-				D6170A682CEF73F9001C8439 /* aes-gcm.c in Sources */,
 				D6FC9AA32CECD11B009AF784 /* temperature.c in Sources */,
-				D6170A6A2CEF73F9001C8439 /* aes-omac1.c in Sources */,
 				D6FC9A6E2CEB43C9009AF784 /* mqtt.c in Sources */,
 				D6170A7B2CF22403001C8439 /* dlfcn.c in Sources */,
-				D6741A812CE610650024FB04 /* vfs.c in Sources */,
 				D6741A332CE393DD0024FB04 /* app_main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -13,6 +13,7 @@
 #include <esp_hap_controllers.h>
 #include <esp_hap_database.h>
 #include "dlfcn.h"
+#include "enc28j60.h"
 #include "httpd.h"
 #include "https.h"
 #include "mqtt.h"
@@ -122,6 +123,9 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(GPIO_PIN_MUX_REG),
     ESP_ELFSYM_EXPORT(IP_EVENT),
     ESP_ELFSYM_EXPORT(WIFI_EVENT),
+
+    // enc28j60
+    ESP_ELFSYM_EXPORT(enc28j60),
 
     // httpd
     ESP_ELFSYM_EXPORT(httpd_start),

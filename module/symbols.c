@@ -104,6 +104,7 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(uart1_tx),
     ESP_ELFSYM_EXPORT(uart1_rx),
     ESP_ELFSYM_EXPORT(ap_netif),
+    ESP_ELFSYM_EXPORT(eth_netif),
     ESP_ELFSYM_EXPORT(sta_netif),
     ESP_ELFSYM_EXPORT(httpd_server),
 

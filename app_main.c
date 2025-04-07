@@ -27,6 +27,7 @@ int uart0_rx IRAM_BSS_ATTR = U0RXD_GPIO_NUM;
 int uart1_tx IRAM_BSS_ATTR = U1TXD_GPIO_NUM;
 int uart1_rx IRAM_BSS_ATTR = U1RXD_GPIO_NUM;
 esp_netif_t* ap_netif IRAM_BSS_ATTR;
+esp_netif_t* eth_netif IRAM_BSS_ATTR;
 esp_netif_t* sta_netif IRAM_BSS_ATTR;
 httpd_handle_t httpd_server IRAM_BSS_ATTR;
 

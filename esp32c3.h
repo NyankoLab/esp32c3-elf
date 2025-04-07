@@ -40,6 +40,7 @@ extern int uart0_rx;
 extern int uart1_tx;
 extern int uart1_rx;
 extern esp_netif_t* ap_netif;
+extern esp_netif_t* eth_netif;
 extern esp_netif_t* sta_netif;
 extern httpd_handle_t httpd_server;
 

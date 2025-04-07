@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-void enc28j60(int mosi, int miso, int sclk, int cs, int interrupt);
+esp_netif_t *enc28j60(int mosi, int miso, int sclk, int cs, int interrupt, void(*connected_handler)(void));
 
 #ifdef __cplusplus
 }

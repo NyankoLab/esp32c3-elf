@@ -25,6 +25,8 @@
 
 static const char *TAG = "enc28j60";
 
+static void(*eth_connected_handler)(void);
+
 /** Event handler for Ethernet events */
 static void eth_event_handler(void *arg, esp_event_base_t event_base,
                               int32_t event_id, void *event_data)
@@ -39,6 +41,8 @@ static void eth_event_handler(void *arg, esp_event_base_t event_base,
         ESP_LOGI(TAG, "Ethernet Link Up");
         ESP_LOGI(TAG, "Ethernet HW Addr %02x:%02x:%02x:%02x:%02x:%02x",
                  mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
+        if (eth_connected_handler)
+            eth_connected_handler();
         break;
     case ETHERNET_EVENT_DISCONNECTED:
         ESP_LOGI(TAG, "Ethernet Link Down");
@@ -69,8 +73,10 @@ static void got_ip_event_handler(void *arg, esp_event_base_t event_base,
     ESP_LOGI(TAG, "~~~~~~~~~~~");
 }
 
-void enc28j60(int mosi, int miso, int sclk, int cs, int interrupt)
+esp_netif_t *enc28j60(int mosi, int miso, int sclk, int cs, int interrupt, void(*connected_handler)(void))
 {
+    eth_connected_handler = eth_connected_handler;
+
     ESP_ERROR_CHECK(gpio_install_isr_service(0));
     // Initialize TCP/IP network interface (should be called only once in application)
     ESP_ERROR_CHECK(esp_netif_init());
@@ -138,4 +144,6 @@ void enc28j60(int mosi, int miso, int sclk, int cs, int interrupt)
 
     /* start Ethernet driver state machine */
     ESP_ERROR_CHECK(esp_eth_start(eth_handle));
+
+    return eth_netif;
 }

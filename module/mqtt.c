@@ -45,7 +45,8 @@ static void mqtt_information(char* buffer, size_t size)
     mqtt_publish(mqtt_prefix(buffer, size, "ESP", "Version", 0), mqtt_app_version, 0, 1);
 
     esp_netif_ip_info_t ip_info = {};
-    if (esp_netif_get_ip_info(sta_netif, &ip_info) == ESP_OK)
+    esp_netif_t* netif = eth_netif ? eth_netif : sta_netif;
+    if (netif && esp_netif_get_ip_info(netif, &ip_info) == ESP_OK)
     {
         snprintf(buffer + 64, size - 64, IPSTR, IP2STR(&ip_info.ip));
         mqtt_publish(mqtt_prefix(buffer, size, "ESP", "IP", 0), buffer + 64, 0, 1);

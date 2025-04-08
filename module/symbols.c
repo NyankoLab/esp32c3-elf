@@ -1,6 +1,7 @@
 #include "esp32c3.h"
 #include <sys/socket.h>
 #include <sys/stat.h>
+#include <driver/spi_slave.h>
 #include <esp_ota_ops.h>
 #include <esp_private/esp_clk.h>
 #include <esp_private/periph_ctrl.h>
@@ -13,12 +14,13 @@
 #include <esp_hap_controllers.h>
 #include <esp_hap_database.h>
 #include "dlfcn.h"
-#include "enc28j60.h"
+#include "ethernet.h"
 #include "httpd.h"
 #include "https.h"
 #include "mqtt.h"
 #include "ota.h"
 #include "temperature.h"
+#include "wifi.h"
 #include "elf_loader/include/private/elf_symbol.h"
 
 void* _Znaj(unsigned int s) { return malloc(s); }
@@ -125,8 +127,8 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(IP_EVENT),
     ESP_ELFSYM_EXPORT(WIFI_EVENT),
 
-    // enc28j60
-    ESP_ELFSYM_EXPORT(enc28j60),
+    // ethernet
+    ESP_ELFSYM_EXPORT(ethernet),
 
     // httpd
     ESP_ELFSYM_EXPORT(httpd_start),
@@ -181,9 +183,20 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(sntp_servermode_dhcp),
 #endif
 
+    // spi_slave
+    ESP_ELFSYM_EXPORT(spi_slave_initialize),
+//  ESP_ELFSYM_EXPORT(spi_slave_free),
+    ESP_ELFSYM_EXPORT(spi_slave_queue_trans),
+    ESP_ELFSYM_EXPORT(spi_slave_get_trans_result),
+    ESP_ELFSYM_EXPORT(spi_slave_transmit),
+
     // temperature
     ESP_ELFSYM_EXPORT(temperature_init),
     ESP_ELFSYM_EXPORT(temperature),
+
+    // wifi
+    ESP_ELFSYM_EXPORT(wifi_ap),
+    ESP_ELFSYM_EXPORT(wifi_sta),
 
     // esp_event
 //  ESP_ELFSYM_EXPORT(esp_event_loop_create),
@@ -244,7 +257,7 @@ const struct esp_elfsym g_customer_elfsyms[] = {
 //  ESP_ELFSYM_EXPORT(esp_netif_join_ip6_multicast_group),
 //  ESP_ELFSYM_EXPORT(esp_netif_leave_ip6_multicast_group),
 //  ESP_ELFSYM_EXPORT(esp_netif_set_mac),
-//  ESP_ELFSYM_EXPORT(esp_netif_get_mac),
+    ESP_ELFSYM_EXPORT(esp_netif_get_mac),
     ESP_ELFSYM_EXPORT(esp_netif_set_hostname),
 //  ESP_ELFSYM_EXPORT(esp_netif_get_hostname),
 //  ESP_ELFSYM_EXPORT(esp_netif_is_netif_up),

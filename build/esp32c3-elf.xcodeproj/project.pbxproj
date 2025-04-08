@@ -29,9 +29,6 @@
 		D6619E472DA2303F001C8599 /* vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E442DA2303F001C8599 /* vfs.c */; };
 		D6619E482DA2303F001C8599 /* cxx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6619E402DA2303F001C8599 /* cxx.cpp */; };
 		D6619E492DA2303F001C8599 /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E412DA2303F001C8599 /* file.c */; };
-		D6619E572DA2451D001C8599 /* esp_eth_mac_enc28j60.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E552DA2451D001C8599 /* esp_eth_mac_enc28j60.c */; };
-		D6619E582DA2451D001C8599 /* esp_eth_phy_enc28j60.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E562DA2451D001C8599 /* esp_eth_phy_enc28j60.c */; };
-		D6619E5C2DA2731D001C8599 /* enc28j60.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E5B2DA2731D001C8599 /* enc28j60.c */; };
 		D6741A332CE393DD0024FB04 /* app_main.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A322CE393DD0024FB04 /* app_main.c */; };
 		D6741A642CE5D31A0024FB04 /* libelf_loader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6741A632CE5D31A0024FB04 /* libelf_loader.a */; };
 		D6741A682CE5E4240024FB04 /* fs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A672CE5E4240024FB04 /* fs.c */; };
@@ -42,6 +39,8 @@
 		D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A6D2CEB43C8009AF784 /* httpd.c */; };
 		D6FC9AA22CECD11B009AF784 /* ota.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A9F2CECD11B009AF784 /* ota.c */; };
 		D6FC9AA32CECD11B009AF784 /* temperature.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9AA02CECD11B009AF784 /* temperature.c */; };
+		F5F5E4132DA3E62F00BA4DF0 /* wifi.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5E4122DA3E62F00BA4DF0 /* wifi.c */; };
+		F5F5E41D2DA4325F00BA4DF0 /* ethernet.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5E41C2DA4325F00BA4DF0 /* ethernet.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,12 +70,6 @@
 		D6619E422DA2303F001C8599 /* homekit.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = homekit.c; sourceTree = "<group>"; };
 		D6619E432DA2303F001C8599 /* nvs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = nvs.c; sourceTree = "<group>"; };
 		D6619E442DA2303F001C8599 /* vfs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = vfs.c; sourceTree = "<group>"; };
-		D6619E532DA2451D001C8599 /* enc28j60.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = enc28j60.h; sourceTree = "<group>"; };
-		D6619E542DA2451D001C8599 /* esp_eth_enc28j60.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = esp_eth_enc28j60.h; sourceTree = "<group>"; };
-		D6619E552DA2451D001C8599 /* esp_eth_mac_enc28j60.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = esp_eth_mac_enc28j60.c; sourceTree = "<group>"; };
-		D6619E562DA2451D001C8599 /* esp_eth_phy_enc28j60.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = esp_eth_phy_enc28j60.c; sourceTree = "<group>"; };
-		D6619E5B2DA2731D001C8599 /* enc28j60.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = enc28j60.c; sourceTree = "<group>"; };
-		D6619E5D2DA27A56001C8599 /* enc28j60.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = enc28j60.h; sourceTree = "<group>"; };
 		D66C4B1829A860C100F27A29 /* ClangPlatform.esp32c3.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ClangPlatform.esp32c3.xcconfig; sourceTree = "<group>"; };
 		D66C4B1929A860D000F27A29 /* sdkconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sdkconfig.h; path = hello_world/build/config/sdkconfig.h; sourceTree = "<group>"; };
 		D66C4B1C29A864FC00F27A29 /* sdkconfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sdkconfig.h; sourceTree = "<group>"; };
@@ -98,6 +91,12 @@
 		D6FC9A9F2CECD11B009AF784 /* ota.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ota.c; path = ../module/ota.c; sourceTree = "<group>"; };
 		D6FC9AA02CECD11B009AF784 /* temperature.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = temperature.c; path = ../module/temperature.c; sourceTree = "<group>"; };
 		D6FC9AA12CECD11B009AF784 /* temperature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = temperature.h; path = ../module/temperature.h; sourceTree = "<group>"; };
+		F5F5E4112DA3E62F00BA4DF0 /* wifi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wifi.h; sourceTree = "<group>"; };
+		F5F5E4122DA3E62F00BA4DF0 /* wifi.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = wifi.c; sourceTree = "<group>"; };
+		F5F5E4182DA42DAC00BA4DF0 /* ethernet_init.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ethernet_init.h; sourceTree = "<group>"; };
+		F5F5E4192DA42DAC00BA4DF0 /* ethernet_init.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ethernet_init.c; sourceTree = "<group>"; };
+		F5F5E41B2DA4325F00BA4DF0 /* ethernet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ethernet.h; sourceTree = "<group>"; };
+		F5F5E41C2DA4325F00BA4DF0 /* ethernet.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ethernet.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,28 +178,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D6619E522DA244F4001C8599 /* enc28j60 */ = {
-			isa = PBXGroup;
-			children = (
-				D6619E532DA2451D001C8599 /* enc28j60.h */,
-				D6619E542DA2451D001C8599 /* esp_eth_enc28j60.h */,
-				D6619E552DA2451D001C8599 /* esp_eth_mac_enc28j60.c */,
-				D6619E562DA2451D001C8599 /* esp_eth_phy_enc28j60.c */,
-			);
-			name = enc28j60;
-			path = "../esp-idf/examples/ethernet/enc28j60/components/eth_enc28j60";
-			sourceTree = "<group>";
-		};
 		D6741A652CE5E4160024FB04 /* module */ = {
 			isa = PBXGroup;
 			children = (
-				D6619E522DA244F4001C8599 /* enc28j60 */,
+				F5F5E4142DA42D2200BA4DF0 /* ethernet */,
 				D6170A512CEF73EA001C8439 /* crypto */,
 				D6741A7C2CE610470024FB04 /* patch */,
 				D6170A7A2CF22403001C8439 /* dlfcn.c */,
 				D6170A792CF22403001C8439 /* dlfcn.h */,
-				D6619E5B2DA2731D001C8599 /* enc28j60.c */,
-				D6619E5D2DA27A56001C8599 /* enc28j60.h */,
+				F5F5E41C2DA4325F00BA4DF0 /* ethernet.c */,
+				F5F5E41B2DA4325F00BA4DF0 /* ethernet.h */,
 				D6741A672CE5E4240024FB04 /* fs.c */,
 				D6741A692CE5E4BA0024FB04 /* fs.h */,
 				D6FC9A6D2CEB43C8009AF784 /* httpd.c */,
@@ -214,6 +201,8 @@
 				D65A9C022CE848CC0022B1E0 /* symbols.c */,
 				D6FC9AA02CECD11B009AF784 /* temperature.c */,
 				D6FC9AA12CECD11B009AF784 /* temperature.h */,
+				F5F5E4122DA3E62F00BA4DF0 /* wifi.c */,
+				F5F5E4112DA3E62F00BA4DF0 /* wifi.h */,
 			);
 			name = module;
 			path = ../module;
@@ -229,6 +218,16 @@
 				D6619E442DA2303F001C8599 /* vfs.c */,
 			);
 			path = patch;
+			sourceTree = "<group>";
+		};
+		F5F5E4142DA42D2200BA4DF0 /* ethernet */ = {
+			isa = PBXGroup;
+			children = (
+				F5F5E4182DA42DAC00BA4DF0 /* ethernet_init.h */,
+				F5F5E4192DA42DAC00BA4DF0 /* ethernet_init.c */,
+			);
+			name = ethernet;
+			path = "../esp-idf/examples/ethernet/basic/components/ethernet_init";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,10 +320,8 @@
 				D6619E382DA23013001C8599 /* aes-gcm.c in Sources */,
 				D6619E392DA23013001C8599 /* aes-ccm.c in Sources */,
 				D6619E3A2DA23013001C8599 /* sha.c in Sources */,
-				D6619E5C2DA2731D001C8599 /* enc28j60.c in Sources */,
 				D6619E3B2DA23013001C8599 /* aes-cbc.c in Sources */,
-				D6619E572DA2451D001C8599 /* esp_eth_mac_enc28j60.c in Sources */,
-				D6619E582DA2451D001C8599 /* esp_eth_phy_enc28j60.c in Sources */,
+				F5F5E4132DA3E62F00BA4DF0 /* wifi.c in Sources */,
 				D6619E3C2DA23013001C8599 /* sha1-internal.c in Sources */,
 				D6619E3D2DA23013001C8599 /* aes-internal-enc.c in Sources */,
 				D6619E3E2DA23013001C8599 /* aes-wrap.c in Sources */,
@@ -337,6 +334,7 @@
 				D6FC9A6F2CEB43C9009AF784 /* https.c in Sources */,
 				D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */,
 				D65A9C032CE848CC0022B1E0 /* symbols.c in Sources */,
+				F5F5E41D2DA4325F00BA4DF0 /* ethernet.c in Sources */,
 				D6741A682CE5E4240024FB04 /* fs.c in Sources */,
 				D6FC9AA32CECD11B009AF784 /* temperature.c in Sources */,
 				D6FC9A6E2CEB43C9009AF784 /* mqtt.c in Sources */,

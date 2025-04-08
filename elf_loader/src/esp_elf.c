@@ -370,9 +370,9 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
                             break;
                         }
                         if (i == (ELF_SECS - 1)) {
-                        ESP_LOGE(TAG, "Unsupported section index %d", sym.shndx);
-                        return -ENOEXEC;
-                    }
+                            ESP_LOGE(TAG, "Unsupported section index %d", sym.shndx);
+                            return -ENOEXEC;
+                        }
                     }
                     ESP_LOGD(TAG, "Found value %d addr=%x", sym.value, addr);
                     break;

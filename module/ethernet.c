@@ -40,7 +40,25 @@ static int8_t eth_spi_phy_rst0_gpio;
 #define CONFIG_EXAMPLE_USE_SPI_ETHERNET         1
 #define CONFIG_EXAMPLE_USE_W5500                1
 
+#define TAG __CONCAT(TAG, __LINE__)
+#define TAG141 "ethernet"
+#define TAG144 "ethernet"
+#define TAG158 "ethernet"
+#define TAG217 "ethernet"
+#define TAG222 "ethernet"
+#define TAG254 "ethernet"
+#define TAG256 "ethernet"
+#define TAG265 "ethernet"
+#define TAG273 "ethernet"
+#define TAG289 "ethernet"
+#define TAG309 "ethernet"
+#define TAG316 "ethernet"
+#define TAG331 "ethernet"
+
 #include "ethernet/ethernet_init.c"
+
+#undef TAG
+#define TAG "ethernet"
 
 static void (*eth_connected_handler)(void);
 
@@ -82,11 +100,15 @@ static void got_ip_event_handler(void *arg, esp_event_base_t event_base,
     ip_event_got_ip_t *event = (ip_event_got_ip_t *) event_data;
     const esp_netif_ip_info_t *ip_info = &event->ip_info;
 
+//  esp_netif_dns_info_t dns = {};
+//  esp_netif_get_dns_info(event->esp_netif, ESP_NETIF_DNS_MAIN, &dns);
+
     ESP_LOGI(TAG, "Ethernet Got IP Address");
     ESP_LOGI(TAG, "~~~~~~~~~~~");
     ESP_LOGI(TAG, "ETHIP:" IPSTR, IP2STR(&ip_info->ip));
     ESP_LOGI(TAG, "ETHMASK:" IPSTR, IP2STR(&ip_info->netmask));
     ESP_LOGI(TAG, "ETHGW:" IPSTR, IP2STR(&ip_info->gw));
+//  ESP_LOGI(TAG, "ETHDNS:" IPSTR, IP2STR(&dns.ip.u_addr.ip4));
     ESP_LOGI(TAG, "~~~~~~~~~~~");
 }
 
@@ -110,7 +132,8 @@ void ethernet(int miso, int mosi, int scs, int sclk, int interrupt, int reset, v
     // Initialize Ethernet driver
     uint8_t eth_port_cnt = 0;
     esp_eth_handle_t *eth_handles;
-    ESP_ERROR_CHECK(example_eth_init(&eth_handles, &eth_port_cnt));
+    if (example_eth_init(&eth_handles, &eth_port_cnt) != ESP_OK)
+        return;
 
     // Initialize TCP/IP network interface aka the esp-netif (should be called only once in application)
     ESP_ERROR_CHECK(esp_netif_init());

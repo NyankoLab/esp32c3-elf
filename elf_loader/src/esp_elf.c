@@ -23,6 +23,8 @@
 #define sflags(_s, _f)              (((_s)->flags & (_f)) == (_f))
 #define TAG                         "ELF"
 
+//#undef ESP_LOGD
+//#define ESP_LOGD ESP_LOGI
 
 /**
  * @brief Initialize ELF object.
@@ -180,9 +182,16 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
     }
 
     if (elf->sec[ELF_SEC_RTC].size) {
-        elf->rtcdata = esp_elf_malloc(elf->sec[ELF_SEC_RTC].size, 2);
+        elf->rtcdata = esp_elf_malloc(elf->sec[ELF_SEC_RTC].size + 4, 2);
         if (!elf->rtcdata) {
             return -ENOMEM;
+        }
+        Elf32_Addr value = 0;
+        memcpy(&value, elf->rtcdata, sizeof(Elf32_Addr));
+        if (value != hdr.entry) {
+            value = hdr.entry;
+            memcpy(elf->rtcdata, &value, sizeof(Elf32_Addr));
+            memset(elf->rtcdata + 4, 0, elf->sec[ELF_SEC_RTC].size);
         }
     }
 
@@ -246,7 +255,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
 
     /* rtc data */
 
-    elf->sec[ELF_SEC_RTC].addr = (Elf32_Addr)elf->rtcdata;
+    elf->sec[ELF_SEC_RTC].addr = (Elf32_Addr)elf->rtcdata + 4;
 
     /* Set ELF entry */
 

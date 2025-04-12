@@ -7,11 +7,27 @@
 #include <soc/uart_periph.h>
 #include <hal/gpio_ll.h>
 #include <hal/uart_ll.h>
+#include <hal/usb_serial_jtag_ll.h>
 #include <lwip/sockets.h>
 
 static int udp_fd = -1;
 static struct sockaddr_in udp_sockaddr;
 static SemaphoreHandle_t g_mutex = NULL;
+
+#define USBSERIAL_TIMEOUT_MAX_US 50000
+static int s_usbserial_timeout = 0;
+
+static void usb_serial_jtag_ll_write(const uint8_t c)
+{
+    while (!usb_serial_jtag_ll_txfifo_writable() && s_usbserial_timeout < (USBSERIAL_TIMEOUT_MAX_US / 100)) {
+        esp_rom_delay_us(100);
+        s_usbserial_timeout++;
+    }
+    if (usb_serial_jtag_ll_txfifo_writable()) {
+        usb_serial_jtag_ll_write_txfifo(&c, 1);
+        s_usbserial_timeout = 0;
+    }
+}
 
 void init_udp_console(const char* ip)
 {
@@ -60,11 +76,14 @@ ssize_t __wrap__write_r_console(struct _reent* r, int fd, const void* data, size
             c = '\r';
             while (uart_ll_get_txfifo_len(&UART0) < 2);
             uart_ll_write_txfifo(&UART0, &c, 1);
+            usb_serial_jtag_ll_write(c);
             c = '\n';
         }
         while (uart_ll_get_txfifo_len(&UART0) < 2);
         uart_ll_write_txfifo(&UART0, &c, 1);
+        usb_serial_jtag_ll_write(c);
     }
+    usb_serial_jtag_ll_txfifo_flush();
     if (mutex && uart0_tx != U0TXD_GPIO_NUM) {
         while (uart_ll_get_txfifo_len(&UART0) < UART_LL_FIFO_DEF_LEN);
         ets_delay_us(1000);

@@ -18,10 +18,11 @@ static esp_lcd_panel_handle_t panel_handle = NULL;
 void lcd_init(int addr, int sda, int scl)
 {
     i2c_master_bus_config_t i2c_bus_conf = {
-        .clk_source = I2C_CLK_SRC_DEFAULT,
+        .i2c_port = -1,
         .sda_io_num = sda,
         .scl_io_num = scl,
-        .i2c_port = -1,
+        .clk_source = I2C_CLK_SRC_DEFAULT,
+        .flags.enable_internal_pullup = true,
     };
 
     i2c_master_bus_handle_t bus_handle = NULL;
@@ -30,11 +31,11 @@ void lcd_init(int addr, int sda, int scl)
 
     esp_lcd_panel_io_i2c_config_t io_config = {
         .dev_addr = addr,
-        .scl_speed_hz = (400 * 1000),
         .control_phase_bytes = 1, // According to SSD1306 datasheet
         .dc_bit_offset = 6,       // According to SSD1306 datasheet
         .lcd_cmd_bits = 8,        // According to SSD1306 datasheet
         .lcd_param_bits = 8,      // According to SSD1306 datasheet
+        .scl_speed_hz = (400 * 1000),
     };
 
     esp_lcd_panel_io_handle_t io_handle = NULL;
@@ -44,8 +45,8 @@ void lcd_init(int addr, int sda, int scl)
     }
 
     esp_lcd_panel_dev_config_t panel_config = {
-        .bits_per_pixel = 1,
         .reset_gpio_num = -1,
+        .bits_per_pixel = 1,
     };
     if (esp_lcd_new_panel_ssd1306(io_handle, &panel_config, &panel_handle) != ESP_OK) {
         esp_lcd_panel_io_del(io_handle);

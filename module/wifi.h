@@ -5,7 +5,7 @@ extern "C" {
 #endif
 
 void wifi_ap(char const* name, char const* pass);
-void wifi_sta();
+void wifi_sta(char const* name);
 
 #ifdef __cplusplus
 }

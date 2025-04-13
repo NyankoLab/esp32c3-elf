@@ -39,6 +39,7 @@
 		D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A6D2CEB43C8009AF784 /* httpd.c */; };
 		D6FC9AA22CECD11B009AF784 /* ota.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A9F2CECD11B009AF784 /* ota.c */; };
 		D6FC9AA32CECD11B009AF784 /* temperature.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9AA02CECD11B009AF784 /* temperature.c */; };
+		F54D9C002DAAA9EB00B429A9 /* lcd.c in Sources */ = {isa = PBXBuildFile; fileRef = F54D9BFF2DAAA9EB00B429A9 /* lcd.c */; };
 		F5F5E4132DA3E62F00BA4DF0 /* wifi.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5E4122DA3E62F00BA4DF0 /* wifi.c */; };
 		F5F5E41D2DA4325F00BA4DF0 /* ethernet.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5E41C2DA4325F00BA4DF0 /* ethernet.c */; };
 /* End PBXBuildFile section */
@@ -91,6 +92,8 @@
 		D6FC9A9F2CECD11B009AF784 /* ota.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ota.c; path = ../module/ota.c; sourceTree = "<group>"; };
 		D6FC9AA02CECD11B009AF784 /* temperature.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = temperature.c; path = ../module/temperature.c; sourceTree = "<group>"; };
 		D6FC9AA12CECD11B009AF784 /* temperature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = temperature.h; path = ../module/temperature.h; sourceTree = "<group>"; };
+		F54D9BFF2DAAA9EB00B429A9 /* lcd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lcd.c; sourceTree = "<group>"; };
+		F54D9C012DAAAD1000B429A9 /* lcd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lcd.h; sourceTree = "<group>"; };
 		F5F5E4112DA3E62F00BA4DF0 /* wifi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wifi.h; sourceTree = "<group>"; };
 		F5F5E4122DA3E62F00BA4DF0 /* wifi.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = wifi.c; sourceTree = "<group>"; };
 		F5F5E4182DA42DAC00BA4DF0 /* ethernet_init.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ethernet_init.h; sourceTree = "<group>"; };
@@ -194,6 +197,8 @@
 				D6FC9A6B2CEB43C8009AF784 /* httpd.h */,
 				D6FC9A692CEB43C8009AF784 /* https.c */,
 				D6FC9A6A2CEB43C8009AF784 /* https.h */,
+				F54D9BFF2DAAA9EB00B429A9 /* lcd.c */,
+				F54D9C012DAAAD1000B429A9 /* lcd.h */,
 				D6FC9A682CEB43C8009AF784 /* mqtt.c */,
 				D6FC9A6C2CEB43C8009AF784 /* mqtt.h */,
 				D6FC9A9F2CECD11B009AF784 /* ota.c */,
@@ -318,6 +323,7 @@
 				D6619E362DA23013001C8599 /* aes-omac1.c in Sources */,
 				D6619E372DA23013001C8599 /* aes-unwrap.c in Sources */,
 				D6619E382DA23013001C8599 /* aes-gcm.c in Sources */,
+				F54D9C002DAAA9EB00B429A9 /* lcd.c in Sources */,
 				D6619E392DA23013001C8599 /* aes-ccm.c in Sources */,
 				D6619E3A2DA23013001C8599 /* sha.c in Sources */,
 				D6619E3B2DA23013001C8599 /* aes-cbc.c in Sources */,

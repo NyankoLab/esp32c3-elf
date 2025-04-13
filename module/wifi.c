@@ -32,9 +32,14 @@ void wifi_ap(char const* name, char const* pass)
     config.ap.beacon_interval = 100;
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &config));
     ESP_ERROR_CHECK(esp_wifi_start());
+
+    // Hostname
+    char hostname[24];
+    strcpy(hostname, (char*)config.ap.ssid);
+    esp_netif_set_hostname(ap_netif, hostname);
 }
 
-void wifi_sta()
+void wifi_sta(char const* name)
 {
     ESP_ERROR_CHECK(esp_netif_init());
     sta_netif = esp_netif_create_default_wifi_sta();
@@ -45,5 +50,15 @@ void wifi_sta()
     ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
 
+    // MAC
+    uint8_t macaddr[6] = {};
+    esp_wifi_get_mac(WIFI_IF_AP, macaddr);
+
+    // STA
     ESP_ERROR_CHECK(esp_wifi_start());
+
+    // Hostname
+    char hostname[24];
+    snprintf(hostname, sizeof(hostname), "%s-%02X%02X%02X", name, macaddr[3], macaddr[4], macaddr[5]);
+    esp_netif_set_hostname(sta_netif, hostname);
 }

@@ -1,7 +1,11 @@
 #include "esp32c3.h"
 #include <sys/socket.h>
 #include <sys/stat.h>
+//#include <driver/i2c_master.h>
 #include <driver/spi_slave.h>
+//#include <esp_lcd_io_i2c.h>
+//#include <esp_lcd_panel_ops.h>
+//#include <esp_lcd_panel_ssd1306.h>
 #include <esp_ota_ops.h>
 #include <esp_private/esp_clk.h>
 #include <esp_private/periph_ctrl.h>
@@ -17,6 +21,7 @@
 #include "ethernet.h"
 #include "httpd.h"
 #include "https.h"
+#include "lcd.h"
 #include "mqtt.h"
 #include "ota.h"
 #include "temperature.h"
@@ -152,6 +157,10 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(https_send),
     ESP_ELFSYM_EXPORT(https_callback),
 
+    // lcd
+    ESP_ELFSYM_EXPORT(lcd_init),
+    ESP_ELFSYM_EXPORT(lcd_text),
+
     // mqtt
     ESP_ELFSYM_EXPORT(mqtt_prefix),
     ESP_ELFSYM_EXPORT(mqtt_publish),
@@ -182,6 +191,9 @@ const struct esp_elfsym g_customer_elfsyms[] = {
 #if SNTP_GET_SERVERS_FROM_DHCP || SNTP_GET_SERVERS_FROM_DHCPV6
     ESP_ELFSYM_EXPORT(sntp_servermode_dhcp),
 #endif
+
+    // i2c
+//  ESP_ELFSYM_EXPORT(i2c_new_master_bus),
 
     // spi_slave
     ESP_ELFSYM_EXPORT(spi_slave_initialize),
@@ -220,6 +232,15 @@ const struct esp_elfsym g_customer_elfsyms[] = {
 #endif
 //  ESP_ELFSYM_EXPORT(esp_event_dump),
 
+    // esp_lcd
+//  ESP_ELFSYM_EXPORT(esp_lcd_new_panel_io_i2c_v1),
+//  ESP_ELFSYM_EXPORT(esp_lcd_new_panel_io_i2c_v2),
+//  ESP_ELFSYM_EXPORT(esp_lcd_new_panel_ssd1306),
+//  ESP_ELFSYM_EXPORT(esp_lcd_panel_init),
+//  ESP_ELFSYM_EXPORT(esp_lcd_panel_disp_on_off),
+//  ESP_ELFSYM_EXPORT(esp_lcd_panel_draw_bitmap),
+//  ESP_ELFSYM_EXPORT(esp_lcd_panel_reset),
+
     // esp_log
 //  ESP_ELFSYM_EXPORT(esp_log_level_set),
 //  ESP_ELFSYM_EXPORT(esp_log_level_get),
@@ -257,9 +278,9 @@ const struct esp_elfsym g_customer_elfsyms[] = {
 //  ESP_ELFSYM_EXPORT(esp_netif_join_ip6_multicast_group),
 //  ESP_ELFSYM_EXPORT(esp_netif_leave_ip6_multicast_group),
 //  ESP_ELFSYM_EXPORT(esp_netif_set_mac),
-    ESP_ELFSYM_EXPORT(esp_netif_get_mac),
+//  ESP_ELFSYM_EXPORT(esp_netif_get_mac),
     ESP_ELFSYM_EXPORT(esp_netif_set_hostname),
-//  ESP_ELFSYM_EXPORT(esp_netif_get_hostname),
+    ESP_ELFSYM_EXPORT(esp_netif_get_hostname),
 //  ESP_ELFSYM_EXPORT(esp_netif_is_netif_up),
     ESP_ELFSYM_EXPORT(esp_netif_get_ip_info),
 //  ESP_ELFSYM_EXPORT(esp_netif_get_old_ip_info),

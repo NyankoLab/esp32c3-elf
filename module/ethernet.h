@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-void ethernet(int miso, int mosi, int scs, int sclk, int interrupt, int reset, void(*connected_handler)(void));
+void ethernet(char const* name, int miso, int mosi, int scs, int sclk, int interrupt, int reset, void(*connected_handler)(void));
 
 #ifdef __cplusplus
 }

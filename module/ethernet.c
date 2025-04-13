@@ -112,7 +112,7 @@ static void got_ip_event_handler(void *arg, esp_event_base_t event_base,
     ESP_LOGI(TAG, "~~~~~~~~~~~");
 }
 
-void ethernet(int miso, int mosi, int scs, int sclk, int interrupt, int reset, void(*connected_handler)(void))
+void ethernet(char const* name, int miso, int mosi, int scs, int sclk, int interrupt, int reset, void(*connected_handler)(void))
 {
     eth_spi_miso_gpio = miso;
     eth_spi_mosi_gpio = mosi;
@@ -204,4 +204,13 @@ void ethernet(int miso, int mosi, int scs, int sclk, int interrupt, int reset, v
 #endif // EXAMPLE_ETH_DEINIT_AFTER_S > 0
 
     eth_netif = eth_netifs[0];
+
+    // MAC
+    uint8_t macaddr[6] = {};
+    esp_netif_get_mac(eth_netif, macaddr);
+
+    // Hostname
+    char hostname[24];
+    snprintf(hostname, sizeof(hostname), "%s-%02X%02X%02X", name, macaddr[3], macaddr[4], macaddr[5]);
+    esp_netif_set_hostname(eth_netif, hostname);
 }

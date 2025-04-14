@@ -6,6 +6,9 @@
 //#include <esp_lcd_io_i2c.h>
 //#include <esp_lcd_panel_ops.h>
 //#include <esp_lcd_panel_ssd1306.h>
+//#define CONFIG_ADC_SUPPRESS_DEPRECATE_WARN 1
+//#include <esp_adc_cal.h>
+#include <esp_adc/adc_oneshot.h>
 #include <esp_ota_ops.h>
 #include <esp_private/esp_clk.h>
 #include <esp_private/periph_ctrl.h>
@@ -210,6 +213,15 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(wifi_ap),
     ESP_ELFSYM_EXPORT(wifi_sta),
 
+    // esp_adc
+//  ESP_ELFSYM_EXPORT(esp_adc_cal_characterize),
+//  ESP_ELFSYM_EXPORT(esp_adc_cal_raw_to_voltage),
+//  ESP_ELFSYM_EXPORT(esp_adc_cal_get_voltage),
+    ESP_ELFSYM_EXPORT(adc_oneshot_new_unit),
+    ESP_ELFSYM_EXPORT(adc_oneshot_read),
+    ESP_ELFSYM_EXPORT(adc_cali_create_scheme_curve_fitting),
+    ESP_ELFSYM_EXPORT(adc_cali_raw_to_voltage),
+    
     // esp_event
 //  ESP_ELFSYM_EXPORT(esp_event_loop_create),
 //  ESP_ELFSYM_EXPORT(esp_event_loop_delete),
@@ -278,7 +290,7 @@ const struct esp_elfsym g_customer_elfsyms[] = {
 //  ESP_ELFSYM_EXPORT(esp_netif_join_ip6_multicast_group),
 //  ESP_ELFSYM_EXPORT(esp_netif_leave_ip6_multicast_group),
 //  ESP_ELFSYM_EXPORT(esp_netif_set_mac),
-//  ESP_ELFSYM_EXPORT(esp_netif_get_mac),
+    ESP_ELFSYM_EXPORT(esp_netif_get_mac),
     ESP_ELFSYM_EXPORT(esp_netif_set_hostname),
     ESP_ELFSYM_EXPORT(esp_netif_get_hostname),
 //  ESP_ELFSYM_EXPORT(esp_netif_is_netif_up),

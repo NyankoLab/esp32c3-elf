@@ -19,8 +19,8 @@ int fs_read(void* buffer, int length, int fd);
 int fs_write(const void* buffer, int length, int fd);
 
 int fs_mkdir(const char* name);
-
 int fs_remove(const char* name);
+int fs_rename(const char* oldpath, const char* newpath);
 
 int fs_dir_open(const char* name);
 int fs_dir_read(int dir, char* name, int length, int* size);

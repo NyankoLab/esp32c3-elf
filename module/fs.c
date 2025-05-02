@@ -253,6 +253,11 @@ int fs_remove(const char* name)
     return lfs_remove(&fs, name);
 }
 
+int fs_rename(const char* oldpath, const char* newpath)
+{
+    return lfs_rename(&fs, oldpath, newpath);
+}
+
 int fs_dir_open(const char* name)
 {
     lfs_dir_t* dir = calloc(1, sizeof(lfs_dir_t));

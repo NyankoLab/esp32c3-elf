@@ -73,6 +73,7 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(fread),
     ESP_ELFSYM_EXPORT(mkdir),
     ESP_ELFSYM_EXPORT(remove),
+    ESP_ELFSYM_EXPORT(rename),
     ESP_ELFSYM_EXPORT(sprintf),
     ESP_ELFSYM_EXPORT(snprintf),
     ESP_ELFSYM_EXPORT(stat),

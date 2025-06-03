@@ -34,14 +34,19 @@ void init_udp_console(const char* ip)
     udp_fd = lwip_socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (udp_fd < 0)
         return;
+    char temp[64];
+    strcpy(temp, ip);
+    char* step = temp;
+    char* address = strsep(&step, ":");
+    char* port = strsep(&step, ":");
     udp_sockaddr.sin_len = sizeof(udp_sockaddr);
     udp_sockaddr.sin_family = AF_INET;
-    udp_sockaddr.sin_port = htons(8888);
+    udp_sockaddr.sin_port = htons(port ? atoi(port) : 8888);
     udp_sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     int mode = 1;
     lwip_ioctl(udp_fd, FIONBIO, &mode);
     lwip_bind(udp_fd, (struct sockaddr*)&udp_sockaddr, sizeof(udp_sockaddr));
-    lwip_inet_pton(AF_INET, ip, &udp_sockaddr.sin_addr);
+    lwip_inet_pton(AF_INET, address, &udp_sockaddr.sin_addr);
 }
 
 void vfs_init(void)

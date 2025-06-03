@@ -218,11 +218,12 @@ const struct esp_elfsym g_customer_elfsyms[] = {
 //  ESP_ELFSYM_EXPORT(esp_adc_cal_characterize),
 //  ESP_ELFSYM_EXPORT(esp_adc_cal_raw_to_voltage),
 //  ESP_ELFSYM_EXPORT(esp_adc_cal_get_voltage),
+    ESP_ELFSYM_EXPORT(adc_oneshot_config_channel),
     ESP_ELFSYM_EXPORT(adc_oneshot_new_unit),
     ESP_ELFSYM_EXPORT(adc_oneshot_read),
     ESP_ELFSYM_EXPORT(adc_cali_create_scheme_curve_fitting),
     ESP_ELFSYM_EXPORT(adc_cali_raw_to_voltage),
-    
+
     // esp_event
 //  ESP_ELFSYM_EXPORT(esp_event_loop_create),
 //  ESP_ELFSYM_EXPORT(esp_event_loop_delete),

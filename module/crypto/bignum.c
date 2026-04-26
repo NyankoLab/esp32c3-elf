@@ -7,6 +7,8 @@
  */
 
 #include "esp32c3.h"
+#include "esp_private/esp_crypto_lock_internal.h"
+#include "hal/mpi_ll.h"
 #include <mbedtls/bignum.h>
 #define ESP_PLATFORM
 #include <utils/common.h>
@@ -178,3 +180,31 @@ int bignum_exptmod(const struct bignum *a, const struct bignum *b, const struct 
 {
     return mbedtls_mpi_exp_mod((mbedtls_mpi *) d, (const mbedtls_mpi *) a, (const mbedtls_mpi *) b, (const mbedtls_mpi *) c, NULL);
 }
+
+#if SOC_MPI_SUPPORTED
+/* Lock for the MPI/RSA peripheral, also used by the DS peripheral */
+static portMUX_TYPE s_crypto_mpi_lock = portMUX_INITIALIZER_UNLOCKED;
+
+void esp_crypto_mpi_enable_periph_clk(bool enable)
+{
+    MPI_RCC_ATOMIC() {
+        mpi_ll_enable_bus_clock(enable);
+        if (enable) {
+            mpi_ll_power_up();
+            mpi_ll_reset_register();
+        } else {
+            mpi_ll_power_down();
+        }
+    }
+}
+
+void esp_crypto_mpi_lock_acquire(void)
+{
+    portENTER_CRITICAL(&s_crypto_mpi_lock);
+}
+
+void esp_crypto_mpi_lock_release(void)
+{
+    portEXIT_CRITICAL(&s_crypto_mpi_lock);
+}
+#endif /* SOC_MPI_SUPPORTED */

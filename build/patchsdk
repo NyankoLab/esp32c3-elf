@@ -1,50 +1,37 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 722b07b973..e607e21cdd 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -16,10 +16,13 @@ endif()
- if(NOT BOOTLOADER_BUILD)
+diff --git a/components/wpa_supplicant/CMakeLists.txt b/components/wpa_supplicant/CMakeLists.txt
+index 4039ab4345..608d0784ab 100644
+--- a/components/wpa_supplicant/CMakeLists.txt
++++ b/components/wpa_supplicant/CMakeLists.txt
+@@ -179,6 +179,7 @@ else()
+     "src/crypto/sha256-internal.c"
+     "src/crypto/sha256.c"
+     "src/crypto/sha384-internal.c"
++    "src/crypto/sha384.c"
+     "src/crypto/sha512-internal.c"
+     "src/crypto/sha256.c")
+ endif()
+@@ -333,6 +334,8 @@ if(NOT CONFIG_ESP_WIFI_MBEDTLS_TLS_CLIENT)
+ endif()
+ if(CONFIG_ESP_WIFI_MBEDTLS_CRYPTO)
+     target_compile_definitions(${COMPONENT_LIB} PRIVATE CONFIG_CRYPTO_MBEDTLS)
++else()
++    target_compile_definitions(${COMPONENT_LIB} PRIVATE CONFIG_CRYPTO_INTERNAL)
+ endif()
+ if(NOT CONFIG_MBEDTLS_SHA1_C AND NOT CONFIG_MBEDTLS_HARDWARE_SHA)
+     target_compile_definitions(${COMPONENT_LIB} PRIVATE CONFIG_CRYPTO_INTERNAL)
+diff --git a/components/wpa_supplicant/src/crypto/crypto.h b/components/wpa_supplicant/src/crypto/crypto.h
+index b65b00809b..9cc4bcd27a 100644
+--- a/components/wpa_supplicant/src/crypto/crypto.h
++++ b/components/wpa_supplicant/src/crypto/crypto.h
+@@ -22,6 +22,8 @@
+ #define CRYPTO_H
+ #include "utils/common.h"
  
-     if(CONFIG_COMPILER_OPTIMIZATION_SIZE)
--        list(APPEND compile_options "-Os")
-         if(CMAKE_C_COMPILER_ID MATCHES "GNU")
-+            list(APPEND compile_options "-Os")
-             list(APPEND compile_options "-freorder-blocks")
-         endif()
-+        if(CMAKE_C_COMPILER_ID MATCHES "Clang")
-+            list(APPEND compile_options "-Oz")
-+        endif()
-     elseif(CONFIG_COMPILER_OPTIMIZATION_DEBUG)
-         list(APPEND compile_options "-Og")
-         if(CMAKE_C_COMPILER_ID MATCHES "GNU" AND NOT CONFIG_IDF_TARGET_LINUX)
-@@ -34,10 +37,13 @@ if(NOT BOOTLOADER_BUILD)
- else()  # BOOTLOADER_BUILD
- 
-     if(CONFIG_BOOTLOADER_COMPILER_OPTIMIZATION_SIZE)
--        list(APPEND compile_options "-Os")
-         if(CMAKE_C_COMPILER_ID MATCHES "GNU")
-+            list(APPEND compile_options "-Os")
-             list(APPEND compile_options "-freorder-blocks")
-         endif()
-+        if(CMAKE_C_COMPILER_ID MATCHES "Clang")
-+            list(APPEND compile_options "-Oz")
-+        endif()
-     elseif(CONFIG_BOOTLOADER_COMPILER_OPTIMIZATION_DEBUG)
-         list(APPEND compile_options "-Og")
-         if(CMAKE_C_COMPILER_ID MATCHES "GNU" AND NOT CONFIG_IDF_TARGET_LINUX)
-diff --git a/components/freertos/FreeRTOS-Kernel/portable/riscv/portasm.S b/components/freertos/FreeRTOS-Kernel/portable/riscv/portasm.S
-index b737e58d7c..5f32c613a0 100644
---- a/components/freertos/FreeRTOS-Kernel/portable/riscv/portasm.S
-+++ b/components/freertos/FreeRTOS-Kernel/portable/riscv/portasm.S
-@@ -441,7 +441,7 @@ rtos_current_tcb:
-     lw      a0, pxCurrentTCBs
- #endif /* ( configNUM_CORES > 1 ) */
-     ret
--    .size, .-rtos_current_tcb
-+    .size rtos_current_tcb, .-rtos_current_tcb
- 
- 
++#define HMAC_VECTOR_MAX_ELEM 11
++
  /**
+  * md4_vector - MD4 hash for data vector
+  * @num_elem: Number of elements in the data vector
 diff --git a/components/wpa_supplicant/src/tls/asn1.c b/components/wpa_supplicant/src/tls/asn1.c
 index 04d5320490..cdde93e7cf 100644
 --- a/components/wpa_supplicant/src/tls/asn1.c
@@ -195,29 +182,6 @@ index 1bbd80ade8..07b877d9a4 100644
  	case 2: /* md2WithRSAEncryption */
  	default:
  		wpa_printf(MSG_INFO, "X509: Unsupported certificate signature "
-diff --git a/tools/cmake/build.cmake b/tools/cmake/build.cmake
-index 0bafd9fcb1..10abac4a10 100644
---- a/tools/cmake/build.cmake
-+++ b/tools/cmake/build.cmake
-@@ -517,16 +517,9 @@ macro(idf_build_process target)
- 
-         set(__contents "components:\n")
-         idf_build_get_property(build_component_targets BUILD_COMPONENT_TARGETS)
--        foreach(__build_component_target ${build_component_targets})
--            __component_get_property(__component_name ${__build_component_target} COMPONENT_NAME)
--            __component_get_property(__component_dir ${__build_component_target} COMPONENT_DIR)
--
--            # Exclude components could be passed with -DEXCLUDE_COMPONENTS
--            # after the call to __component_add finished in the last run.
--            # Need to check if the component is excluded again
--            if(NOT __component_name IN_LIST EXCLUDE_COMPONENTS)
-+        foreach(__component_name ${components})
-+            idf_component_get_property(__component_dir ${__component_name} COMPONENT_DIR)
-                 set(__contents "${__contents}  - name: \"${__component_name}\"\n    path: \"${__component_dir}\"\n")
--            endif()
-         endforeach()
- 
-         file(WRITE ${local_components_list_file} "${__contents}")
 diff --git a/tools/cmake/third_party/GetGitRevisionDescription.cmake b/tools/cmake/third_party/GetGitRevisionDescription.cmake
 index 53428e2cb8..381d173b30 100644
 --- a/tools/cmake/third_party/GetGitRevisionDescription.cmake

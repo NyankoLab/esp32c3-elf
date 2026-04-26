@@ -1,5 +1,18 @@
+diff --git a/components/homekit/esp_hap_core/src/esp_hap_database.c b/components/homekit/esp_hap_core/src/esp_hap_database.c
+index a4961c5..a53f71f 100644
+--- a/components/homekit/esp_hap_core/src/esp_hap_database.c
++++ b/components/homekit/esp_hap_core/src/esp_hap_database.c
+@@ -299,7 +299,7 @@ char *hap_get_acc_id()
+ 	return hap_priv.acc_id;
+ }
+ 
+-int hap_get_next_aid(char *id)
++int hap_get_next_aid()
+ {
+     hap_priv.cur_aid++;
+     hap_save_cur_aid();
 diff --git a/components/homekit/esp_hap_core/src/esp_hap_ip_services.c b/components/homekit/esp_hap_core/src/esp_hap_ip_services.c
-index b8dfb7e..4080f4e 100644
+index 980bc03..c56fc0c 100644
 --- a/components/homekit/esp_hap_core/src/esp_hap_ip_services.c
 +++ b/components/homekit/esp_hap_core/src/esp_hap_ip_services.c
 @@ -51,7 +51,7 @@

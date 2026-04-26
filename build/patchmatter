@@ -1,0 +1,40 @@
+diff --git a/components/esp_matter/CMakeLists.txt b/components/esp_matter/CMakeLists.txt
+index 1e13bda5..9d9c7e1f 100644
+--- a/components/esp_matter/CMakeLists.txt
++++ b/components/esp_matter/CMakeLists.txt
+@@ -60,8 +60,16 @@ idf_component_register( SRC_DIRS        ${SRC_DIRS_LIST}
+ # This has been added to fix the error and should be removed once fixed:
+ # esp-matter/connectedhomeip/connectedhomeip/src/app/EventManagement.cpp:467:23: error: 'writer' is
+ # used uninitialized in this function
+-idf_build_set_property(COMPILE_OPTIONS "-Wno-error=uninitialized;-Wno-error=maybe-uninitialized;-Wno-missing-field-initializers;" APPEND)
++idf_build_set_property(COMPILE_OPTIONS "-Wno-error=uninitialized;-Wno-missing-field-initializers;" APPEND)
++#-Wno-error=maybe-uninitialized;
+ idf_build_set_property(COMPILE_OPTIONS "-Wno-error=array-bounds" APPEND)
++idf_build_set_property(COMPILE_OPTIONS "-Wno-error=inconsistent-missing-override" APPEND)
++idf_build_set_property(COMPILE_OPTIONS "-Wno-error=sign-conversion" APPEND)
++idf_build_set_property(COMPILE_OPTIONS "-Wno-error=format" APPEND)
++idf_build_set_property(COMPILE_OPTIONS "-Wno-error=missing-braces" APPEND)
++idf_build_set_property(COMPILE_OPTIONS "-Wno-error=#warnings" APPEND)
++idf_build_set_property(COMPILE_OPTIONS "-Wno-error=unused-private-field" APPEND)
++idf_build_set_property(COMPILE_OPTIONS "-Wno-error=non-c-typedef-for-linkage" APPEND)
+ 
+ if (CONFIG_ESP_MATTER_ENABLE_MATTER_SERVER)
+     if (CONFIG_ESP_MATTER_ENABLE_DATA_MODEL)
+diff --git a/connectedhomeip/connectedhomeip b/connectedhomeip/connectedhomeip
+--- a/connectedhomeip/connectedhomeip
++++ b/connectedhomeip/connectedhomeip
+@@ -1 +1 @@
+-Subproject commit cf84d0360c48dbc194c48b47b09169f302a9745b
++Subproject commit cf84d0360c48dbc194c48b47b09169f302a9745b-dirty
+diff --git a/examples/light/CMakeLists.txt b/examples/light/CMakeLists.txt
+index abaf5015..0430a99d 100644
+--- a/examples/light/CMakeLists.txt
++++ b/examples/light/CMakeLists.txt
+@@ -46,6 +46,7 @@ set(EXTRA_COMPONENT_DIRS
+     "${MATTER_SDK_PATH}/config/esp32/components"
+     "${ESP_MATTER_PATH}/components"
+     "${ESP_MATTER_PATH}/device_hal/device"
++    "$ENV{HOMEKIT_PATH}/components/homekit"
+     ${extra_components_dirs_append})
+ 
+ project(light)

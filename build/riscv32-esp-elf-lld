@@ -34,6 +34,8 @@ while [[ $# > 0 ]] ; do
         ;;
         -platform_version)
         shift 3 ;;
+        -rdynamic)
+        ;;
         -reproducible)
         ;;
         -syslibroot)

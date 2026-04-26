@@ -1,6 +1,8 @@
 .DS_Store
 bin/
-build/hello_world/
+build/light/
+build/patchhomekit.ok
+build/patchmatter.ok
 build/patchsdk.ok
 build/temp/
 build/*.tar.gz

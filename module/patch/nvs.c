@@ -2,6 +2,7 @@
 #include <nvs.h>
 #include "module/fs.h"
 
+#if 0
 esp_err_t nvs_open(const char* name, nvs_open_mode_t open_mode, nvs_handle_t* out_handle) { return nvs_open_from_partition("nvs", name, open_mode, out_handle); }
 esp_err_t nvs_open_from_partition(const char* part_name, const char* name, nvs_open_mode_t open_mode, nvs_handle_t* out_handle)
 {
@@ -96,3 +97,4 @@ esp_err_t nvs_flash_secure_init(nvs_sec_cfg_t* cfg) { return ESP_FAIL; }
 esp_err_t nvs_flash_secure_init_partition(const char* partition_label, nvs_sec_cfg_t* cfg) { return ESP_FAIL; }
 esp_err_t nvs_flash_generate_keys(const esp_partition_t* partition, nvs_sec_cfg_t* cfg) { return ESP_FAIL; }
 esp_err_t nvs_flash_read_security_cfg(const esp_partition_t* partition, nvs_sec_cfg_t* cfg) { return ESP_FAIL; }
+#endif

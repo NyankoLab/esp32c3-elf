@@ -12,15 +12,20 @@ void esp_aes_acquire_hardware(void)
     portENTER_CRITICAL(&aes_spinlock);
 
     /* Enable AES hardware */
-    periph_module_enable(PERIPH_AES_MODULE);
+    AES_RCC_ATOMIC() {
+        aes_ll_enable_bus_clock(true);
+        aes_ll_reset_register();
+    }
 }
 
 void esp_aes_release_hardware(void) __attribute__((weak));
 void esp_aes_release_hardware(void)
 {
     /* Disable AES hardware */
-    periph_module_disable(PERIPH_AES_MODULE);
-    
+    AES_RCC_ATOMIC() {
+        aes_ll_enable_bus_clock(false);
+    }
+
     portEXIT_CRITICAL(&aes_spinlock);
 }
 

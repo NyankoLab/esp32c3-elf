@@ -275,7 +275,7 @@ int esp_elf_relocate(esp_elf_t *elf, bool(*read)(void *, size_t, bool, const voi
             return -ENOEXEC;
         }
         if (stype(&shdr, SHT_RELA)) {
-            char name[128];
+            char name[256];
             int nr_reloc = shdr.size / sizeof(elf32_rela_t);
             if (!read_string(name, shstrab + shdr.name)) {
                 return -ENOEXEC;

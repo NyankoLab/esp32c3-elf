@@ -26,6 +26,8 @@ int __wrap_sha256_vector(size_t num_elem, const u8 *addr[], const size_t *len, u
     bool first_block = true;
 
     esp_sha_acquire_hardware();
+    sha_hal_wait_idle();
+    sha_hal_set_mode(SHA2_256);
     for (i = 0; i <= num_elem; i++) {
         size_t left = total % 64;
         size_t fill = 64 - left;
@@ -81,6 +83,8 @@ int __wrap_sha256_vector(size_t num_elem, const u8 *addr[], const size_t *len, u
 int __wrap_sha256_compress(struct sha256_state *md, unsigned char *buf)
 {
     esp_sha_acquire_hardware();
+    sha_hal_wait_idle();
+    sha_hal_set_mode(SHA2_256);
     sha_hal_write_digest(SHA2_256, md->state);
     sha_hal_hash_block(SHA2_256, buf, 64 / 4, false);
     sha_hal_read_digest(SHA2_256, md->state);

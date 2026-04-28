@@ -18,6 +18,7 @@ int __wrap_hap_httpd_start(void)
     return __real_hap_httpd_start();
 }
 
+#if 0
 int hap_keystore_init(void)
 {
     return HAP_SUCCESS;
@@ -80,3 +81,4 @@ void hap_keystore_erase_all_data(void)
 {
     fs_remove("hap");
 }
+#endif

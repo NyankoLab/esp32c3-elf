@@ -26,6 +26,8 @@ int __wrap_sha1_vector(size_t num_elem, const u8 *addr[], const size_t *len, u8 
     bool first_block = true;
 
     esp_sha_acquire_hardware();
+    sha_hal_wait_idle();
+    sha_hal_set_mode(SHA1);
     for (i = 0; i <= num_elem; i++) {
         size_t left = total % 64;
         size_t fill = 64 - left;
@@ -82,6 +84,8 @@ int __wrap_sha1_vector(size_t num_elem, const u8 *addr[], const size_t *len, u8 
 void __wrap_SHA1Transform(u32 state[5], const unsigned char buffer[64])
 {
     esp_sha_acquire_hardware();
+    sha_hal_wait_idle();
+    sha_hal_set_mode(SHA1);
     sha_hal_write_digest(SHA1, state);
     sha_hal_hash_block(SHA1, buffer, 64 / 4, false);
     sha_hal_read_digest(SHA1, state);

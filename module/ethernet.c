@@ -41,19 +41,19 @@ static int8_t eth_spi_phy_rst0_gpio;
 #define CONFIG_EXAMPLE_USE_W5500                1
 
 #define TAG __CONCAT(TAG, __LINE__)
-#define TAG141 "ethernet"
-#define TAG144 "ethernet"
-#define TAG158 "ethernet"
-#define TAG217 "ethernet"
-#define TAG222 "ethernet"
-#define TAG254 "ethernet"
+#define TAG143 "ethernet"
+#define TAG146 "ethernet"
+#define TAG160 "ethernet"
+#define TAG219 "ethernet"
+#define TAG224 "ethernet"
 #define TAG256 "ethernet"
-#define TAG265 "ethernet"
-#define TAG273 "ethernet"
-#define TAG289 "ethernet"
-#define TAG309 "ethernet"
-#define TAG316 "ethernet"
-#define TAG331 "ethernet"
+#define TAG258 "ethernet"
+#define TAG267 "ethernet"
+#define TAG275 "ethernet"
+#define TAG291 "ethernet"
+#define TAG311 "ethernet"
+#define TAG318 "ethernet"
+#define TAG333 "ethernet"
 
 #include "ethernet/ethernet_init.c"
 

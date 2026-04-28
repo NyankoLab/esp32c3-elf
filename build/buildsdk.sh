@@ -4,6 +4,7 @@ export ESP_MATTER_PATH=$PWD/../esp-matter
 export HOMEKIT_PATH=$PWD/../esp-homekit-sdk
 #export IDF_PATH=$PWD/../esp-idf
 #export PATH=$PWD:$PWD/../esp-clang/bin:$PWD/../riscv32-esp-elf/bin:$PATH
+export PATH=$PWD:$PWD/../esp-clang/bin:$PATH
 
 if [ ! -f "patchsdk.ok" ]; then
   echo ok > patchsdk.ok
@@ -34,8 +35,8 @@ if [ ! -f "light/README.md" ]; then
   cp -r $ESP_MATTER_PATH/examples/light .
 fi
 
-#export IDF_TARGET=esp32c3
-#export IDF_MAINTAINER=1
+export IDF_TARGET=esp32c3
+export IDF_MAINTAINER=1
 
 cd light
 idf.py -DIDF_TOOLCHAIN=clang set-target esp32c3

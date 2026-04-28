@@ -1,7 +1,6 @@
 #include "esp32c3.h"
 #include <sys/socket.h>
 #include <lwip/dns.h>
-#define ESP_PLATFORM
 #include <utils/common.h>
 #include <crypto/tls.h>
 #include "https.h"

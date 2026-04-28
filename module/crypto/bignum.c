@@ -10,7 +10,6 @@
 #include "esp_private/esp_crypto_lock_internal.h"
 #include "hal/mpi_ll.h"
 #include <mbedtls/bignum.h>
-#define ESP_PLATFORM
 #include <utils/common.h>
 
 

@@ -12,7 +12,6 @@
 		D6619E312DA23013001C8599 /* aes-ctr.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E242DA23013001C8599 /* aes-ctr.c */; };
 		D6619E322DA23013001C8599 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E212DA23013001C8599 /* aes.c */; };
 		D6619E332DA23013001C8599 /* bignum.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E2B2DA23013001C8599 /* bignum.c */; };
-		D6619E342DA23013001C8599 /* sha384.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E302DA23013001C8599 /* sha384.c */; };
 		D6619E352DA23013001C8599 /* aes-internal-dec.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E262DA23013001C8599 /* aes-internal-dec.c */; };
 		D6619E362DA23013001C8599 /* aes-omac1.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E282DA23013001C8599 /* aes-omac1.c */; };
 		D6619E372DA23013001C8599 /* aes-unwrap.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E292DA23013001C8599 /* aes-unwrap.c */; };
@@ -42,6 +41,8 @@
 		F54D9C002DAAA9EB00B429A9 /* lcd.c in Sources */ = {isa = PBXBuildFile; fileRef = F54D9BFF2DAAA9EB00B429A9 /* lcd.c */; };
 		F5F5E4132DA3E62F00BA4DF0 /* wifi.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5E4122DA3E62F00BA4DF0 /* wifi.c */; };
 		F5F5E41D2DA4325F00BA4DF0 /* ethernet.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5E41C2DA4325F00BA4DF0 /* ethernet.c */; };
+		F5FA569C2FA0915A008340EA /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FA569B2FA0915A008340EA /* hash.cpp */; };
+		F5FA569E2FA09182008340EA /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FA569D2FA09182008340EA /* memory.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,7 +66,6 @@
 		D6619E2D2DA23013001C8599 /* sha.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = sha.c; sourceTree = "<group>"; };
 		D6619E2E2DA23013001C8599 /* sha1-internal.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "sha1-internal.c"; sourceTree = "<group>"; };
 		D6619E2F2DA23013001C8599 /* sha256-internal.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "sha256-internal.c"; sourceTree = "<group>"; };
-		D6619E302DA23013001C8599 /* sha384.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = sha384.c; sourceTree = "<group>"; };
 		D6619E402DA2303F001C8599 /* cxx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cxx.cpp; sourceTree = "<group>"; };
 		D6619E412DA2303F001C8599 /* file.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = file.c; sourceTree = "<group>"; };
 		D6619E422DA2303F001C8599 /* homekit.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = homekit.c; sourceTree = "<group>"; };
@@ -100,6 +100,8 @@
 		F5F5E4192DA42DAC00BA4DF0 /* ethernet_init.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ethernet_init.c; sourceTree = "<group>"; };
 		F5F5E41B2DA4325F00BA4DF0 /* ethernet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ethernet.h; sourceTree = "<group>"; };
 		F5F5E41C2DA4325F00BA4DF0 /* ethernet.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ethernet.c; sourceTree = "<group>"; };
+		F5FA569B2FA0915A008340EA /* hash.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = hash.cpp; sourceTree = "<group>"; };
+		F5FA569D2FA09182008340EA /* memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = memory.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,7 +157,6 @@
 				D6619E2C2DA23013001C8599 /* sha.h */,
 				D6619E2E2DA23013001C8599 /* sha1-internal.c */,
 				D6619E2F2DA23013001C8599 /* sha256-internal.c */,
-				D6619E302DA23013001C8599 /* sha384.c */,
 			);
 			path = crypto;
 			sourceTree = "<group>";
@@ -216,6 +217,8 @@
 		D6741A7C2CE610470024FB04 /* patch */ = {
 			isa = PBXGroup;
 			children = (
+				F5FA569D2FA09182008340EA /* memory.cpp */,
+				F5FA569B2FA0915A008340EA /* hash.cpp */,
 				D6619E402DA2303F001C8599 /* cxx.cpp */,
 				D6619E412DA2303F001C8599 /* file.c */,
 				D6619E422DA2303F001C8599 /* homekit.c */,
@@ -328,6 +331,7 @@
 				F5F5E4132DA3E62F00BA4DF0 /* wifi.c in Sources */,
 				D6619E322DA23013001C8599 /* aes.c in Sources */,
 				D6619E3B2DA23013001C8599 /* aes-cbc.c in Sources */,
+				F5FA569E2FA09182008340EA /* memory.cpp in Sources */,
 				D6619E392DA23013001C8599 /* aes-ccm.c in Sources */,
 				D6619E312DA23013001C8599 /* aes-ctr.c in Sources */,
 				D6619E382DA23013001C8599 /* aes-gcm.c in Sources */,
@@ -340,10 +344,10 @@
 				D6619E3A2DA23013001C8599 /* sha.c in Sources */,
 				D6619E3C2DA23013001C8599 /* sha1-internal.c in Sources */,
 				D6619E3F2DA23013001C8599 /* sha256-internal.c in Sources */,
-				D6619E342DA23013001C8599 /* sha384.c in Sources */,
 				D6619E452DA2303F001C8599 /* homekit.c in Sources */,
 				D6619E482DA2303F001C8599 /* cxx.cpp in Sources */,
 				D6619E492DA2303F001C8599 /* file.c in Sources */,
+				F5FA569C2FA0915A008340EA /* hash.cpp in Sources */,
 				D6619E462DA2303F001C8599 /* nvs.c in Sources */,
 				D6619E472DA2303F001C8599 /* vfs.c in Sources */,
 			);

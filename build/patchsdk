@@ -1,3 +1,85 @@
+diff --git a/components/cxx/cxx_exception_stubs.cpp b/components/cxx/cxx_exception_stubs.cpp
+index 7e794755c0..f3de729347 100644
+--- a/components/cxx/cxx_exception_stubs.cpp
++++ b/components/cxx/cxx_exception_stubs.cpp
+@@ -6,7 +6,10 @@
+ #include <cstdlib>
+ #include <cstdio>
+ #include <exception>
++#if defined(_LIBCPP_VERSION)
++#else
+ #include <bits/functexcept.h>
++#endif
+ #include <sdkconfig.h>
+ 
+ #ifndef CONFIG_COMPILER_CXX_EXCEPTIONS
+diff --git a/components/cxx/cxx_guards.cpp b/components/cxx/cxx_guards.cpp
+index e4f9f905a6..98a6feaced 100644
+--- a/components/cxx/cxx_guards.cpp
++++ b/components/cxx/cxx_guards.cpp
+@@ -15,7 +15,11 @@
+ #include "freertos/semphr.h"
+ #include "freertos/task.h"
+ 
++#if defined(_LIBCPP_VERSION)
++typedef uint64_t __guard;
++#else
+ using __cxxabiv1::__guard;
++#endif
+ 
+ static SemaphoreHandle_t s_static_init_mutex = NULL;        //!< lock used for the critical section
+ static SemaphoreHandle_t s_static_init_wait_sem = NULL;     //!< counting semaphore used by the waiting tasks
+@@ -26,8 +30,13 @@ static size_t s_static_init_max_waiting_count = 0;          //!< maximum ever va
+ #endif
+ 
+ extern "C" int __cxa_guard_acquire(__guard* pg);
++#if defined(_LIBCPP_VERSION)
++extern "C" void __cxa_guard_release(__guard* pg);
++extern "C" void __cxa_guard_abort(__guard* pg);
++#else
+ extern "C" void __cxa_guard_release(__guard* pg) throw();
+ extern "C" void __cxa_guard_abort(__guard* pg) throw();
++#endif
+ extern "C" void __cxa_guard_dummy(void);
+ 
+ /**
+@@ -167,7 +176,11 @@ extern "C" int __cxa_guard_acquire(__guard* pg)
+     return ret;
+ }
+ 
++#if defined(_LIBCPP_VERSION)
++extern "C" void __cxa_guard_release(__guard* pg)
++#else
+ extern "C" void __cxa_guard_release(__guard* pg) throw()
++#endif
+ {
+     guard_t* g = reinterpret_cast<guard_t*>(pg);
+     const auto scheduler_started = xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED;
+@@ -189,7 +202,11 @@ extern "C" void __cxa_guard_release(__guard* pg) throw()
+     }
+ }
+ 
++#if defined(_LIBCPP_VERSION)
++extern "C" void __cxa_guard_abort(__guard* pg)
++#else
+ extern "C" void __cxa_guard_abort(__guard* pg) throw()
++#endif
+ {
+     guard_t* g = reinterpret_cast<guard_t*>(pg);
+     const auto scheduler_started = xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED;
+diff --git a/components/newlib/platform_include/assert.h b/components/newlib/platform_include/assert.h
+index 1834290fc6..6810b91f3a 100644
+--- a/components/newlib/platform_include/assert.h
++++ b/components/newlib/platform_include/assert.h
+@@ -9,7 +9,7 @@
+ */
+ #pragma once
+ #include <sdkconfig.h>
+-#include <stdlib.h>
++//#include <stdlib.h>
+ #include <stdint.h>
+ 
+ #include_next <assert.h>
 diff --git a/components/wpa_supplicant/CMakeLists.txt b/components/wpa_supplicant/CMakeLists.txt
 index 4039ab4345..608d0784ab 100644
 --- a/components/wpa_supplicant/CMakeLists.txt
@@ -195,3 +277,23 @@ index 53428e2cb8..381d173b30 100644
          ${ARGN}
          WORKING_DIRECTORY
          "${CMAKE_CURRENT_SOURCE_DIR}"
+diff --git a/tools/cmake/toolchain-clang-esp32c3.cmake b/tools/cmake/toolchain-clang-esp32c3.cmake
+index 3d7593a2d3..470b39febe 100644
+--- a/tools/cmake/toolchain-clang-esp32c3.cmake
++++ b/tools/cmake/toolchain-clang-esp32c3.cmake
+@@ -19,6 +19,15 @@ set(CMAKE_C_FLAGS "${UNIQ_CMAKE_C_FLAGS}"
+     FORCE)
+ 
+ remove_duplicated_flags("--target=riscv32-esp-elf -march=rv32imc_zicsr_zifencei -mabi=ilp32 \
++-fno-aligned-allocation -fno-sized-deallocation -stdlib=libc++ \
++-D_LIBCPP_DISABLE_AVAILABILITY \
++-D_LIBCPP___CONFIG_SITE \
++-D_LIBCPP_ABI_NAMESPACE=__1 \
++-D_LIBCPP_ABI_VERSION=1 \
++-D_LIBCPP_ASSERTION_SEMANTIC_DEFAULT=_LIBCPP_ASSERTION_SEMANTIC_IGNORE \
++-D_LIBCPP_HARDENING_MODE_DEFAULT=_LIBCPP_HARDENING_MODE_NONE \
++-D_LIBCPP_HAS_WIDE_CHARACTERS \
++-D_LIBCPP_VERBOSE_ABORT=\\(void\\) \
+                         ${CMAKE_CXX_FLAGS}"
+                         UNIQ_CMAKE_CXX_FLAGS)
+ set(CMAKE_CXX_FLAGS "${UNIQ_CMAKE_CXX_FLAGS}"

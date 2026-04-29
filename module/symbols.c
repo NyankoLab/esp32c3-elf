@@ -54,17 +54,18 @@ void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2ILi0EEEPKc
 void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED1Ev();
 void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED2Ev();
 
-void _ZN10esp_matter8endpoint13get_priv_dataEt();
+void _ZN4chip26CommissioningWindowManager28OpenBasicCommissioningWindowENSt3__16chrono8durationIjNS1_5ratioILx1ELx1EEEEENS_32CommissioningWindowAdvertisementE();
+void _ZNK4chip26CommissioningWindowManager25IsCommissioningWindowOpenEv();
+void _ZN4chip11DeviceLayer29SetDeviceInstanceInfoProviderEPNS0_26DeviceInstanceInfoProviderE();
+void _ZN4chip6Server7sServerE();
 void _Z18esp_matter_invalidPv();
 void _ZN10esp_matter9attribute7get_valEtjjP21esp_matter_attr_val_t();
 void _ZN10esp_matter9attribute6updateEtjjP21esp_matter_attr_val_t();
-void _ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_();
-void _ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv();
 void _ZN10esp_matter8endpoint6get_idEPj();
+void _ZN10esp_matter8endpoint13get_priv_dataEt();
+void _ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_();
 void _ZN10esp_matter5startEPFvPKN4chip11DeviceLayer15ChipDeviceEventEiEi();
-void _ZN4chip6Server7sServerE();
-void _ZNK4chip26CommissioningWindowManager25IsCommissioningWindowOpenEv();
-void _ZN4chip26CommissioningWindowManager28OpenBasicCommissioningWindowENSt3__16chrono8durationIjNS1_5ratioILx1ELx1EEEEENS_32CommissioningWindowAdvertisementE();
 
 void init_udp_console(const char* ip);
 BaseType_t xTaskCreatePinnedToCore(TaskFunction_t, const char* const, const configSTACK_DEPTH_TYPE, void* const, UBaseType_t, TaskHandle_t* const, const BaseType_t);
@@ -727,18 +728,21 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     // hap_database
     ESP_ELFSYM_EXPORT(hap_get_acc_id),
 
+    // chip
+    ESP_ELFSYM_EXPORT(_ZN4chip26CommissioningWindowManager28OpenBasicCommissioningWindowENSt3__16chrono8durationIjNS1_5ratioILx1ELx1EEEEENS_32CommissioningWindowAdvertisementE),
+    ESP_ELFSYM_EXPORT(_ZNK4chip26CommissioningWindowManager25IsCommissioningWindowOpenEv),
+    ESP_ELFSYM_EXPORT(_ZN4chip11DeviceLayer29SetDeviceInstanceInfoProviderEPNS0_26DeviceInstanceInfoProviderE),
+    ESP_ELFSYM_EXPORT(_ZN4chip6Server7sServerE),
+
     // esp-matter
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13get_priv_dataEt),
     ESP_ELFSYM_EXPORT(_Z18esp_matter_invalidPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute7get_valEtjjP21esp_matter_attr_val_t),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute6updateEtjjP21esp_matter_attr_val_t),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6get_idEPj),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13get_priv_dataEt),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter5startEPFvPKN4chip11DeviceLayer15ChipDeviceEventEiEi),
-    ESP_ELFSYM_EXPORT(_ZN4chip6Server7sServerE),
-    ESP_ELFSYM_EXPORT(_ZNK4chip26CommissioningWindowManager25IsCommissioningWindowOpenEv),
-    ESP_ELFSYM_EXPORT(_ZN4chip26CommissioningWindowManager28OpenBasicCommissioningWindowENSt3__16chrono8durationIjNS1_5ratioILx1ELx1EEEEENS_32CommissioningWindowAdvertisementE),
 
     // end
     ESP_ELFSYM_END

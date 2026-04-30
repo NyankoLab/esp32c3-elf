@@ -152,6 +152,30 @@ index a4d1be4735..a72c01f3a8 100644
  int asn1_parse_oid(const u8 *buf, size_t len, struct asn1_oid *oid);
  int asn1_get_oid(const u8 *buf, size_t len, struct asn1_oid *oid,
  		 const u8 **next);
+diff --git a/components/wpa_supplicant/src/tls/tlsv1_client.c b/components/wpa_supplicant/src/tls/tlsv1_client.c
+index 431044c57b..efe70103b0 100644
+--- a/components/wpa_supplicant/src/tls/tlsv1_client.c
++++ b/components/wpa_supplicant/src/tls/tlsv1_client.c
+@@ -372,9 +372,16 @@ struct wpabuf * tlsv1_client_decrypt(struct tlsv1_client *conn,
+ 		}
+ 		if (used == 0) {
+ 			struct wpabuf *partial;
+-			wpa_printf(MSG_DEBUG, "TLSv1: Need more data");
+-			partial = wpabuf_alloc_copy(pos, in_end - pos);
+-			wpabuf_free(conn->partial_input);
++			wpa_printf(MSG_INFO, "TLSv1: Need more data");
++            if (conn->partial_input && wpabuf_len(conn->partial_input) >= (in_end - pos)) {
++                partial = conn->partial_input; 
++                partial->used = 0;
++                wpabuf_put_data(partial, pos, in_end - pos);
++            }
++            else {
++                partial = wpabuf_alloc_copy(pos, in_end - pos);
++                wpabuf_free(conn->partial_input);
++            }
+ 			conn->partial_input = partial;
+ 			if (conn->partial_input == NULL) {
+ 				wpa_printf(MSG_DEBUG, "TLSv1: Failed to "
 diff --git a/components/wpa_supplicant/src/tls/tlsv1_client_ocsp.c b/components/wpa_supplicant/src/tls/tlsv1_client_ocsp.c
 index 128f4b5b9e..291f2d86d2 100644
 --- a/components/wpa_supplicant/src/tls/tlsv1_client_ocsp.c

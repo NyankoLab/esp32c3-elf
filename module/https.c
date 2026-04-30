@@ -48,11 +48,30 @@ static void https_handler(void* arg)
     context->temp = malloc(1536);
     if (context->temp == NULL)
         goto final;
+#if defined(CONFIG_ESP_WIFI_MBEDTLS_CRYPTO)
+    struct tls_connection_params params = {};
+    if (tls_connection_set_params(context->tls, context->conn, &params) != 0)
+        goto final;
+#endif
 
     // Hello
     struct wpabuf in;
     wpabuf_set(&in, NULL, 0);
+#if defined(CONFIG_ESP_WIFI_MBEDTLS_CRYPTO)
+    context->need_more_data = 0;
+    struct wpabuf* data = NULL;
+    struct wpabuf* out = tls_connection_handshake(context->tls, context->conn, &in, &data);
+    if (data)
+    {
+        wpabuf_free(data);
+    }
+    else
+    {
+        context->need_more_data = 1;
+    }
+#else
     struct wpabuf* out = tls_connection_handshake2(context->tls, context->conn, &in, NULL, &context->need_more_data);
+#endif
 
     if (out)
     {
@@ -74,7 +93,21 @@ static void https_handler(void* arg)
 
         struct wpabuf in;
         wpabuf_set(&in, context->temp, length);
+#if defined(CONFIG_ESP_WIFI_MBEDTLS_CRYPTO)
+        context->need_more_data = 0;
+        struct wpabuf* data = NULL;
+        struct wpabuf* out = tls_connection_handshake(context->tls, context->conn, &in, &data);
+        if (data)
+        {
+            wpabuf_free(data);
+        }
+        else
+        {
+            context->need_more_data = 1;
+        }
+#else
         struct wpabuf* out = tls_connection_handshake2(context->tls, context->conn, &in, NULL, &context->need_more_data);
+#endif
 
         if (out == NULL)
         {
@@ -125,9 +158,16 @@ static void https_handler(void* arg)
 
         struct wpabuf in;
         wpabuf_set(&in, context->temp, length);
-        struct wpabuf* out = tls_connection_decrypt2(context->tls, context->conn, &in, NULL);
-
-        if (out)
+#if defined(CONFIG_ESP_WIFI_MBEDTLS_CRYPTO)
+        struct wpabuf* out = tls_connection_decrypt(context->tls, context->conn, &in);
+#else
+        struct wpabuf* out = tls_connection_decrypt2(context->tls, context->conn, &in, &context->need_more_data);
+#endif
+        if (out == NULL)
+        {
+            
+        }
+        else
         {
             if (wpabuf_len(out) != 0)
             {

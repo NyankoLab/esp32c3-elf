@@ -165,7 +165,11 @@ static void https_handler(void* arg)
 #endif
         if (out == NULL)
         {
-            
+            if (context->need_more_data == 0)
+            {
+                ESP_LOGE(TAG, "TLS decrypt failed");
+                goto final;
+            }
         }
         else
         {
@@ -197,7 +201,7 @@ static void dns_found(const char* name, const ip_addr_t* ip, void* arg)
 
     https_disconnect(context);
     free(context);
-    ESP_LOGI(TAG, "%s not found", name);
+    ESP_LOGE(TAG, "%s not found", name);
 }
 
 void https_connect(const char* url, const char* attr, void (*recv)(void* arg, char* pusrdata, int length), void (*disconn)(void* arg))

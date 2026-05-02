@@ -56,7 +56,7 @@ int dlclose(void* handle)
 
 int execv(const char* path, char* const argv[])
 {
-    int ret = 0;
+    int ret = -1;
 
     void* handle = dlopen(path, 0);
     if (handle)

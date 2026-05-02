@@ -18,6 +18,7 @@
 #include <soc/uart_pins.h>
 #include "elf_loader/include/esp_elf.h"
 #include "module/dlfcn.h"
+#include "module/fs.h"
 #include "helper.h"
 
 #define TAG __FILE_NAME__
@@ -83,7 +84,15 @@ void app_main(void)
     fs_init();
 
     /* Execute ELF */
-    execv("main.elf", NULL);
+    if (fs_stat("update") >= 0) {
+        fs_remove("update");
+        if (execv("update.elf", NULL) < 0) {
+            execv("update.old", NULL);
+        }
+    }
+    else {
+        execv("main.elf", NULL);
+    }
 
     /* Fallback */
     extern void wifi_ap(char const* name, char const* pass);

@@ -64,6 +64,8 @@ void _ZN10esp_matter9attribute6updateEtjjP21esp_matter_attr_val_t();
 void _ZN10esp_matter8endpoint6get_idEPj();
 void _ZN10esp_matter8endpoint13get_priv_dataEt();
 void _ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter13factory_resetEv();
+void _ZN10esp_matter10is_startedEv();
 void _ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_();
 void _ZN10esp_matter5startEPFvPKN4chip11DeviceLayer15ChipDeviceEventEiEi();
 
@@ -741,6 +743,8 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6get_idEPj),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13get_priv_dataEt),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter13factory_resetEv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter10is_startedEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter5startEPFvPKN4chip11DeviceLayer15ChipDeviceEventEiEi),
 

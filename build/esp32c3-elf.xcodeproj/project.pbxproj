@@ -39,6 +39,7 @@
 		D6FC9AA22CECD11B009AF784 /* ota.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A9F2CECD11B009AF784 /* ota.c */; };
 		D6FC9AA32CECD11B009AF784 /* temperature.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9AA02CECD11B009AF784 /* temperature.c */; };
 		F54D9C002DAAA9EB00B429A9 /* lcd.c in Sources */ = {isa = PBXBuildFile; fileRef = F54D9BFF2DAAA9EB00B429A9 /* lcd.c */; };
+		F5BF0D212FA785A400F82963 /* matter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5BF0D202FA7859900F82963 /* matter.cpp */; };
 		F5F5E4132DA3E62F00BA4DF0 /* wifi.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5E4122DA3E62F00BA4DF0 /* wifi.c */; };
 		F5F5E41D2DA4325F00BA4DF0 /* ethernet.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5E41C2DA4325F00BA4DF0 /* ethernet.c */; };
 		F5FA569C2FA0915A008340EA /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FA569B2FA0915A008340EA /* hash.cpp */; };
@@ -94,6 +95,7 @@
 		D6FC9AA12CECD11B009AF784 /* temperature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = temperature.h; path = ../module/temperature.h; sourceTree = "<group>"; };
 		F54D9BFF2DAAA9EB00B429A9 /* lcd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lcd.c; sourceTree = "<group>"; };
 		F54D9C012DAAAD1000B429A9 /* lcd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lcd.h; sourceTree = "<group>"; };
+		F5BF0D202FA7859900F82963 /* matter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = matter.cpp; sourceTree = "<group>"; };
 		F5F5E4112DA3E62F00BA4DF0 /* wifi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wifi.h; sourceTree = "<group>"; };
 		F5F5E4122DA3E62F00BA4DF0 /* wifi.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = wifi.c; sourceTree = "<group>"; };
 		F5F5E4182DA42DAC00BA4DF0 /* ethernet_init.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ethernet_init.h; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				D6FC9A6A2CEB43C8009AF784 /* https.h */,
 				F54D9BFF2DAAA9EB00B429A9 /* lcd.c */,
 				F54D9C012DAAAD1000B429A9 /* lcd.h */,
+				F5BF0D202FA7859900F82963 /* matter.cpp */,
 				D6FC9A682CEB43C8009AF784 /* mqtt.c */,
 				D6FC9A6C2CEB43C8009AF784 /* mqtt.h */,
 				D6FC9A9F2CECD11B009AF784 /* ota.c */,
@@ -317,6 +320,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5BF0D212FA785A400F82963 /* matter.cpp in Sources */,
 				D6741A332CE393DD0024FB04 /* app_main.c in Sources */,
 				D6170A7B2CF22403001C8439 /* dlfcn.c in Sources */,
 				F5F5E41D2DA4325F00BA4DF0 /* ethernet.c in Sources */,

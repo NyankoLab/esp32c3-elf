@@ -2,6 +2,10 @@
 
 #pragma clang diagnostic ignored "-Wstrict-prototypes"
 
+#define HAVE_HOMEKIT 1
+#define HAVE_MATTER 1
+#define HAVE_PREPATCH 0
+
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>

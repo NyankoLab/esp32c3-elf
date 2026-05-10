@@ -31,6 +31,8 @@
 #include "wifi.h"
 #include "elf_loader/include/private/elf_symbol.h"
 
+#if HAVE_PREPATCH == 0
+
 void* _Znaj(unsigned int s) { return malloc(s); }
 void* _Znwj(unsigned int s) { return malloc(s); }
 void _ZdaPv(void* p) { free(p); }
@@ -58,18 +60,42 @@ void _ZN4chip26CommissioningWindowManager28OpenBasicCommissioningWindowENSt3__16
 void _ZNK4chip26CommissioningWindowManager25IsCommissioningWindowOpenEv();
 void _ZN4chip11DeviceLayer29SetDeviceInstanceInfoProviderEPNS0_26DeviceInstanceInfoProviderE();
 void _ZN4chip6Server7sServerE();
-void _Z18esp_matter_invalidPv();
+
 void _ZN10esp_matter9attribute7get_valEtjjP21esp_matter_attr_val_t();
 void _ZN10esp_matter9attribute6updateEtjjP21esp_matter_attr_val_t();
+void _ZN10esp_matter7cluster3getEPjj();
 void _ZN10esp_matter20default_app_event_cbEPKN4chip11DeviceLayer15ChipDeviceEventEi();
 void _ZN10esp_matter29default_app_identification_cbENS_14identification13callback_typeEthhPv();
 void _ZN10esp_matter8endpoint6get_idEPj();
 void _ZN10esp_matter8endpoint13get_priv_dataEt();
-void _ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv();
 void _ZN10esp_matter13factory_resetEv();
+void _ZN10esp_matter16get_pairing_codeERNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE();
 void _ZN10esp_matter10is_startedEv();
 void _ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_();
+void _ZN10esp_matter32set_commissionable_data_providerEv();
+void _ZN10esp_matter33set_device_instance_info_providerEPKcS1_();
+void _ZN10esp_matter11set_versionEPKc();
 void _ZN10esp_matter5startEPFvPKN4chip11DeviceLayer15ChipDeviceEventEiEi();
+
+void _ZN10esp_matter7cluster10thermostat9attribute18create_ac_capacityEPjt();
+void _ZN10esp_matter7cluster10thermostat9attribute25create_ac_louver_positionEPjh();
+void _ZN10esp_matter7cluster10thermostat9attribute26create_outdoor_temperatureEPj8nullableIsE();
+
+void _ZN10esp_matter8endpoint12air_purifier6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter8endpoint18air_quality_sensor6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter8endpoint3fan6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter8endpoint14generic_switch6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter8endpoint15humidity_sensor6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter8endpoint12on_off_light6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter8endpoint19on_off_light_switch6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter8endpoint11solar_power6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter8endpoint18temperature_sensor6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter8endpoint10thermostat6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter8endpoint12water_heater6createEPjPNS1_6configEhPv();
+void _ZN10esp_matter8endpoint15window_covering6createEPjPNS1_6configEhPv();
+
+void _ZN10esp_matter8endpoint3fan3addEPjPNS1_6configE();
 
 void init_udp_console(const char* ip);
 BaseType_t xTaskCreatePinnedToCore(TaskFunction_t, const char* const, const configSTACK_DEPTH_TYPE, void* const, UBaseType_t, TaskHandle_t* const, const BaseType_t);
@@ -481,6 +507,7 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(xTimerCreate),
     ESP_ELFSYM_EXPORT(xTimerGenericCommand),
 
+#if HAVE_HOMEKIT
     // hap
 //  ESP_ELFSYM_EXPORT(hap_set_debug_level),
     ESP_ELFSYM_EXPORT(hap_get_version),
@@ -731,7 +758,9 @@ const struct esp_elfsym g_customer_elfsyms[] = {
 
     // hap_database
     ESP_ELFSYM_EXPORT(hap_get_acc_id),
+#endif
 
+#if HAVE_MATTER
     // chip
     ESP_ELFSYM_EXPORT(_ZN4chip26CommissioningWindowManager28OpenBasicCommissioningWindowENSt3__16chrono8durationIjNS1_5ratioILx1ELx1EEEEENS_32CommissioningWindowAdvertisementE),
     ESP_ELFSYM_EXPORT(_ZNK4chip26CommissioningWindowManager25IsCommissioningWindowOpenEv),
@@ -739,19 +768,48 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(_ZN4chip6Server7sServerE),
 
     // esp-matter
-    ESP_ELFSYM_EXPORT(_Z18esp_matter_invalidPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute7get_valEtjjP21esp_matter_attr_val_t),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute6updateEtjjP21esp_matter_attr_val_t),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster3getEPjj),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter20default_app_event_cbEPKN4chip11DeviceLayer15ChipDeviceEventEi),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter29default_app_identification_cbENS_14identification13callback_typeEthhPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6get_idEPj),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13get_priv_dataEt),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter13factory_resetEv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter16get_pairing_codeERNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter10is_startedEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter32set_commissionable_data_providerEv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter33set_device_instance_info_providerEPKcS1_),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter11set_versionEPKc),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter5startEPFvPKN4chip11DeviceLayer15ChipDeviceEventEiEi),
+
+    // cluster
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster10thermostat9attribute18create_ac_capacityEPjt),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster10thermostat9attribute25create_ac_louver_positionEPjh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster10thermostat9attribute26create_outdoor_temperatureEPj8nullableIsE),
+
+    // endpoint create
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12air_purifier6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint18air_quality_sensor6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint3fan6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14generic_switch6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15humidity_sensor6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12on_off_light6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19on_off_light_switch6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11solar_power6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint18temperature_sensor6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint10thermostat6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12water_heater6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15window_covering6createEPjPNS1_6configEhPv),
+
+    // endpoint add
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint3fan3addEPjPNS1_6configE),
+#endif
 
     // end
     ESP_ELFSYM_END
 };
+
+#endif

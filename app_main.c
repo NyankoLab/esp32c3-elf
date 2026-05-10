@@ -49,6 +49,28 @@ int mesh_sta_auth_expire_time(void)
     return 0;
 }
 
+static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data)
+{
+    if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
+        esp_wifi_connect();
+    }
+    else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
+        esp_wifi_connect();
+        ESP_LOGI(TAG, "retry to connect to the AP");
+
+        ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
+    }
+    else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
+        if (fs_stat("preboot") < 0) {
+            int file = fs_open("preboot", "w");
+            if (file) {
+                fs_write("YES", 3, file);
+                fs_close(file);
+            }
+        }
+    }
+}
+
 void app_main(void)
 {
 #if 0
@@ -83,6 +105,7 @@ void app_main(void)
     vfs_init();
     fs_init();
 
+#if HAVE_PREPATCH == 0
     /* Execute ELF */
     if (fs_stat("update") >= 0) {
         fs_remove("update");
@@ -97,12 +120,24 @@ void app_main(void)
     /* Fallback */
     extern void wifi_ap(char const* name, char const* pass);
     wifi_ap("ESP32C3", "ESP32C3");
+#else
+    ESP_ERROR_CHECK(esp_event_loop_create_default());
+    ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL, NULL));
+    ESP_ERROR_CHECK(esp_event_handler_instance_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler, NULL, NULL));
+
+    wifi_config_t config = {};
+    config.sta.scan_method = WIFI_ALL_CHANNEL_SCAN;
+    config.sta.sort_method = WIFI_CONNECT_AP_BY_SIGNAL;
+    ESP_ERROR_CHECK(esp_wifi_disconnect());
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &config));
+    ESP_ERROR_CHECK(esp_wifi_connect());
+#endif
 
     /* OTA */
     extern void ota_init(int);
     ota_init(8685);
 
-    for (int i = 100; i >= 0; i--) {
+    for (int i = 200; i >= 0; i--) {
         ESP_LOGI(TAG, "Restarting in %d seconds...", i);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }

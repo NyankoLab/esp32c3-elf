@@ -4,6 +4,7 @@
 #include <esp_flash.h>
 #include <miniz.h>
 #include <spi_flash_mmap.h>
+#include "fs.h"
 #include "ota.h"
 
 #define TAG __FILE_NAME__
@@ -15,6 +16,7 @@ struct ota_context
     int offset;
     int size;
     void* temp;
+    char* filename;
     esp_ota_handle_t handle;
 };
 static struct ota_context* context IRAM_BSS_ATTR;
@@ -31,9 +33,23 @@ static void ota_handler(TimerHandle_t timer)
         }
         if (context->offset == 0 && context->handle == 0)
         {
-            esp_ota_begin(esp_ota_get_next_update_partition(NULL), context->size, &context->handle);
+            if (strstr(context->filename, ".bin"))
+            {
+                esp_ota_begin(esp_ota_get_next_update_partition(NULL), context->size, &context->handle);
+            }
+            else
+            {
+                context->handle = fs_open(context->filename, "w");
+            }
         }
-        esp_ota_write_with_offset(context->handle, data, length, context->offset);
+        if (strstr(context->filename, ".bin"))
+        {
+            esp_ota_write_with_offset(context->handle, data, length, context->offset);
+        }
+        else
+        {
+            fs_write(data, length, context->handle);
+        }
         context->offset += length;
         ESP_LOGI(TAG, "%d/%d", context->offset, context->size);
         if (length > 0 && length < 1536)
@@ -44,10 +60,18 @@ static void ota_handler(TimerHandle_t timer)
         {
             if (context->offset == context->size)
             {
-                esp_ota_end(context->handle);
-                context->handle = 0;
+                if (strstr(context->filename, ".bin"))
+                {
+                    esp_ota_end(context->handle);
+                    context->handle = 0;
 
-                esp_ota_set_boot_partition(esp_ota_get_next_update_partition(NULL));
+                    esp_ota_set_boot_partition(esp_ota_get_next_update_partition(NULL));
+                }
+                else
+                {
+                    fs_close(context->handle);
+                    context->handle = 0;
+                }
 
                 lwip_send(context->tcp_socket, "OK", 2, 0);
                 vTaskDelay(1000 / portTICK_PERIOD_MS);
@@ -57,7 +81,9 @@ static void ota_handler(TimerHandle_t timer)
             context->tcp_socket = -1;
 
             free(context->temp);
+            free(context->filename);
             context->temp = NULL;
+            context->filename = NULL;
 
             xTimerChangePeriod(timer, 1000 / portTICK_PERIOD_MS, 0);
         }
@@ -74,16 +100,19 @@ static void ota_handler(TimerHandle_t timer)
             const char* remote_port = strsep(&buffer, " \n");
             const char* content_size = strsep(&buffer, " \n");
             const char* file_md5 = strsep(&buffer, " \n");
-            if (command && remote_port && content_size && file_md5)
+            const char* filename = strsep(&buffer, " \n");
+            if (command && remote_port && content_size && file_md5 && filename)
             {
                 ESP_LOGI(TAG, "Command: %s", command);
                 ESP_LOGI(TAG, "Remote port: %s", remote_port);
                 ESP_LOGI(TAG, "Context size: %s", content_size);
                 ESP_LOGI(TAG, "File MD5: %s", file_md5);
+                ESP_LOGI(TAG, "Filename: %s", filename);
 
                 context->offset = 0;
                 context->size = strtol(content_size, NULL, 10);
                 context->temp = realloc(context->temp, 1536);
+                context->filename = strdup(filename);
 
                 context->tcp_socket = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
                 if (context->tcp_socket < 0)

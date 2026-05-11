@@ -60,6 +60,7 @@ static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_
 
         ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
     }
+#if HAVE_PREPATCH
     else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
         if (fs_stat("preboot") < 0) {
             int file = fs_open("preboot", "w");
@@ -67,8 +68,12 @@ static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_
                 fs_write("YES", 3, file);
                 fs_close(file);
             }
+
+            extern void update();
+            update();
         }
     }
+#endif
 }
 
 void app_main(void)
@@ -116,6 +121,10 @@ void app_main(void)
     else {
         execv("main.elf", NULL);
     }
+
+    ESP_ERROR_CHECK(esp_event_loop_create_default());
+    ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL, NULL));
+    ESP_ERROR_CHECK(esp_event_handler_instance_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler, NULL, NULL));
 
     /* Fallback */
     extern void wifi_ap(char const* name, char const* pass);

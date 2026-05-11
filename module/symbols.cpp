@@ -1,4 +1,7 @@
 #include "esp32c3.h"
+
+extern "C" {
+
 #include <sys/socket.h>
 #include <sys/stat.h>
 //#include <driver/i2c_master.h>
@@ -69,6 +72,7 @@ void _ZN10esp_matter29default_app_identification_cbENS_14identification13callbac
 void _ZN10esp_matter8endpoint6get_idEPj();
 void _ZN10esp_matter8endpoint13get_priv_dataEt();
 void _ZN10esp_matter13factory_resetEv();
+void _ZN10esp_matter16get_fabric_countEv();
 void _ZN10esp_matter16get_pairing_codeERNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE();
 void _ZN10esp_matter10is_startedEv();
 void _ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_();
@@ -101,7 +105,10 @@ void init_udp_console(const char* ip);
 BaseType_t xTaskCreatePinnedToCore(TaskFunction_t, const char* const, const configSTACK_DEPTH_TYPE, void* const, UBaseType_t, TaskHandle_t* const, const BaseType_t);
 extern esp_app_desc_t esp_app_desc;
 
-const struct esp_elfsym g_customer_elfsyms[] = {
+#undef ESP_ELFSYM_EXPORT
+#define ESP_ELFSYM_EXPORT(_sym) { #_sym, (void*)&_sym }
+
+extern const struct esp_elfsym g_customer_elfsyms[] = {
 
     // c
     ESP_ELFSYM_EXPORT(abort),
@@ -776,6 +783,7 @@ const struct esp_elfsym g_customer_elfsyms[] = {
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6get_idEPj),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13get_priv_dataEt),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter13factory_resetEv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter16get_fabric_countEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter16get_pairing_codeERNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter10is_startedEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_),
@@ -813,3 +821,5 @@ const struct esp_elfsym g_customer_elfsyms[] = {
 };
 
 #endif
+
+}   // extern "C"

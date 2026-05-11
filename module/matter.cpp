@@ -1,5 +1,8 @@
 #include "esp32c3.h"
 
+#pragma clang diagnostic ignored "-Wnon-c-typedef-for-linkage"
+#pragma clang diagnostic ignored "-Wunreachable-code"
+
 #include <esp_log.h>
 #include <esp_matter.h>
 #include <esp_ota_ops.h>
@@ -241,6 +244,11 @@ static char version[32] = { VersionHelper };
 void set_version(const char* string)
 {
     strcpy(version, string);
+}
+
+int get_fabric_count()
+{
+    return chip::Server::GetInstance().GetFabricTable().FabricCount();
 }
 
 void get_pairing_code(std::string& code)

@@ -67,6 +67,24 @@ index e4f9f905a6..98a6feaced 100644
  {
      guard_t* g = reinterpret_cast<guard_t*>(pg);
      const auto scheduler_started = xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED;
+diff --git a/components/esp_http_server/src/httpd_txrx.c b/components/esp_http_server/src/httpd_txrx.c
+index b0998d420e..abe9e85a6e 100644
+--- a/components/esp_http_server/src/httpd_txrx.c
++++ b/components/esp_http_server/src/httpd_txrx.c
+@@ -240,11 +240,13 @@ esp_err_t httpd_resp_set_type(httpd_req_t *r, const char *type)
+         return ESP_ERR_HTTPD_INVALID_REQ;
+     }
+ 
++#if 0
+     /* Reject CRLF in content type */
+     if (strpbrk(type, "\r\n")) {
+         ESP_LOGW(TAG, LOG_FMT("rejecting content type with CRLF: %.32s"), type);
+         return ESP_ERR_INVALID_ARG;
+     }
++#endif
+ 
+     struct httpd_req_aux *ra = r->aux;
+     ra->content_type = (char *)type;
 diff --git a/components/newlib/platform_include/assert.h b/components/newlib/platform_include/assert.h
 index 1834290fc6..6810b91f3a 100644
 --- a/components/newlib/platform_include/assert.h
@@ -81,10 +99,10 @@ index 1834290fc6..6810b91f3a 100644
  
  #include_next <assert.h>
 diff --git a/components/wpa_supplicant/CMakeLists.txt b/components/wpa_supplicant/CMakeLists.txt
-index 4039ab4345..608d0784ab 100644
+index 12137f922a..6617ec53fe 100644
 --- a/components/wpa_supplicant/CMakeLists.txt
 +++ b/components/wpa_supplicant/CMakeLists.txt
-@@ -179,6 +179,7 @@ else()
+@@ -181,6 +181,7 @@ else()
      "src/crypto/sha256-internal.c"
      "src/crypto/sha256.c"
      "src/crypto/sha384-internal.c"
@@ -92,7 +110,7 @@ index 4039ab4345..608d0784ab 100644
      "src/crypto/sha512-internal.c"
      "src/crypto/sha256.c")
  endif()
-@@ -333,6 +334,8 @@ if(NOT CONFIG_ESP_WIFI_MBEDTLS_TLS_CLIENT)
+@@ -339,6 +340,8 @@ if(NOT CONFIG_ESP_WIFI_MBEDTLS_TLS_CLIENT)
  endif()
  if(CONFIG_ESP_WIFI_MBEDTLS_CRYPTO)
      target_compile_definitions(${COMPONENT_LIB} PRIVATE CONFIG_CRYPTO_MBEDTLS)

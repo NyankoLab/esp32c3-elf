@@ -248,11 +248,15 @@ void set_version(const char* string)
 
 int get_fabric_count()
 {
+    if (esp_matter::is_started() == false)
+        return 0;
     return chip::Server::GetInstance().GetFabricTable().FabricCount();
 }
 
 void get_pairing_code(std::string& code)
 {
+    if (esp_matter::is_started() == false)
+        return;
     chip::DeviceLayer::CommissionableDataProvider* provider = chip::DeviceLayer::GetCommissionableDataProvider();
     if (provider == nullptr)
         return;
@@ -280,3 +284,5 @@ CHIP_ERROR ConfigurationManagerImpl::GetSoftwareVersionString(char * buf, size_t
 }
 } // namespace DeviceLayer
 } // namespace chip
+
+void emberAfDoorLockClusterInitCallback(chip::EndpointId endpoint) {}

@@ -1,165 +1,183 @@
-#include "esp32c3.h"
+#define memcpy memcpy_used
+#define memset memset_used
+#define strchr strchr_used
+#define strcmp strcmp_used
+#define strcspn strcspn_used
+#define strerror strerror_used
+#define strlen strlen_used
+#define strncat strncat_used
+#define strrchr strrchr_used
+#define _ctype_ _ctype_used
+#define __getreent __getreent_unused
+#include <algorithm>
+#include <array>
+#undef memcpy
+#undef memset
+#undef strchr
+#undef strcmp
+#undef strcspn
+#undef strerror
+#undef strlen
+#undef strncat
+#undef strrchr
+#undef _ctype_
+#undef __getreent
 
-extern "C" {
+#define SNTP_MONITOR_SERVER_REACHABILITY 1
+#define SNTP_SERVER_DNS 1
+#define SNTP_GET_SERVERS_FROM_DHCP 0
 
-#include <sys/socket.h>
-#include <sys/stat.h>
-//#include <driver/i2c_master.h>
-#include <driver/spi_slave.h>
-//#include <esp_lcd_io_i2c.h>
-//#include <esp_lcd_panel_ops.h>
-//#include <esp_lcd_panel_ssd1306.h>
-//#define CONFIG_ADC_SUPPRESS_DEPRECATE_WARN 1
-//#include <esp_adc_cal.h>
-#include <esp_adc/adc_oneshot.h>
-#include <esp_ota_ops.h>
-#include <esp_private/esp_clk.h>
-#include <esp_private/periph_ctrl.h>
-#include <soc/gpio_periph.h>
-#include <soc/uart_periph.h>
-#include <lwip/apps/sntp.h>
-#include <hap.h>
-#include <hap_apple_chars.h>
-#include <hap_apple_servs.h>
-#include <esp_hap_controllers.h>
-#include <esp_hap_database.h>
-#include "dlfcn.h"
-#include "ethernet.h"
-#include "httpd.h"
-#include "https.h"
-#include "lcd.h"
-#include "mqtt.h"
-#include "ota.h"
-#include "temperature.h"
-#include "wifi.h"
-#include "elf_loader/include/private/elf_symbol.h"
+#define HAVE_HOMEKIT 1
+#define HAVE_MATTER 1
+#define HAVE_PREPATCH 0
 
-#if HAVE_PREPATCH == 0
+#define FNV_32_PRIME 0x01000193
+#define FNV_32_INIT  0x811c9dc5
 
-void* _Znaj(unsigned int s) { return malloc(s); }
-void* _Znwj(unsigned int s) { return malloc(s); }
-void _ZdaPv(void* p) { free(p); }
-void _ZdlPv(void* p) { free(p); }
-void _ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findEcj();
-void _ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findEPKcj();
-void _ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findERKS5_j();
-void _ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE5emptyEv();
-void _ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6substrEjj();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE5clearEv();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6__initEPKcj();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKc();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKcj();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendERKS5_();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6assignEPKc();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6resizeEj();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7replaceEjjPKc();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE9push_backEc();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEaSEOS5_();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2ILi0EEEPKc();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED1Ev();
-void _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED2Ev();
+constexpr unsigned int fnv1a(const char* string)
+{
+    unsigned int hash = FNV_32_INIT;
+    for (char c; (c = (*string)); ++string) {
+        hash ^= c;
+        hash *= FNV_32_PRIME;
+    }
+    return hash;
+}
 
-void _ZN4chip26CommissioningWindowManager28OpenBasicCommissioningWindowENSt3__16chrono8durationIjNS1_5ratioILx1ELx1EEEEENS_32CommissioningWindowAdvertisementE();
-void _ZNK4chip26CommissioningWindowManager25IsCommissioningWindowOpenEv();
-void _ZN4chip11DeviceLayer29SetDeviceInstanceInfoProviderEPNS0_26DeviceInstanceInfoProviderE();
-void _ZN4chip6Server7sServerE();
+struct esp_elfsym
+{
+    unsigned int name = 0;
+    void* symbol = nullptr;
+    constexpr operator unsigned int() const {
+        return name;
+    }
+};
 
-void _ZN10esp_matter9attribute7get_valEtjjP21esp_matter_attr_val_t();
-void _ZN10esp_matter9attribute6reportEtjjP21esp_matter_attr_val_t();
-void _ZN10esp_matter9attribute6updateEtjjP21esp_matter_attr_val_t();
-void _ZN10esp_matter7cluster3getEPjj();
-void _ZN10esp_matter20default_app_event_cbEPKN4chip11DeviceLayer15ChipDeviceEventEi();
-void _ZN10esp_matter29default_app_identification_cbENS_14identification13callback_typeEthhPv();
-void _ZN10esp_matter8endpoint6get_idEPj();
-void _ZN10esp_matter8endpoint13get_priv_dataEt();
-void _ZN10esp_matter13factory_resetEv();
-void _ZN10esp_matter16get_fabric_countEv();
-void _ZN10esp_matter16get_pairing_codeERNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE();
-void _ZN10esp_matter10is_startedEv();
-void _ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_();
-void _ZN10esp_matter32set_commissionable_data_providerEv();
-void _ZN10esp_matter33set_device_instance_info_providerEPKcS1_();
-void _ZN10esp_matter11set_versionEPKc();
-void _ZN10esp_matter5startEPFvPKN4chip11DeviceLayer15ChipDeviceEventEiEi();
+consteval std::array<esp_elfsym, 438> create_customer_table()
+{
+    std::array<esp_elfsym, 438> table;
+    int i = 0;
 
-void _ZN10esp_matter7cluster10thermostat9attribute18create_ac_capacityEPjt();
-void _ZN10esp_matter7cluster10thermostat9attribute25create_ac_louver_positionEPjh();
-void _ZN10esp_matter7cluster10thermostat9attribute26create_outdoor_temperatureEPj8nullableIsE();
+#define ESP_ELFSYM_EXPORT(_sym) \
+    (void)0; \
+    extern int _sym; \
+    auto hash ## _ ## _sym = fnv1a(#_sym); \
+    for (int j = 0; j < i; ++j) { \
+        if (table[j].name == hash ## _ ## _sym) \
+            return {}; \
+    } \
+    table[i].name = hash ## _ ## _sym; \
+    table[i++].symbol = &_sym; \
+    (void)0
+#define ESP_ELFSYM_END (void)0;
 
-// 1.0
-void _ZN10esp_matter8endpoint12on_off_light3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint12on_off_light6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint14dimmable_light3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint14dimmable_light6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint23color_temperature_light3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint23color_temperature_light6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint20extended_color_light3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint20extended_color_light6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint19on_off_plug_in_unit3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint19on_off_plug_in_unit6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint21dimmable_plug_in_unit3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint21dimmable_plug_in_unit6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint10thermostat3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint10thermostat6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint15window_covering3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint15window_covering6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint18temperature_sensor3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint18temperature_sensor6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint15humidity_sensor3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint15humidity_sensor6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint16occupancy_sensor3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint16occupancy_sensor6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint14contact_sensor3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint14contact_sensor6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint12light_sensor3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint12light_sensor6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint9door_lock3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint9door_lock6createEPjPNS1_6configEhPv();
+    /* string.h */
 
-// 1.2
-void _ZN10esp_matter8endpoint12air_purifier3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint12air_purifier6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint3fan3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint3fan6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint14smoke_co_alarm3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint14smoke_co_alarm6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint22robotic_vacuum_cleaner3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint22robotic_vacuum_cleaner6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint11energy_evse3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint11energy_evse6createEPjPNS1_6configEhPv();
+    ESP_ELFSYM_EXPORT(strerror),
+    ESP_ELFSYM_EXPORT(memset),
+    ESP_ELFSYM_EXPORT(memcpy),
+    ESP_ELFSYM_EXPORT(strlen),
+    ESP_ELFSYM_EXPORT(strtod),
+    ESP_ELFSYM_EXPORT(strrchr),
+    ESP_ELFSYM_EXPORT(strchr),
+    ESP_ELFSYM_EXPORT(strcmp),
+    ESP_ELFSYM_EXPORT(strtol),
+    ESP_ELFSYM_EXPORT(strcspn),
+    ESP_ELFSYM_EXPORT(strncat),
 
-// 1.3
-void _ZN10esp_matter8endpoint18air_quality_sensor3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint18air_quality_sensor6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint20room_air_conditioner3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint19water_leak_detector3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint19water_leak_detector6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint11water_valve3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint11water_valve6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint12water_heater3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint12water_heater6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint9heat_pump3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint9heat_pump6createEPjPNS1_6configEhPv();
+    /* stdio.h */
 
-// 1.4
-void _ZN10esp_matter8endpoint5chime3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint5chime6createEPjPNS1_6configEhPv();
-void _ZN10esp_matter8endpoint7closure3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint7closure6createEPjPNS1_6configEhPv();
+    ESP_ELFSYM_EXPORT(puts),
+    ESP_ELFSYM_EXPORT(putchar),
+    ESP_ELFSYM_EXPORT(fputc),
+    ESP_ELFSYM_EXPORT(fputs),
+    ESP_ELFSYM_EXPORT(printf),
+    ESP_ELFSYM_EXPORT(vfprintf),
+    ESP_ELFSYM_EXPORT(fprintf),
+    ESP_ELFSYM_EXPORT(fwrite),
 
-// 1.5
-void _ZN10esp_matter8endpoint6camera3addEPjPNS1_6configE();
-void _ZN10esp_matter8endpoint6camera6createEPjPNS1_6configEhPv();
+    /* unistd.h */
 
-void init_udp_console(const char* ip);
-BaseType_t xTaskCreatePinnedToCore(TaskFunction_t, const char* const, const configSTACK_DEPTH_TYPE, void* const, UBaseType_t, TaskHandle_t* const, const BaseType_t);
-extern esp_app_desc_t esp_app_desc;
+    ESP_ELFSYM_EXPORT(usleep),
+    ESP_ELFSYM_EXPORT(sleep),
+    ESP_ELFSYM_EXPORT(exit),
+    ESP_ELFSYM_EXPORT(close),
 
-#undef ESP_ELFSYM_EXPORT
-#define ESP_ELFSYM_EXPORT(_sym) { #_sym, (void*)&_sym }
+    /* stdlib.h */
 
-extern const struct esp_elfsym g_customer_elfsyms[] = {
+    ESP_ELFSYM_EXPORT(malloc),
+    ESP_ELFSYM_EXPORT(calloc),
+    ESP_ELFSYM_EXPORT(realloc),
+    ESP_ELFSYM_EXPORT(free),
+
+    /* time.h */
+
+    ESP_ELFSYM_EXPORT(clock_gettime),
+    ESP_ELFSYM_EXPORT(strftime),
+
+    /* pthread.h */
+
+    ESP_ELFSYM_EXPORT(pthread_create),
+    ESP_ELFSYM_EXPORT(pthread_attr_init),
+    ESP_ELFSYM_EXPORT(pthread_attr_setstacksize),
+    ESP_ELFSYM_EXPORT(pthread_detach),
+    ESP_ELFSYM_EXPORT(pthread_join),
+    ESP_ELFSYM_EXPORT(pthread_exit),
+
+    /* newlib */
+
+    ESP_ELFSYM_EXPORT(__errno),
+    ESP_ELFSYM_EXPORT(__getreent),
+#ifdef __HAVE_LOCALE_INFO__
+    ESP_ELFSYM_EXPORT(__locale_ctype_ptr),
+#else
+    ESP_ELFSYM_EXPORT(_ctype_),
+#endif
+
+    /* math */
+
+    ESP_ELFSYM_EXPORT(__ltdf2),
+    ESP_ELFSYM_EXPORT(__fixunsdfsi),
+    ESP_ELFSYM_EXPORT(__gtdf2),
+    ESP_ELFSYM_EXPORT(__floatunsidf),
+    ESP_ELFSYM_EXPORT(__divdf3),
+
+    /* getopt.h */
+
+    ESP_ELFSYM_EXPORT(getopt_long),
+    ESP_ELFSYM_EXPORT(optind),
+    ESP_ELFSYM_EXPORT(opterr),
+    ESP_ELFSYM_EXPORT(optarg),
+    ESP_ELFSYM_EXPORT(optopt),
+
+    /* setjmp.h */
+
+    ESP_ELFSYM_EXPORT(longjmp),
+    ESP_ELFSYM_EXPORT(setjmp),
+
+    /* sys/socket.h */
+
+    ESP_ELFSYM_EXPORT(lwip_bind),
+    ESP_ELFSYM_EXPORT(lwip_setsockopt),
+    ESP_ELFSYM_EXPORT(lwip_socket),
+    ESP_ELFSYM_EXPORT(lwip_listen),
+    ESP_ELFSYM_EXPORT(lwip_accept),
+    ESP_ELFSYM_EXPORT(lwip_recv),
+    ESP_ELFSYM_EXPORT(lwip_recvfrom),
+    ESP_ELFSYM_EXPORT(lwip_send),
+    ESP_ELFSYM_EXPORT(lwip_sendto),
+    ESP_ELFSYM_EXPORT(lwip_connect),
+
+    /* arpa/inet.h */
+
+    ESP_ELFSYM_EXPORT(ipaddr_addr),
+    ESP_ELFSYM_EXPORT(lwip_htons),
+    ESP_ELFSYM_EXPORT(lwip_htonl),
+    ESP_ELFSYM_EXPORT(ip4addr_ntoa),
+
+    /* ROM functions */
+
+    ESP_ELFSYM_EXPORT(ets_printf),
 
     // c
     ESP_ELFSYM_EXPORT(abort),
@@ -918,8 +936,19 @@ extern const struct esp_elfsym g_customer_elfsyms[] = {
 
     // end
     ESP_ELFSYM_END
+
+    std::sort(table.begin(), table.end());
+    return table;
 };
 
-#endif
+extern "C" constexpr const auto g_customer_elfsyms = create_customer_table();
+static_assert(g_customer_elfsyms[0].name != 0);
 
-}   // extern "C"
+extern "C" void* __wrap_elf_find_sym(const char* sym_name)
+{
+    auto hash = fnv1a(sym_name);
+    auto it = std::lower_bound(g_customer_elfsyms.begin(), g_customer_elfsyms.end(), hash);
+    if (it != g_customer_elfsyms.end() && (*it).name == hash)
+        return (*it).symbol;
+    return nullptr;
+}

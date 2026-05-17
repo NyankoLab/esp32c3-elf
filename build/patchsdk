@@ -85,6 +85,18 @@ index b0998d420e..abe9e85a6e 100644
  
      struct httpd_req_aux *ra = r->aux;
      ra->content_type = (char *)type;
+diff --git a/components/esp_system/ld/ld.flash.sections b/components/esp_system/ld/ld.flash.sections
+index 72cab78373..49f8618a35 100644
+--- a/components/esp_system/ld/ld.flash.sections
++++ b/components/esp_system/ld/ld.flash.sections
+@@ -96,6 +96,7 @@
+   {
+     _flash_rodata_start = ABSOLUTE(.);
+ 
++    *(.rodata..L.*)    
+     SECTION_MAPPINGS(flash_rodata)
+ 
+ #if CONFIG_LIBC_PICOLIBC
 diff --git a/components/newlib/platform_include/assert.h b/components/newlib/platform_include/assert.h
 index 1834290fc6..6810b91f3a 100644
 --- a/components/newlib/platform_include/assert.h

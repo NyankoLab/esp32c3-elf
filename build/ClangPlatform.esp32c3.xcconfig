@@ -389,6 +389,8 @@ OTHER_LDFLAGS = $(inherited) -Wl,-wrap,mkdir
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,remove
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,rename
 
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,elf_find_sym
+
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,hap_httpd_start
 
 ARCHS = riscv32

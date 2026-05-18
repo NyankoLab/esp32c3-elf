@@ -44,6 +44,11 @@ const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc =
                "(" "clang version " __XSTRING(__clang_major__) "." __XSTRING(__clang_minor__) "." __XSTRING(__clang_patchlevel__) ")"
 };
 
+bool esp_wifi_use_supp_pmk_cache(void)
+{
+    return false;
+}
+
 int mesh_sta_auth_expire_time(void)
 {
     return 0;

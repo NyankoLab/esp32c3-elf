@@ -38,6 +38,7 @@
 		D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A6D2CEB43C8009AF784 /* httpd.c */; };
 		D6FC9AA22CECD11B009AF784 /* ota.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A9F2CECD11B009AF784 /* ota.c */; };
 		D6FC9AA32CECD11B009AF784 /* temperature.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9AA02CECD11B009AF784 /* temperature.c */; };
+		F543D84F2FBAF06600DE9187 /* mbedtls.c in Sources */ = {isa = PBXBuildFile; fileRef = F543D84E2FBAF05B00DE9187 /* mbedtls.c */; };
 		F54D9C002DAAA9EB00B429A9 /* lcd.c in Sources */ = {isa = PBXBuildFile; fileRef = F54D9BFF2DAAA9EB00B429A9 /* lcd.c */; };
 		F5BF0D212FA785A400F82963 /* matter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5BF0D202FA7859900F82963 /* matter.cpp */; };
 		F5F5E4132DA3E62F00BA4DF0 /* wifi.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5E4122DA3E62F00BA4DF0 /* wifi.c */; };
@@ -93,6 +94,7 @@
 		D6FC9A9F2CECD11B009AF784 /* ota.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ota.c; path = ../module/ota.c; sourceTree = "<group>"; };
 		D6FC9AA02CECD11B009AF784 /* temperature.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = temperature.c; path = ../module/temperature.c; sourceTree = "<group>"; };
 		D6FC9AA12CECD11B009AF784 /* temperature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = temperature.h; path = ../module/temperature.h; sourceTree = "<group>"; };
+		F543D84E2FBAF05B00DE9187 /* mbedtls.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mbedtls.c; sourceTree = "<group>"; };
 		F54D9BFF2DAAA9EB00B429A9 /* lcd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lcd.c; sourceTree = "<group>"; };
 		F54D9C012DAAAD1000B429A9 /* lcd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lcd.h; sourceTree = "<group>"; };
 		F5BF0D202FA7859900F82963 /* matter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = matter.cpp; sourceTree = "<group>"; };
@@ -220,11 +222,12 @@
 		D6741A7C2CE610470024FB04 /* patch */ = {
 			isa = PBXGroup;
 			children = (
-				F5FA569D2FA09182008340EA /* memory.cpp */,
-				F5FA569B2FA0915A008340EA /* hash.cpp */,
 				D6619E402DA2303F001C8599 /* cxx.cpp */,
 				D6619E412DA2303F001C8599 /* file.c */,
+				F5FA569B2FA0915A008340EA /* hash.cpp */,
 				D6619E422DA2303F001C8599 /* homekit.c */,
+				F543D84E2FBAF05B00DE9187 /* mbedtls.c */,
+				F5FA569D2FA09182008340EA /* memory.cpp */,
 				D6619E432DA2303F001C8599 /* nvs.c */,
 				D6619E442DA2303F001C8599 /* vfs.c */,
 			);
@@ -351,6 +354,7 @@
 				D6619E452DA2303F001C8599 /* homekit.c in Sources */,
 				D6619E482DA2303F001C8599 /* cxx.cpp in Sources */,
 				D6619E492DA2303F001C8599 /* file.c in Sources */,
+				F543D84F2FBAF06600DE9187 /* mbedtls.c in Sources */,
 				F5FA569C2FA0915A008340EA /* hash.cpp in Sources */,
 				D6619E462DA2303F001C8599 /* nvs.c in Sources */,
 				D6619E472DA2303F001C8599 /* vfs.c in Sources */,

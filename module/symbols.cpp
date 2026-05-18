@@ -27,15 +27,14 @@
 #define SNTP_SERVER_DNS 1
 #define SNTP_GET_SERVERS_FROM_DHCP 0
 
-#define HAVE_HOMEKIT 1
+#define HAVE_HOMEKIT 0
 #define HAVE_MATTER 1
 #define HAVE_PREPATCH 0
 
-#define FNV_32_PRIME 0x01000193
-#define FNV_32_INIT  0x811c9dc5
-
 constexpr unsigned int fnv1a(const char* string)
 {
+#define FNV_32_PRIME 0x01000193
+#define FNV_32_INIT  0x811c9dc5
     unsigned int hash = FNV_32_INIT;
     for (char c; (c = (*string)); ++string) {
         hash ^= c;
@@ -44,7 +43,7 @@ constexpr unsigned int fnv1a(const char* string)
     return hash;
 }
 
-struct esp_elfsym
+struct hashed_elfsym
 {
     unsigned int name = 0;
     void* symbol = nullptr;
@@ -53,9 +52,25 @@ struct esp_elfsym
     }
 };
 
-consteval std::array<esp_elfsym, 438> create_customer_table()
+// Base     223
+// HomeKit  171
+// Matter   44
+#define BASE_COUNT      223
+#if HAVE_HOMEKIT
+#define HAP_COUNT       171
+#else
+#define HAP_COUNT       0
+#endif
+#if HAVE_MATTER
+#define MATTER_COUNT    44
+#else
+#define MATTER_COUNT    0
+#endif
+#define ARRAY_COUNT     BASE_COUNT + HAP_COUNT + MATTER_COUNT
+
+consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
 {
-    std::array<esp_elfsym, 438> table;
+    std::array<hashed_elfsym, ARRAY_COUNT> table;
     int i = 0;
 
 #define ESP_ELFSYM_EXPORT(_sym) \
@@ -941,7 +956,7 @@ consteval std::array<esp_elfsym, 438> create_customer_table()
     return table;
 };
 
-extern "C" constexpr const auto g_customer_elfsyms = create_customer_table();
+static constexpr const auto g_customer_elfsyms = create_customer_table();
 static_assert(g_customer_elfsyms[0].name != 0);
 
 extern "C" void* __wrap_elf_find_sym(const char* sym_name)

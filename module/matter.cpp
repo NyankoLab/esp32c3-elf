@@ -1,5 +1,7 @@
 #include "esp32c3.h"
 
+#if HAVE_MATTER
+
 #pragma clang diagnostic ignored "-Wnon-c-typedef-for-linkage"
 #pragma clang diagnostic ignored "-Wunreachable-code"
 
@@ -286,3 +288,5 @@ CHIP_ERROR ConfigurationManagerImpl::GetSoftwareVersionString(char * buf, size_t
 } // namespace chip
 
 void emberAfDoorLockClusterInitCallback(chip::EndpointId endpoint) {}
+
+#endif

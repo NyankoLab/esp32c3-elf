@@ -2,12 +2,12 @@
 #include <sys/socket.h>
 #include "httpd.h"
 
+#ifndef HTTPD_FULL
+
 #define HTTPD_STACK_SIZE 3584
 #define HTTPD_MAX_CONNECTIONS 16
 
 #define TAG __FILE_NAME__
-
-#ifndef HTTPD_FULL
 
 struct httpd_uri_node
 {
@@ -110,7 +110,7 @@ static void httpd_handler(void* arg)
                             else
                             {
                                 req->method = fd;
-                                for (int i = 0; i < HTTPD_MAX_URI_LEN; ++i)
+                                for (int i = 0; i < CONFIG_HTTPD_MAX_URI_LEN; ++i)
                                 {
                                     length = i;
                                     char c = buf[i + 4];
@@ -275,8 +275,7 @@ esp_err_t httpd_query_key_value(const char* qry, const char* key, char* val, siz
     if (temp)
     {
         char* token = temp;
-        char* path = strsep(&token, "?=&");
-        while (path)
+        for (;;)
         {
             char* left = strsep(&token, "?=&");
             char* right = strsep(&token, "?=&");

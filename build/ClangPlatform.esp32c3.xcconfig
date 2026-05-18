@@ -228,7 +228,6 @@ OTHER_LDFLAGS = $(inherited) -lesp_driver_i2c
 OTHER_LDFLAGS = $(inherited) -lesp_driver_spi
 OTHER_LDFLAGS = $(inherited) -lesp_eth
 OTHER_LDFLAGS = $(inherited) -lesp_event
-OTHER_LDFLAGS = $(inherited) -lesp_http_server
 OTHER_LDFLAGS = $(inherited) -lesp_hw_support
 //OTHER_LDFLAGS = $(inherited) -lesp_gdbstub
 OTHER_LDFLAGS = $(inherited) -lesp_lcd
@@ -246,7 +245,6 @@ OTHER_LDFLAGS = $(inherited) -lesp_wifi
 OTHER_LDFLAGS = $(inherited) -lfreertos
 OTHER_LDFLAGS = $(inherited) -lhal
 OTHER_LDFLAGS = $(inherited) -lheap
-OTHER_LDFLAGS = $(inherited) -lhttp_parser
 OTHER_LDFLAGS = $(inherited) -llog
 OTHER_LDFLAGS = $(inherited) -llwip
 OTHER_LDFLAGS = $(inherited) -lmbedcrypto
@@ -391,8 +389,6 @@ OTHER_LDFLAGS = $(inherited) -Wl,-wrap,rename
 
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,elf_find_sym
 
-OTHER_LDFLAGS = $(inherited) -Wl,-wrap,hap_httpd_start
-
 ARCHS = riscv32
 ARCHS_STANDARD = riscv32
 VALID_ARCHS = riscv32
@@ -400,30 +396,35 @@ EXCLUDED_ARCHS =
 
 // esp-homekit-sdk
 
-HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-homekit-sdk/components/homekit/esp_hap_apple_profiles/include
-HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-homekit-sdk/components/homekit/esp_hap_core/include
-HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-homekit-sdk/components/homekit/esp_hap_core/src/priv_includes
-HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/managed_components/espressif__mdns/include
-
-LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hap_apple_profiles
-LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hap_core
-LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hap_platform
-LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/espressif__json_generator
-LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/espressif__json_parser
-LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/espressif__libsodium
-LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/espressif__mdns
-LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/hkdf-sha
-LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/mu_srp
-
-OTHER_LDFLAGS = $(inherited) -lesp_hap_apple_profiles
-OTHER_LDFLAGS = $(inherited) -lesp_hap_core
-OTHER_LDFLAGS = $(inherited) -lesp_hap_platform
-OTHER_LDFLAGS = $(inherited) -lespressif__json_generator
-OTHER_LDFLAGS = $(inherited) -lespressif__json_parser
-OTHER_LDFLAGS = $(inherited) -lespressif__libsodium
-OTHER_LDFLAGS = $(inherited) -lespressif__mdns
-OTHER_LDFLAGS = $(inherited) -lhkdf-sha
-OTHER_LDFLAGS = $(inherited) -lmu_srp
+//HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-homekit-sdk/components/homekit/esp_hap_apple_profiles/include
+//HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-homekit-sdk/components/homekit/esp_hap_core/include
+//HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-homekit-sdk/components/homekit/esp_hap_core/src/priv_includes
+//HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/managed_components/espressif__mdns/include
+//
+//LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hap_apple_profiles
+//LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hap_core
+//LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hap_platform
+//LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/espressif__json_generator
+//LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/espressif__json_parser
+//LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/espressif__libsodium
+//LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/espressif__mdns
+//LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/hkdf-sha
+//LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/mu_srp
+//
+//OTHER_LDFLAGS = $(inherited) -lesp_http_server
+//OTHER_LDFLAGS = $(inherited) -lhttp_parser
+//
+//OTHER_LDFLAGS = $(inherited) -lesp_hap_apple_profiles
+//OTHER_LDFLAGS = $(inherited) -lesp_hap_core
+//OTHER_LDFLAGS = $(inherited) -lesp_hap_platform
+//OTHER_LDFLAGS = $(inherited) -lespressif__json_generator
+//OTHER_LDFLAGS = $(inherited) -lespressif__json_parser
+//OTHER_LDFLAGS = $(inherited) -lespressif__libsodium
+//OTHER_LDFLAGS = $(inherited) -lespressif__mdns
+//OTHER_LDFLAGS = $(inherited) -lhkdf-sha
+//OTHER_LDFLAGS = $(inherited) -lmu_srp
+//
+//OTHER_LDFLAGS = $(inherited) -Wl,-wrap,hap_httpd_start
 
 // esp-matter
 

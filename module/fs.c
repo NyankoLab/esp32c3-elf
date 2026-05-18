@@ -5,7 +5,7 @@
 
 #define IROM_ADDR   0x42000000
 #define PHYS_BEGIN  0x42020000
-#define PHYS_END    0x420A0000
+#define PHYS_END    0x420E0000
 #define PHYS_ADDR   (PHYS_BEGIN - IROM_ADDR)
 #define PHYS_SIZE   (PHYS_END - PHYS_BEGIN)
 #define PHYS_PAGE   0x100

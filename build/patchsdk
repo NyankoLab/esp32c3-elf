@@ -318,19 +318,21 @@ index 1bbd80ade8..07b877d9a4 100644
  	case 2: /* md2WithRSAEncryption */
  	default:
  		wpa_printf(MSG_INFO, "X509: Unsupported certificate signature "
-diff --git a/tools/cmake/third_party/GetGitRevisionDescription.cmake b/tools/cmake/third_party/GetGitRevisionDescription.cmake
-index 53428e2cb8..381d173b30 100644
---- a/tools/cmake/third_party/GetGitRevisionDescription.cmake
-+++ b/tools/cmake/third_party/GetGitRevisionDescription.cmake
-@@ -118,7 +118,7 @@ function(git_describe _var _repo_dir)
-         describe
-         "--always"
-         "--tags"
--        "--dirty"
-+#       "--dirty"
-         ${ARGN}
-         WORKING_DIRECTORY
-         "${CMAKE_CURRENT_SOURCE_DIR}"
+diff --git a/tools/cmake/build.cmake b/tools/cmake/build.cmake
+index c323d9eac1..2e98b950af 100644
+--- a/tools/cmake/build.cmake
++++ b/tools/cmake/build.cmake
+@@ -100,8 +100,8 @@ function(__build_get_idf_git_revision)
+     if(EXISTS "${idf_path}/version.txt")
+         file(STRINGS "${idf_path}/version.txt" idf_ver_t)
+         set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${idf_path}/version.txt")
+-    elseif(idf_ver_git)
+-        set(idf_ver_t ${idf_ver_git})
++#   elseif(idf_ver_git)
++#       set(idf_ver_t ${idf_ver_git})
+     else()
+         set(idf_ver_t "v${IDF_VERSION_MAJOR}.${IDF_VERSION_MINOR}.${IDF_VERSION_PATCH}")
+     endif()
 diff --git a/tools/cmake/toolchain-clang-esp32c3.cmake b/tools/cmake/toolchain-clang-esp32c3.cmake
 index 3d7593a2d3..470b39febe 100644
 --- a/tools/cmake/toolchain-clang-esp32c3.cmake

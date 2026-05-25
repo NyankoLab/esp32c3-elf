@@ -60,7 +60,7 @@ static int8_t eth_spi_phy_rst0_gpio;
 #undef TAG
 #define TAG "ethernet"
 
-static void (*eth_connected_handler)(void);
+static void (*eth_connected_handler)(void) IRAM_BSS_ATTR;
 
 /** Event handler for Ethernet events */
 static void eth_event_handler(void *arg, esp_event_base_t event_base,

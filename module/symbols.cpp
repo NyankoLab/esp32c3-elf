@@ -52,10 +52,10 @@ struct hashed_elfsym
     }
 };
 
-// Base     223
+// Base     179
 // HomeKit  171
 // Matter   44
-#define BASE_COUNT      223
+#define BASE_COUNT      179
 #if HAVE_HOMEKIT
 #define HAP_COUNT       171
 #else
@@ -113,10 +113,10 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
 
     /* unistd.h */
 
-    ESP_ELFSYM_EXPORT(usleep),
-    ESP_ELFSYM_EXPORT(sleep),
-    ESP_ELFSYM_EXPORT(exit),
-    ESP_ELFSYM_EXPORT(close),
+//  ESP_ELFSYM_EXPORT(usleep),
+//  ESP_ELFSYM_EXPORT(sleep),
+//  ESP_ELFSYM_EXPORT(exit),
+//  ESP_ELFSYM_EXPORT(close),
 
     /* stdlib.h */
 
@@ -132,89 +132,90 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
 
     /* pthread.h */
 
-    ESP_ELFSYM_EXPORT(pthread_create),
-    ESP_ELFSYM_EXPORT(pthread_attr_init),
-    ESP_ELFSYM_EXPORT(pthread_attr_setstacksize),
-    ESP_ELFSYM_EXPORT(pthread_detach),
-    ESP_ELFSYM_EXPORT(pthread_join),
-    ESP_ELFSYM_EXPORT(pthread_exit),
+//  ESP_ELFSYM_EXPORT(pthread_create),
+//  ESP_ELFSYM_EXPORT(pthread_attr_init),
+//  ESP_ELFSYM_EXPORT(pthread_attr_setstacksize),
+//  ESP_ELFSYM_EXPORT(pthread_detach),
+//  ESP_ELFSYM_EXPORT(pthread_join),
+//  ESP_ELFSYM_EXPORT(pthread_exit),
 
     /* newlib */
 
-    ESP_ELFSYM_EXPORT(__errno),
-    ESP_ELFSYM_EXPORT(__getreent),
+//  ESP_ELFSYM_EXPORT(__errno),
+//  ESP_ELFSYM_EXPORT(__getreent),
 #ifdef __HAVE_LOCALE_INFO__
-    ESP_ELFSYM_EXPORT(__locale_ctype_ptr),
+//  ESP_ELFSYM_EXPORT(__locale_ctype_ptr),
 #else
-    ESP_ELFSYM_EXPORT(_ctype_),
+//  ESP_ELFSYM_EXPORT(_ctype_),
 #endif
 
     /* math */
 
-    ESP_ELFSYM_EXPORT(__ltdf2),
-    ESP_ELFSYM_EXPORT(__fixunsdfsi),
-    ESP_ELFSYM_EXPORT(__gtdf2),
-    ESP_ELFSYM_EXPORT(__floatunsidf),
-    ESP_ELFSYM_EXPORT(__divdf3),
+//  ESP_ELFSYM_EXPORT(__ltdf2),
+//  ESP_ELFSYM_EXPORT(__fixunsdfsi),
+//  ESP_ELFSYM_EXPORT(__gtdf2),
+//  ESP_ELFSYM_EXPORT(__floatunsidf),
+//  ESP_ELFSYM_EXPORT(__divdf3),
 
     /* getopt.h */
 
-    ESP_ELFSYM_EXPORT(getopt_long),
-    ESP_ELFSYM_EXPORT(optind),
-    ESP_ELFSYM_EXPORT(opterr),
-    ESP_ELFSYM_EXPORT(optarg),
-    ESP_ELFSYM_EXPORT(optopt),
+//  ESP_ELFSYM_EXPORT(getopt_long),
+//  ESP_ELFSYM_EXPORT(optind),
+//  ESP_ELFSYM_EXPORT(opterr),
+//  ESP_ELFSYM_EXPORT(optarg),
+//  ESP_ELFSYM_EXPORT(optopt),
 
     /* setjmp.h */
 
-    ESP_ELFSYM_EXPORT(longjmp),
-    ESP_ELFSYM_EXPORT(setjmp),
+//  ESP_ELFSYM_EXPORT(longjmp),
+//  ESP_ELFSYM_EXPORT(setjmp),
 
     /* sys/socket.h */
 
-    ESP_ELFSYM_EXPORT(lwip_bind),
-    ESP_ELFSYM_EXPORT(lwip_setsockopt),
-    ESP_ELFSYM_EXPORT(lwip_socket),
-    ESP_ELFSYM_EXPORT(lwip_listen),
-    ESP_ELFSYM_EXPORT(lwip_accept),
-    ESP_ELFSYM_EXPORT(lwip_recv),
-    ESP_ELFSYM_EXPORT(lwip_recvfrom),
-    ESP_ELFSYM_EXPORT(lwip_send),
-    ESP_ELFSYM_EXPORT(lwip_sendto),
-    ESP_ELFSYM_EXPORT(lwip_connect),
+//  ESP_ELFSYM_EXPORT(lwip_bind),
+//  ESP_ELFSYM_EXPORT(lwip_setsockopt),
+//  ESP_ELFSYM_EXPORT(lwip_socket),
+//  ESP_ELFSYM_EXPORT(lwip_listen),
+//  ESP_ELFSYM_EXPORT(lwip_accept),
+//  ESP_ELFSYM_EXPORT(lwip_recv),
+//  ESP_ELFSYM_EXPORT(lwip_recvfrom),
+//  ESP_ELFSYM_EXPORT(lwip_send),
+//  ESP_ELFSYM_EXPORT(lwip_sendto),
+//  ESP_ELFSYM_EXPORT(lwip_connect),
 
     /* arpa/inet.h */
 
-    ESP_ELFSYM_EXPORT(ipaddr_addr),
-    ESP_ELFSYM_EXPORT(lwip_htons),
-    ESP_ELFSYM_EXPORT(lwip_htonl),
-    ESP_ELFSYM_EXPORT(ip4addr_ntoa),
+//  ESP_ELFSYM_EXPORT(ipaddr_addr),
+//  ESP_ELFSYM_EXPORT(lwip_htons),
+//  ESP_ELFSYM_EXPORT(lwip_htonl),
+//  ESP_ELFSYM_EXPORT(ip4addr_ntoa),
 
     /* ROM functions */
 
-    ESP_ELFSYM_EXPORT(ets_printf),
+//  ESP_ELFSYM_EXPORT(ets_printf),
 
     // c
     ESP_ELFSYM_EXPORT(abort),
     ESP_ELFSYM_EXPORT(dlopen),
     ESP_ELFSYM_EXPORT(dlsym),
     ESP_ELFSYM_EXPORT(dlclose),
-    ESP_ELFSYM_EXPORT(ftell),
-    ESP_ELFSYM_EXPORT(fopen),
+    ESP_ELFSYM_EXPORT(execv),
     ESP_ELFSYM_EXPORT(fclose),
     ESP_ELFSYM_EXPORT(fgetc),
     ESP_ELFSYM_EXPORT(fgets),
+    ESP_ELFSYM_EXPORT(fopen),
     ESP_ELFSYM_EXPORT(fread),
+    ESP_ELFSYM_EXPORT(ftell),
+    ESP_ELFSYM_EXPORT(localtime),
+    ESP_ELFSYM_EXPORT(localtime_r),
     ESP_ELFSYM_EXPORT(mkdir),
     ESP_ELFSYM_EXPORT(remove),
     ESP_ELFSYM_EXPORT(rename),
     ESP_ELFSYM_EXPORT(sprintf),
     ESP_ELFSYM_EXPORT(snprintf),
+    ESP_ELFSYM_EXPORT(setenv),
     ESP_ELFSYM_EXPORT(stat),
     ESP_ELFSYM_EXPORT(time),
-    ESP_ELFSYM_EXPORT(localtime),
-    ESP_ELFSYM_EXPORT(localtime_r),
-    ESP_ELFSYM_EXPORT(setenv),
     ESP_ELFSYM_EXPORT(tzset),
 
     // c++
@@ -243,7 +244,6 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
 
     // common
     ESP_ELFSYM_EXPORT(init_udp_console),
-    ESP_ELFSYM_EXPORT(execv),
     ESP_ELFSYM_EXPORT(uart0_tx),
     ESP_ELFSYM_EXPORT(uart0_rx),
     ESP_ELFSYM_EXPORT(uart1_tx),
@@ -259,10 +259,10 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(esp_get_idf_version),
     ESP_ELFSYM_EXPORT(esp_restart),
     ESP_ELFSYM_EXPORT(esp_timer_get_time),
-    ESP_ELFSYM_EXPORT(g_wifi_default_wpa_crypto_funcs),
-    ESP_ELFSYM_EXPORT(g_wifi_osi_funcs),
-    ESP_ELFSYM_EXPORT(lwip_ioctl),
-    ESP_ELFSYM_EXPORT(lwip_close),
+//  ESP_ELFSYM_EXPORT(g_wifi_default_wpa_crypto_funcs),
+//  ESP_ELFSYM_EXPORT(g_wifi_osi_funcs),
+//  ESP_ELFSYM_EXPORT(lwip_ioctl),
+//  ESP_ELFSYM_EXPORT(lwip_close),
     ESP_ELFSYM_EXPORT(periph_module_enable),
     ESP_ELFSYM_EXPORT(periph_module_reset),
     ESP_ELFSYM_EXPORT(uart_periph_signal),

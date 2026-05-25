@@ -13,7 +13,7 @@
 #include "esp_system.h"
 #include "lcd.h"
 
-static esp_lcd_panel_handle_t panel_handle = NULL;
+static esp_lcd_panel_handle_t panel_handle IRAM_BSS_ATTR = NULL;
 
 void lcd_init(int addr, int sda, int scl)
 {
@@ -165,7 +165,7 @@ void lcd_text(char const* text)
     uint8_t* ram = malloc(length);
     if (ram == NULL)
         return;
-    memset(ram, 0 , length);
+    memset(ram, 0, length);
     int pos = 0;
     for (char c; (c = *text); text++) {
         uint8_t const* font = NULL;

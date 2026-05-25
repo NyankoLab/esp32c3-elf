@@ -230,19 +230,19 @@ struct default_device_instance_info_provider : public chip::DeviceLayer::DeviceI
 
 void set_commissionable_data_provider()
 {
-    static default_commissionable_data_provider* provider = new default_commissionable_data_provider;
+    static default_commissionable_data_provider* provider IRAM_BSS_ATTR = new default_commissionable_data_provider;
     chip::DeviceLayer::SetCommissionableDataProvider(provider);
 }
 
 void set_device_instance_info_provider(const char* vendor, const char* name)
 {
-    static default_device_instance_info_provider* provider = new default_device_instance_info_provider;
+    static default_device_instance_info_provider* provider IRAM_BSS_ATTR = new default_device_instance_info_provider;
     provider->vendor = vendor;
     provider->name = name;
     chip::DeviceLayer::SetDeviceInstanceInfoProvider(provider);
 }
 
-static char version[32] = { VersionHelper };
+static char version[32] IRAM_BSS_ATTR = { VersionHelper };
 void set_version(const char* string)
 {
     strcpy(version, string);

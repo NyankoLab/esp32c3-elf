@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D6170A7B2CF22403001C8439 /* dlfcn.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A7A2CF22403001C8439 /* dlfcn.c */; };
-		D65A9C032CE848CC0022B1E0 /* symbols.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D65A9C022CE848CC0022B1E0 /* symbols.cpp */; settings = {COMPILER_FLAGS = "-I../elf_loader/include -std=gnu++23"; }; };
+		D65A9C032CE848CC0022B1E0 /* symbols.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D65A9C022CE848CC0022B1E0 /* symbols.cpp */; settings = {COMPILER_FLAGS = "-I../elf_loader/include"; }; };
 		D6619E312DA23013001C8599 /* aes-ctr.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E242DA23013001C8599 /* aes-ctr.c */; };
 		D6619E322DA23013001C8599 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E212DA23013001C8599 /* aes.c */; };
 		D6619E332DA23013001C8599 /* bignum.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E2B2DA23013001C8599 /* bignum.c */; };
@@ -26,7 +26,7 @@
 		D6619E452DA2303F001C8599 /* homekit.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E422DA2303F001C8599 /* homekit.c */; };
 		D6619E462DA2303F001C8599 /* nvs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E432DA2303F001C8599 /* nvs.c */; };
 		D6619E472DA2303F001C8599 /* vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E442DA2303F001C8599 /* vfs.c */; };
-		D6619E482DA2303F001C8599 /* cxx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6619E402DA2303F001C8599 /* cxx.cpp */; };
+		D6619E482DA2303F001C8599 /* cxx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6619E402DA2303F001C8599 /* cxx.cpp */; settings = {COMPILER_FLAGS = "-std=gnu++20"; }; };
 		D6619E492DA2303F001C8599 /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E412DA2303F001C8599 /* file.c */; };
 		D6741A332CE393DD0024FB04 /* app_main.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A322CE393DD0024FB04 /* app_main.c */; };
 		D6741A642CE5D31A0024FB04 /* libelf_loader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6741A632CE5D31A0024FB04 /* libelf_loader.a */; };
@@ -403,7 +403,7 @@
 				CLANGPLATFORM_DIR = $PROJECT_DIR;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++23";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -468,7 +468,7 @@
 				CLANGPLATFORM_DIR = $PROJECT_DIR;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++23";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;

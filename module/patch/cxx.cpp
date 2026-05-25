@@ -11,5 +11,7 @@ _LIBCPP_BEGIN_NAMESPACE_STD
   template size_t   string::find(string const&, size_t) const;
   template string&  string::operator=(string&&);
   template void     string::resize(size_t);
+#if _LIBCPP_STD_VER <= 20
   template string   string::substr(size_t, size_t) const;
+#endif
 _LIBCPP_END_NAMESPACE_STD

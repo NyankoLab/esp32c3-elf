@@ -25,10 +25,10 @@ static const char* mqtt_client_id IRAM_BSS_ATTR;
 static void* mqtt_client IRAM_BSS_ATTR;
 static mqtt_connect_info_t mqtt_info IRAM_BSS_ATTR;
 #endif
-static const char* mqtt_app_build = "Unknown";
-static const char* mqtt_app_version = "Unknown";
+static const char* mqtt_app_build IRAM_BSS_ATTR = "Unknown";
+static const char* mqtt_app_version IRAM_BSS_ATTR = "Unknown";
 static void (*mqtt_receive_callback)(const char* topic, uint32_t topic_len, const char* data, uint32_t length) IRAM_BSS_ATTR;
-static bool mqtt_is_connected;
+static bool mqtt_is_connected IRAM_BSS_ATTR;
 
 static void mqtt_information(char* buffer, size_t size)
 {

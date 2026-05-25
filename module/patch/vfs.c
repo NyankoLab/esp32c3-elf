@@ -10,12 +10,12 @@
 #include <hal/usb_serial_jtag_ll.h>
 #include <lwip/sockets.h>
 
-static int udp_fd = -1;
-static struct sockaddr_in udp_sockaddr;
-static SemaphoreHandle_t g_mutex = NULL;
+static int udp_fd IRAM_BSS_ATTR = -1;
+static struct sockaddr_in udp_sockaddr IRAM_BSS_ATTR;
+static SemaphoreHandle_t g_mutex IRAM_BSS_ATTR = NULL;
 
 #define USBSERIAL_TIMEOUT_MAX_US 50000
-static int s_usbserial_timeout = 0;
+static int s_usbserial_timeout IRAM_BSS_ATTR = 0;
 
 static void usb_serial_jtag_ll_write(const uint8_t c)
 {

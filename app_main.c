@@ -44,11 +44,6 @@ const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc =
                "(" "clang version " __XSTRING(__clang_major__) "." __XSTRING(__clang_minor__) "." __XSTRING(__clang_patchlevel__) ")"
 };
 
-bool esp_wifi_use_supp_pmk_cache(void)
-{
-    return false;
-}
-
 int mesh_sta_auth_expire_time(void)
 {
     return 0;
@@ -152,7 +147,9 @@ void app_main(void)
     ota_init(8685);
 
     for (int i = 200; i >= 0; i--) {
+#if HAVE_PREPATCH == 0
         ESP_LOGI(TAG, "Restarting in %d seconds...", i);
+#endif
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
     ESP_LOGI(TAG, "Restarting now.");

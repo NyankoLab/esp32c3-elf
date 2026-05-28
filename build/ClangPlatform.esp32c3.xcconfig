@@ -210,7 +210,7 @@ OTHER_LDFLAGS = $(inherited) -Wl,--start-group
 
 OTHER_LDFLAGS = $(inherited) -lm
 OTHER_LDFLAGS = $(inherited) -lcore
-OTHER_LDFLAGS = $(inherited) -lespnow
+//OTHER_LDFLAGS = $(inherited) -lespnow
 //OTHER_LDFLAGS = $(inherited) -lmesh
 OTHER_LDFLAGS = $(inherited) -lnet80211
 OTHER_LDFLAGS = $(inherited) -lphy
@@ -448,7 +448,7 @@ LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_m
 
 OTHER_CFLAGS = $(inherited) -DCHIP_HAVE_CONFIG_H
 
-OTHER_LDFLAGS = $(inherited) -lstdc++
+//OTHER_LDFLAGS = $(inherited) -lstdc++
 OTHER_LDFLAGS = $(inherited) -lchip
 OTHER_LDFLAGS = $(inherited) -lesp_matter
 OTHER_LDFLAGS = $(inherited) -lmbedx509

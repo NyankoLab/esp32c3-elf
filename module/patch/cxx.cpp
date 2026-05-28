@@ -15,3 +15,28 @@ _LIBCPP_BEGIN_NAMESPACE_STD
   template string   string::substr(size_t, size_t) const;
 #endif
 _LIBCPP_END_NAMESPACE_STD
+
+void* operator new(size_t size)
+{
+    return malloc(size);
+}
+
+void* operator new[](size_t size)
+{
+    return malloc(size);
+}
+
+void operator delete(void* pointer)
+{
+    free(pointer);
+}
+
+void operator delete[](void* pointer)
+{
+    free(pointer);
+}
+
+extern "C" void __cxa_pure_virtual()
+{
+    esp_restart();
+}

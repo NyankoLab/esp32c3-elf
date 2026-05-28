@@ -110,6 +110,19 @@ index 1834290fc6..6810b91f3a 100644
  #include <stdint.h>
  
  #include_next <assert.h>
+diff --git a/components/nvs_flash/src/nvs_page.cpp b/components/nvs_flash/src/nvs_page.cpp
+index d0049c4f08..9bfe3eed3a 100644
+--- a/components/nvs_flash/src/nvs_page.cpp
++++ b/components/nvs_flash/src/nvs_page.cpp
+@@ -46,7 +46,7 @@ esp_err_t Page::load(Partition *partition, uint32_t sectorNumber)
+         // check if the whole page is really empty
+         // reading the whole page takes ~40 times less than erasing it
+         const int BLOCK_SIZE = 128;
+-        uint32_t* block = new (std::nothrow) uint32_t[BLOCK_SIZE];
++        uint32_t* block = new uint32_t[BLOCK_SIZE];
+ 
+         if (!block) {
+             return ESP_ERR_NO_MEM;
 diff --git a/components/wpa_supplicant/CMakeLists.txt b/components/wpa_supplicant/CMakeLists.txt
 index 12137f922a..6617ec53fe 100644
 --- a/components/wpa_supplicant/CMakeLists.txt

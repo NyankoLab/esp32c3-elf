@@ -18,7 +18,7 @@ _LIBCPP_BEGIN_NAMESPACE_STD
 namespace {
 
 // handle all next_prime(i) for i in [1, 210), special case 0
-const unsigned small_primes[] = {
+const unsigned char small_primes[] = {
     0,   2,   3,   5,   7,   11,  13,  17,  19,  23,  29,  31,  37,  41,  43,  47,
     53,  59,  61,  67,  71,  73,  79,  83,  89,  97,  101, 103, 107, 109, 113, 127,
     131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211};
@@ -26,7 +26,7 @@ const unsigned small_primes[] = {
 // potential primes = 210*k + indices[i], k >= 1
 //   these numbers are not divisible by 2, 3, 5 or 7
 //   (or any integer 2 <= j <= 10 for that matter).
-const unsigned indices[] = {
+const unsigned char indices[] = {
     1,   11,  13,  17,  19,  23,  29,  31,  37,  41,  43,  47,  53,  59,  61,  67,
     71,  73,  79,  83,  89,  97,  101, 103, 107, 109, 113, 121, 127, 131, 137, 139,
     143, 149, 151, 157, 163, 167, 169, 173, 179, 181, 187, 191, 193, 197, 199, 209};

@@ -44,6 +44,11 @@ const _SECTION_ATTR_IMPL(".rodata_desc", __LINE__) esp_app_desc_t esp_app_desc =
                "(" "clang version " __XSTRING(__clang_major__) "." __XSTRING(__clang_minor__) "." __XSTRING(__clang_patchlevel__) ")"
 };
 
+const uint8_t g_espnow_user_oui[3] =
+{
+    0x18, 0xfe, 0x34
+};
+
 int mesh_sta_auth_expire_time(void)
 {
     return 0;

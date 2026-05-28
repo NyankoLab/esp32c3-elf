@@ -25,6 +25,7 @@
 		D6FC9AA22CECD11B009AF784 /* ota.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A9F2CECD11B009AF784 /* ota.c */; };
 		D6FC9AA32CECD11B009AF784 /* temperature.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9AA02CECD11B009AF784 /* temperature.c */; };
 		F543D84F2FBAF06600DE9187 /* mbedtls.c in Sources */ = {isa = PBXBuildFile; fileRef = F543D84E2FBAF05B00DE9187 /* mbedtls.c */; };
+		F543D8502FC5530E00DE9187 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FA569D2FA09182008340EA /* memory.cpp */; };
 		F54D9C002DAAA9EB00B429A9 /* lcd.c in Sources */ = {isa = PBXBuildFile; fileRef = F54D9BFF2DAAA9EB00B429A9 /* lcd.c */; };
 		F5BF0D212FA785A400F82963 /* matter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5BF0D202FA7859900F82963 /* matter.cpp */; };
 		F5F5E4132DA3E62F00BA4DF0 /* wifi.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5E4122DA3E62F00BA4DF0 /* wifi.c */; };
@@ -308,7 +309,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5BF0D212FA785A400F82963 /* matter.cpp in Sources */,
 				D6741A332CE393DD0024FB04 /* app_main.c in Sources */,
 				D6170A7B2CF22403001C8439 /* dlfcn.c in Sources */,
 				F5F5E41D2DA4325F00BA4DF0 /* ethernet.c in Sources */,
@@ -316,16 +316,18 @@
 				D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */,
 				D6FC9A6F2CEB43C9009AF784 /* https.c in Sources */,
 				F54D9C002DAAA9EB00B429A9 /* lcd.c in Sources */,
+				F5BF0D212FA785A400F82963 /* matter.cpp in Sources */,
 				D6FC9A6E2CEB43C9009AF784 /* mqtt.c in Sources */,
 				D6FC9AA22CECD11B009AF784 /* ota.c in Sources */,
 				D65A9C032CE848CC0022B1E0 /* symbols.cpp in Sources */,
 				D6FC9AA32CECD11B009AF784 /* temperature.c in Sources */,
 				F5F5E4132DA3E62F00BA4DF0 /* wifi.c in Sources */,
-				D6619E452DA2303F001C8599 /* homekit.c in Sources */,
 				D6619E482DA2303F001C8599 /* cxx.cpp in Sources */,
 				D6619E492DA2303F001C8599 /* file.c in Sources */,
-				F543D84F2FBAF06600DE9187 /* mbedtls.c in Sources */,
 				F5FA569C2FA0915A008340EA /* hash.cpp in Sources */,
+				D6619E452DA2303F001C8599 /* homekit.c in Sources */,
+				F543D84F2FBAF06600DE9187 /* mbedtls.c in Sources */,
+				F543D8502FC5530E00DE9187 /* memory.cpp in Sources */,
 				D6619E462DA2303F001C8599 /* nvs.c in Sources */,
 				D6619E472DA2303F001C8599 /* vfs.c in Sources */,
 			);

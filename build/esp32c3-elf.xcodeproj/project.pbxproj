@@ -12,7 +12,7 @@
 		D6619E452DA2303F001C8599 /* homekit.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E422DA2303F001C8599 /* homekit.c */; };
 		D6619E462DA2303F001C8599 /* nvs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E432DA2303F001C8599 /* nvs.c */; };
 		D6619E472DA2303F001C8599 /* vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E442DA2303F001C8599 /* vfs.c */; };
-		D6619E482DA2303F001C8599 /* cxx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6619E402DA2303F001C8599 /* cxx.cpp */; settings = {COMPILER_FLAGS = "-std=gnu++20"; }; };
+		D6619E482DA2303F001C8599 /* cxx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6619E402DA2303F001C8599 /* cxx.cpp */; };
 		D6619E492DA2303F001C8599 /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E412DA2303F001C8599 /* file.c */; };
 		D6741A332CE393DD0024FB04 /* app_main.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A322CE393DD0024FB04 /* app_main.c */; };
 		D6741A642CE5D31A0024FB04 /* libelf_loader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6741A632CE5D31A0024FB04 /* libelf_loader.a */; };

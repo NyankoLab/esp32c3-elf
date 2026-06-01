@@ -52,17 +52,17 @@ struct hashed_elfsym
     }
 };
 
-// Base     179
+// Base     181
 // HomeKit  171
 // Matter   44
-#define BASE_COUNT      179
+#define BASE_COUNT      181
 #if HAVE_HOMEKIT
 #define HAP_COUNT       171
 #else
 #define HAP_COUNT       0
 #endif
 #if HAVE_MATTER
-#define MATTER_COUNT    44
+#define MATTER_COUNT    60
 #else
 #define MATTER_COUNT    0
 #endif
@@ -227,7 +227,8 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findEPKcj),
     ESP_ELFSYM_EXPORT(_ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findERKS5_j),
     ESP_ELFSYM_EXPORT(_ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE5emptyEv),
-    ESP_ELFSYM_EXPORT(_ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6substrEjj),
+    ESP_ELFSYM_EXPORT(_ZNKRSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6substrEjj),
+    ESP_ELFSYM_EXPORT(_ZNOSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6substrEjj),
     ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE5clearEv),
     ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6__initEPKcj),
     ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKc),
@@ -241,6 +242,10 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2ILi0EEEPKc),
     ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED1Ev),
     ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED2Ev),
+
+    // c++20
+    table[i].name = fnv1a("_ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6substrEjj");
+    table[i++].symbol = &_ZNKRSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6substrEjj;
 
     // common
     ESP_ELFSYM_EXPORT(init_udp_console),
@@ -885,16 +890,16 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     // endpoint - 1.0
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12on_off_light3addEPjPNS1_6configE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12on_off_light6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14dimmable_light3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14dimmable_light6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint23color_temperature_light3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint23color_temperature_light6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20extended_color_light3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20extended_color_light6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14dimmable_light3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14dimmable_light6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint23color_temperature_light3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint23color_temperature_light6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20extended_color_light3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20extended_color_light6createEPjPNS1_6configEhPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19on_off_plug_in_unit3addEPjPNS1_6configE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19on_off_plug_in_unit6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint21dimmable_plug_in_unit3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint21dimmable_plug_in_unit6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint21dimmable_plug_in_unit3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint21dimmable_plug_in_unit6createEPjPNS1_6configEhPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint10thermostat3addEPjPNS1_6configE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint10thermostat6createEPjPNS1_6configEhPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15window_covering3addEPjPNS1_6configE),
@@ -903,14 +908,14 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint18temperature_sensor6createEPjPNS1_6configEhPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15humidity_sensor3addEPjPNS1_6configE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15humidity_sensor6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint16occupancy_sensor3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint16occupancy_sensor6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14contact_sensor3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14contact_sensor6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12light_sensor3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12light_sensor6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint16occupancy_sensor3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint16occupancy_sensor6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14contact_sensor3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14contact_sensor6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12light_sensor3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12light_sensor6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock6createEPjPNS1_6configEhPv),
 
     // endpoint - 1.2
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12air_purifier3addEPjPNS1_6configE),

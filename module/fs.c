@@ -225,6 +225,34 @@ int fs_write(const void* buffer, int length, int fd)
     return lfs_file_write(&fs, (lfs_file_t*)fd, (void*)buffer, length);
 }
 
+int fs_copy(const char* oldpath, const char* newpath)
+{
+    int result = -1;
+    int old = fs_open(oldpath, "r");
+    int new = fs_open(newpath, "w");
+    if (old > 0 && new > 0)
+    {
+        char* temp = malloc(1024);
+        if (temp)
+        {
+            result = 0;
+            int length;
+            while ((length = fs_read(temp, 1024, old)))
+            {
+                if (fs_write(temp, length, new) != length)
+                {
+                    result = -1;
+                    break;
+                }
+            }
+            free(temp);
+        }
+    }
+    fs_close(old);
+    fs_close(new);
+    return result;
+}
+
 int fs_mkdir(const char* name)
 {
     return lfs_mkdir(&fs, name);

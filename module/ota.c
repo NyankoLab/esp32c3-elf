@@ -9,6 +9,8 @@
 
 #define TAG __FILE_NAME__
 
+#define USE_TASK 1
+
 struct ota_context
 {
     int udp_socket;
@@ -26,51 +28,63 @@ static void ota_handler(TimerHandle_t timer)
     if (context->tcp_socket >= 0)
     {
         char* data = context->temp;
+        bool ota = strstr(context->filename, ".bin") != NULL;
         int length = lwip_recv(context->tcp_socket, data, 1536, 0);
-        if (length < 0)
+        if (length >= 0)
         {
-            return;
-        }
-        if (context->offset == 0 && context->handle == 0)
-        {
-            if (strstr(context->filename, ".bin"))
+            if (context->offset == 0 && context->handle == 0)
             {
-                esp_ota_begin(esp_ota_get_next_update_partition(NULL), context->size, &context->handle);
+                if (ota)
+                {
+                    esp_ota_begin(esp_ota_get_next_update_partition(NULL), context->size, &context->handle);
+                }
+                else
+                {
+                    context->handle = fs_open(context->filename, "w");
+                }
+            }
+            if (ota)
+            {
+                esp_ota_write_with_offset(context->handle, data, length, context->offset);
             }
             else
             {
-                context->handle = fs_open(context->filename, "w");
+                fs_write(data, length, context->handle);
+            }
+            context->offset += length;
+            ESP_LOGI(TAG, "%d/%d", context->offset, context->size);
+            if (length > 0 && length < 1536)
+            {
+                lwip_send(context->tcp_socket, "OK", 2, 0);
             }
         }
-        if (strstr(context->filename, ".bin"))
+        if (length < 0)
         {
-            esp_ota_write_with_offset(context->handle, data, length, context->offset);
-        }
-        else
-        {
-            fs_write(data, length, context->handle);
-        }
-        context->offset += length;
-        ESP_LOGI(TAG, "%d/%d", context->offset, context->size);
-        if (length > 0 && length < 1536)
-        {
-            lwip_send(context->tcp_socket, "OK", 2, 0);
+            if (errno == EWOULDBLOCK)
+                return;
+
+            length = 0;
         }
         if (length == 0 || context->offset == context->size)
         {
-            if (context->offset == context->size)
+            if (context->handle)
             {
-                if (strstr(context->filename, ".bin"))
+                if (ota)
                 {
                     esp_ota_end(context->handle);
                     context->handle = 0;
-
-                    esp_ota_set_boot_partition(esp_ota_get_next_update_partition(NULL));
                 }
                 else
                 {
                     fs_close(context->handle);
                     context->handle = 0;
+                }
+            }
+            if (context->offset == context->size)
+            {
+                if (ota)
+                {
+                    esp_ota_set_boot_partition(esp_ota_get_next_update_partition(NULL));
                 }
 
                 lwip_send(context->tcp_socket, "OK", 2, 0);
@@ -84,8 +98,11 @@ static void ota_handler(TimerHandle_t timer)
             free(context->filename);
             context->temp = NULL;
             context->filename = NULL;
-
+#if USE_TASK
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+#else
             xTimerChangePeriod(timer, 1000 / portTICK_PERIOD_MS, 0);
+#endif
         }
     }
     else if (context->udp_socket >= 0)
@@ -137,12 +154,26 @@ static void ota_handler(TimerHandle_t timer)
                 lwip_connect(context->tcp_socket, (struct sockaddr*)&sockaddr, sizeof(sockaddr));
 
                 lwip_sendto(context->udp_socket, "OK", 2, 0, (struct sockaddr*)&from, fromlen);
-
-                xTimerChangePeriod(timer, 10 / portTICK_PERIOD_MS, 0);
+#if USE_TASK
+                vTaskDelay(100 / portTICK_PERIOD_MS);
+#else
+                xTimerChangePeriod(timer, 100 / portTICK_PERIOD_MS, 0);
+#endif
             }
         }
     }
 }
+
+#if USE_TASK
+static void ota_handler_task(void* arg)
+{
+    for (;;)
+    {
+        ota_handler(NULL);
+        vTaskDelay(1);
+    }
+}
+#endif
 
 void ota_init(int port)
 {
@@ -152,9 +183,6 @@ void ota_init(int port)
         context->udp_socket = lwip_socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
         context->tcp_socket = -1;
 
-        int mode = 1;
-        lwip_ioctl(context->udp_socket, FIONBIO, &mode);
-
         struct sockaddr_in sockaddr = {};
         sockaddr.sin_len = sizeof(sockaddr);
         sockaddr.sin_family = AF_INET;
@@ -162,7 +190,14 @@ void ota_init(int port)
         sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
         lwip_bind(context->udp_socket, (struct sockaddr*)&sockaddr, sizeof(sockaddr));
 
+#if USE_TASK
+        xTaskCreate(ota_handler_task, "OTA", 3072, NULL, 5, NULL);
+#else
+        int mode = 1;
+        lwip_ioctl(context->udp_socket, FIONBIO, &mode);
+
         TimerHandle_t timer = xTimerCreate("OTA", 1000 / portTICK_PERIOD_MS, pdTRUE, (void*)"OTA", ota_handler);
         xTimerStart(timer, 0);
+#endif
     }
 }

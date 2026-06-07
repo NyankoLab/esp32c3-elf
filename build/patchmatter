@@ -1,8 +1,8 @@
 diff --git a/components/esp_matter/CMakeLists.txt b/components/esp_matter/CMakeLists.txt
-index 1e13bda5..15953e96 100644
+index cd389d78..631d4b7f 100644
 --- a/components/esp_matter/CMakeLists.txt
 +++ b/components/esp_matter/CMakeLists.txt
-@@ -60,8 +60,18 @@ idf_component_register( SRC_DIRS        ${SRC_DIRS_LIST}
+@@ -62,8 +62,18 @@ idf_component_register( SRC_DIRS        ${SRC_DIRS_LIST}
  # This has been added to fix the error and should be removed once fixed:
  # esp-matter/connectedhomeip/connectedhomeip/src/app/EventManagement.cpp:467:23: error: 'writer' is
  # used uninitialized in this function
@@ -22,6 +22,48 @@ index 1e13bda5..15953e96 100644
  
  if (CONFIG_ESP_MATTER_ENABLE_MATTER_SERVER)
      if (CONFIG_ESP_MATTER_ENABLE_DATA_MODEL)
+diff --git a/components/esp_matter/data_model/esp_matter_attribute.cpp b/components/esp_matter/data_model/esp_matter_attribute.cpp
+index 82950048..5eda8809 100644
+--- a/components/esp_matter/data_model/esp_matter_attribute.cpp
++++ b/components/esp_matter/data_model/esp_matter_attribute.cpp
+@@ -2285,7 +2285,7 @@ namespace attribute {
+ 
+ attribute_t *create_air_quality(cluster_t *cluster, uint8_t value)
+ {
+-    return esp_matter::attribute::create(cluster, AirQuality::Attributes::AirQuality::Id, ATTRIBUTE_FLAG_MANAGED_INTERNALLY,
++    return esp_matter::attribute::create(cluster, AirQuality::Attributes::AirQuality::Id, ATTRIBUTE_FLAG_NONE,
+                                          esp_matter_enum8(value));
+ }
+ 
+diff --git a/components/esp_matter/data_model/esp_matter_cluster.cpp b/components/esp_matter/data_model/esp_matter_cluster.cpp
+index 2ecd3922..98410063 100644
+--- a/components/esp_matter/data_model/esp_matter_cluster.cpp
++++ b/components/esp_matter/data_model/esp_matter_cluster.cpp
+@@ -1497,7 +1497,7 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags)
+         /* Attributes managed internally */
+         global::attribute::create_feature_map(cluster, 0);
+ 
+-        attribute::create_air_quality(cluster, 0);
++        attribute::create_air_quality(cluster, config->air_quality);
+ 
+         /* Attributes not managed internally */
+         global::attribute::create_cluster_revision(cluster, cluster_revision);
+diff --git a/components/esp_matter/data_model/esp_matter_cluster.h b/components/esp_matter/data_model/esp_matter_cluster.h
+index fb2c43dc..6aba2530 100644
+--- a/components/esp_matter/data_model/esp_matter_cluster.h
++++ b/components/esp_matter/data_model/esp_matter_cluster.h
+@@ -356,7 +356,10 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
+ } /* thermostat_user_interface_configuration */
+ 
+ namespace air_quality {
+-using config_t = common::config_t;
++typedef struct config {
++    uint8_t air_quality;
++    config() : air_quality(0) {}
++} config_t;
+ 
+ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
+ } /* air_quality */
 diff --git a/connectedhomeip/connectedhomeip b/connectedhomeip/connectedhomeip
 --- a/connectedhomeip/connectedhomeip
 +++ b/connectedhomeip/connectedhomeip

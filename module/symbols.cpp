@@ -54,7 +54,7 @@ struct hashed_elfsym
 
 // Base     181
 // HomeKit  171
-// Matter   44
+// Matter   77
 #define BASE_COUNT      181
 #if HAVE_HOMEKIT
 #define HAP_COUNT       171
@@ -62,7 +62,7 @@ struct hashed_elfsym
 #define HAP_COUNT       0
 #endif
 #if HAVE_MATTER
-#define MATTER_COUNT    60
+#define MATTER_COUNT    77
 #else
 #define MATTER_COUNT    0
 #endif
@@ -886,6 +886,25 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster10thermostat9attribute18create_ac_capacityEPjt),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster10thermostat9attribute25create_ac_louver_positionEPjh),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster10thermostat9attribute26create_outdoor_temperatureEPj8nullableIsE),
+
+    // measurement
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster25concentration_measurement6createEPjPNS1_6configEhj),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster41carbon_monoxide_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster40carbon_dioxide_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster42nitrogen_dioxide_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster31ozone_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster38formaldehyde_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster29pm1_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster30pm25_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster30pm10_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster31radon_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster58total_volatile_organic_compounds_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster23temperature_measurement6createEPjPNS1_6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster29relative_humidity_measurement6createEPjPNS1_6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster17occupancy_sensing6createEPjPNS1_6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster23illuminance_measurement6createEPjPNS1_6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster20pressure_measurement6createEPjPNS1_6configEh),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster16flow_measurement6createEPjPNS1_6configEh),
 
     // endpoint - 1.0
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12on_off_light3addEPjPNS1_6configE),

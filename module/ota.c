@@ -61,7 +61,10 @@ static void ota_handler(TimerHandle_t timer)
         if (length < 0)
         {
             if (errno == EWOULDBLOCK)
+            {
+                vTaskDelay(1);
                 return;
+            }
 
             length = 0;
         }

@@ -31,6 +31,8 @@ static void usb_serial_jtag_ll_write(const uint8_t c)
 
 void init_udp_console(const char* ip)
 {
+    if (udp_fd >= 0)
+        return;
     udp_fd = lwip_socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (udp_fd < 0)
         return;

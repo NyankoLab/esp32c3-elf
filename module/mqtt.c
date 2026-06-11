@@ -298,7 +298,7 @@ void mqtt_setup(const char* hostname, const char* build, const char* version, co
         char buffer[256];
         mqtt_info.client_id = hostname;
         mqtt_info.keepalive = 60;
-        mqtt_info.will_topic = strdup(mqtt_prefix(buffer, sizeof(buffer), "connected", 0));
+        mqtt_info.will_topic = mqtt_client = strdup(mqtt_prefix(buffer, sizeof(buffer), "connected", 0));
         mqtt_info.will_message = "false";
         mqtt_info.will_retain = 1;
 

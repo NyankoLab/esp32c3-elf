@@ -64,21 +64,3 @@ index fb2c43dc..6aba2530 100644
  
  cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
  } /* air_quality */
-diff --git a/connectedhomeip/connectedhomeip b/connectedhomeip/connectedhomeip
---- a/connectedhomeip/connectedhomeip
-+++ b/connectedhomeip/connectedhomeip
-@@ -1 +1 @@
--Subproject commit cf84d0360c48dbc194c48b47b09169f302a9745b
-+Subproject commit cf84d0360c48dbc194c48b47b09169f302a9745b-dirty
-diff --git a/examples/light/CMakeLists.txt b/examples/light/CMakeLists.txt
-index abaf5015..0430a99d 100644
---- a/examples/light/CMakeLists.txt
-+++ b/examples/light/CMakeLists.txt
-@@ -46,6 +46,7 @@ set(EXTRA_COMPONENT_DIRS
-     "${MATTER_SDK_PATH}/config/esp32/components"
-     "${ESP_MATTER_PATH}/components"
-     "${ESP_MATTER_PATH}/device_hal/device"
-+    "$ENV{HOMEKIT_PATH}/components/homekit"
-     ${extra_components_dirs_append})
- 
- project(light)

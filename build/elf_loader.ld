@@ -2,7 +2,10 @@ SECTIONS
 {
   .stl :
   {
-    *(.text.*St3__112basic_string*)
+    *(.text._ZNKSt3__112basic_string*)
+    *(.text._ZNKRSt3__112basic_string*)
+    *(.text._ZNOSt3__112basic_string*)
+    *(.text._ZNSt3__112basic_string*)
   }
 
   .text :
@@ -43,7 +46,10 @@ SECTIONS
 
   .rela.stl :
   {
-    *(.rela.text.*St3__112basic_string*)
+    *(.rela.text._ZNKSt3__112basic_string*)
+    *(.rela.text._ZNKRSt3__112basic_string*)
+    *(.rela.text._ZNOSt3__112basic_string*)
+    *(.rela.text._ZNSt3__112basic_string*)
   }
 
   .rela.text :

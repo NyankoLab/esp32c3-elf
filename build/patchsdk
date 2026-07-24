@@ -1,5 +1,5 @@
 diff --git a/components/cxx/cxx_exception_stubs.cpp b/components/cxx/cxx_exception_stubs.cpp
-index 7e794755c0..f3de729347 100644
+index 7e794755c07..f3de729347b 100644
 --- a/components/cxx/cxx_exception_stubs.cpp
 +++ b/components/cxx/cxx_exception_stubs.cpp
 @@ -6,7 +6,10 @@
@@ -14,7 +14,7 @@ index 7e794755c0..f3de729347 100644
  
  #ifndef CONFIG_COMPILER_CXX_EXCEPTIONS
 diff --git a/components/cxx/cxx_guards.cpp b/components/cxx/cxx_guards.cpp
-index e4f9f905a6..98a6feaced 100644
+index e4f9f905a66..98a6feaceda 100644
 --- a/components/cxx/cxx_guards.cpp
 +++ b/components/cxx/cxx_guards.cpp
 @@ -15,7 +15,11 @@
@@ -67,38 +67,8 @@ index e4f9f905a6..98a6feaced 100644
  {
      guard_t* g = reinterpret_cast<guard_t*>(pg);
      const auto scheduler_started = xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED;
-diff --git a/components/esp_http_server/src/httpd_txrx.c b/components/esp_http_server/src/httpd_txrx.c
-index b0998d420e..abe9e85a6e 100644
---- a/components/esp_http_server/src/httpd_txrx.c
-+++ b/components/esp_http_server/src/httpd_txrx.c
-@@ -240,11 +240,13 @@ esp_err_t httpd_resp_set_type(httpd_req_t *r, const char *type)
-         return ESP_ERR_HTTPD_INVALID_REQ;
-     }
- 
-+#if 0
-     /* Reject CRLF in content type */
-     if (strpbrk(type, "\r\n")) {
-         ESP_LOGW(TAG, LOG_FMT("rejecting content type with CRLF: %.32s"), type);
-         return ESP_ERR_INVALID_ARG;
-     }
-+#endif
- 
-     struct httpd_req_aux *ra = r->aux;
-     ra->content_type = (char *)type;
-diff --git a/components/esp_system/ld/ld.flash.sections b/components/esp_system/ld/ld.flash.sections
-index 72cab78373..49f8618a35 100644
---- a/components/esp_system/ld/ld.flash.sections
-+++ b/components/esp_system/ld/ld.flash.sections
-@@ -96,6 +96,7 @@
-   {
-     _flash_rodata_start = ABSOLUTE(.);
- 
-+    *(.rodata..L.*)    
-     SECTION_MAPPINGS(flash_rodata)
- 
- #if CONFIG_LIBC_PICOLIBC
 diff --git a/components/newlib/platform_include/assert.h b/components/newlib/platform_include/assert.h
-index 1834290fc6..6810b91f3a 100644
+index 1834290fc64..6810b91f3ab 100644
 --- a/components/newlib/platform_include/assert.h
 +++ b/components/newlib/platform_include/assert.h
 @@ -9,7 +9,7 @@
@@ -111,7 +81,7 @@ index 1834290fc6..6810b91f3a 100644
  
  #include_next <assert.h>
 diff --git a/components/nvs_flash/src/nvs_page.cpp b/components/nvs_flash/src/nvs_page.cpp
-index d0049c4f08..9bfe3eed3a 100644
+index d0049c4f08e..9bfe3eed3af 100644
 --- a/components/nvs_flash/src/nvs_page.cpp
 +++ b/components/nvs_flash/src/nvs_page.cpp
 @@ -46,7 +46,7 @@ esp_err_t Page::load(Partition *partition, uint32_t sectorNumber)
@@ -123,231 +93,8 @@ index d0049c4f08..9bfe3eed3a 100644
  
          if (!block) {
              return ESP_ERR_NO_MEM;
-diff --git a/components/wpa_supplicant/CMakeLists.txt b/components/wpa_supplicant/CMakeLists.txt
-index 12137f922a..6617ec53fe 100644
---- a/components/wpa_supplicant/CMakeLists.txt
-+++ b/components/wpa_supplicant/CMakeLists.txt
-@@ -181,6 +181,7 @@ else()
-     "src/crypto/sha256-internal.c"
-     "src/crypto/sha256.c"
-     "src/crypto/sha384-internal.c"
-+    "src/crypto/sha384.c"
-     "src/crypto/sha512-internal.c"
-     "src/crypto/sha256.c")
- endif()
-@@ -339,6 +340,8 @@ if(NOT CONFIG_ESP_WIFI_MBEDTLS_TLS_CLIENT)
- endif()
- if(CONFIG_ESP_WIFI_MBEDTLS_CRYPTO)
-     target_compile_definitions(${COMPONENT_LIB} PRIVATE CONFIG_CRYPTO_MBEDTLS)
-+else()
-+    target_compile_definitions(${COMPONENT_LIB} PRIVATE CONFIG_CRYPTO_INTERNAL)
- endif()
- if(NOT CONFIG_MBEDTLS_SHA1_C AND NOT CONFIG_MBEDTLS_HARDWARE_SHA)
-     target_compile_definitions(${COMPONENT_LIB} PRIVATE CONFIG_CRYPTO_INTERNAL)
-diff --git a/components/wpa_supplicant/src/crypto/crypto.h b/components/wpa_supplicant/src/crypto/crypto.h
-index b65b00809b..9cc4bcd27a 100644
---- a/components/wpa_supplicant/src/crypto/crypto.h
-+++ b/components/wpa_supplicant/src/crypto/crypto.h
-@@ -22,6 +22,8 @@
- #define CRYPTO_H
- #include "utils/common.h"
- 
-+#define HMAC_VECTOR_MAX_ELEM 11
-+
- /**
-  * md4_vector - MD4 hash for data vector
-  * @num_elem: Number of elements in the data vector
-diff --git a/components/wpa_supplicant/src/tls/asn1.c b/components/wpa_supplicant/src/tls/asn1.c
-index 04d5320490..cdde93e7cf 100644
---- a/components/wpa_supplicant/src/tls/asn1.c
-+++ b/components/wpa_supplicant/src/tls/asn1.c
-@@ -273,6 +273,7 @@ int asn1_get_next(const u8 *buf, size_t len, struct asn1_hdr *hdr)
- }
- 
- 
-+#ifdef DEBUG_PRINT
- void asn1_print_hdr(const struct asn1_hdr *hdr, const char *title)
- {
- 	wpa_printf(MSG_DEBUG, "%sclass %d constructed %d tag 0x%x",
-@@ -285,6 +286,7 @@ void asn1_unexpected(const struct asn1_hdr *hdr, const char *title)
- 	wpa_printf(MSG_DEBUG, "%s - found class %d constructed %d tag 0x%x",
- 		   title, hdr->class, hdr->constructed, hdr->tag);
- }
-+#endif
- 
- 
- int asn1_parse_oid(const u8 *buf, size_t len, struct asn1_oid *oid)
-diff --git a/components/wpa_supplicant/src/tls/asn1.h b/components/wpa_supplicant/src/tls/asn1.h
-index a4d1be4735..a72c01f3a8 100644
---- a/components/wpa_supplicant/src/tls/asn1.h
-+++ b/components/wpa_supplicant/src/tls/asn1.h
-@@ -60,8 +60,13 @@ struct asn1_oid {
- 
- 
- int asn1_get_next(const u8 *buf, size_t len, struct asn1_hdr *hdr);
-+#ifdef DEBUG_PRINT
- void asn1_print_hdr(const struct asn1_hdr *hdr, const char *title);
- void asn1_unexpected(const struct asn1_hdr *hdr, const char *title);
-+#else /* DEBUG_PRINT */
-+#define asn1_print_hdr(...) do {} while(0)
-+#define asn1_unexpected(...) do {} while(0)
-+#endif /* DEBUG_PRINT */
- int asn1_parse_oid(const u8 *buf, size_t len, struct asn1_oid *oid);
- int asn1_get_oid(const u8 *buf, size_t len, struct asn1_oid *oid,
- 		 const u8 **next);
-diff --git a/components/wpa_supplicant/src/tls/tlsv1_client.c b/components/wpa_supplicant/src/tls/tlsv1_client.c
-index 431044c57b..efe70103b0 100644
---- a/components/wpa_supplicant/src/tls/tlsv1_client.c
-+++ b/components/wpa_supplicant/src/tls/tlsv1_client.c
-@@ -372,9 +372,16 @@ struct wpabuf * tlsv1_client_decrypt(struct tlsv1_client *conn,
- 		}
- 		if (used == 0) {
- 			struct wpabuf *partial;
--			wpa_printf(MSG_DEBUG, "TLSv1: Need more data");
--			partial = wpabuf_alloc_copy(pos, in_end - pos);
--			wpabuf_free(conn->partial_input);
-+			wpa_printf(MSG_INFO, "TLSv1: Need more data");
-+            if (conn->partial_input && wpabuf_len(conn->partial_input) >= (in_end - pos)) {
-+                partial = conn->partial_input; 
-+                partial->used = 0;
-+                wpabuf_put_data(partial, pos, in_end - pos);
-+            }
-+            else {
-+                partial = wpabuf_alloc_copy(pos, in_end - pos);
-+                wpabuf_free(conn->partial_input);
-+            }
- 			conn->partial_input = partial;
- 			if (conn->partial_input == NULL) {
- 				wpa_printf(MSG_DEBUG, "TLSv1: Failed to "
-diff --git a/components/wpa_supplicant/src/tls/tlsv1_client_ocsp.c b/components/wpa_supplicant/src/tls/tlsv1_client_ocsp.c
-index 128f4b5b9e..291f2d86d2 100644
---- a/components/wpa_supplicant/src/tls/tlsv1_client_ocsp.c
-+++ b/components/wpa_supplicant/src/tls/tlsv1_client_ocsp.c
-@@ -77,28 +77,30 @@ static unsigned int ocsp_hash_data(struct asn1_oid *alg, const u8 *data,
- 		wpa_hexdump(MSG_MSGDUMP, "OCSP: Hash (SHA1)", hash, 20);
- 		return 20;
- 	}
--
-+#ifdef CONFIG_SHA256
- 	if (x509_sha256_oid(alg)) {
- 		if (sha256_vector(1, addr, len, hash) < 0)
- 			return 0;
- 		wpa_hexdump(MSG_MSGDUMP, "OCSP: Hash (SHA256)", hash, 32);
- 		return 32;
- 	}
--
-+#endif /* CONFIG_SHA256 */
-+#ifdef CONFIG_INTERNAL_SHA384
- 	if (x509_sha384_oid(alg)) {
- 		if (sha384_vector(1, addr, len, hash) < 0)
- 			return 0;
- 		wpa_hexdump(MSG_MSGDUMP, "OCSP: Hash (SHA384)", hash, 48);
- 		return 48;
- 	}
--
-+#endif /* CONFIG_INTERNAL_SHA384 */
-+#ifdef CONFIG_INTERNAL_SHA512
- 	if (x509_sha512_oid(alg)) {
- 		if (sha512_vector(1, addr, len, hash) < 0)
- 			return 0;
- 		wpa_hexdump(MSG_MSGDUMP, "OCSP: Hash (SHA512)", hash, 64);
- 		return 64;
- 	}
--
-+#endif /* CONFIG_INTERNAL_SHA512 */
- 
- 	asn1_oid_to_str(alg, buf, sizeof(buf));
- 	wpa_printf(MSG_DEBUG, "OCSP: Could not calculate hash with alg %s",
-diff --git a/components/wpa_supplicant/src/tls/x509v3.c b/components/wpa_supplicant/src/tls/x509v3.c
-index 1bbd80ade8..07b877d9a4 100644
---- a/components/wpa_supplicant/src/tls/x509v3.c
-+++ b/components/wpa_supplicant/src/tls/x509v3.c
-@@ -1963,7 +1963,7 @@ int x509_check_signature(struct x509_certificate *issuer,
- 		}
- 		goto skip_digest_oid;
- 	}
--
-+#ifdef CONFIG_SHA256
- 	if (x509_sha256_oid(&oid)) {
- 		if (signature->oid.oid[6] !=
- 		    11 /* sha2561WithRSAEncryption */) {
-@@ -1976,7 +1976,8 @@ int x509_check_signature(struct x509_certificate *issuer,
- 		}
- 		goto skip_digest_oid;
- 	}
--
-+#endif /* CONFIG_SHA256 */
-+#ifdef CONFIG_INTERNAL_SHA384
- 	if (x509_sha384_oid(&oid)) {
- 		if (signature->oid.oid[6] != 12 /* sha384WithRSAEncryption */) {
- 			wpa_printf(MSG_DEBUG, "X509: digestAlgorithm SHA384 "
-@@ -1988,7 +1989,8 @@ int x509_check_signature(struct x509_certificate *issuer,
- 		}
- 		goto skip_digest_oid;
- 	}
--
-+#endif /* CONFIG_INTERNAL_SHA384 */
-+#ifdef CONFIG_INTERNAL_SHA512
- 	if (x509_sha512_oid(&oid)) {
- 		if (signature->oid.oid[6] != 13 /* sha512WithRSAEncryption */) {
- 			wpa_printf(MSG_DEBUG, "X509: digestAlgorithm SHA512 "
-@@ -2000,7 +2002,7 @@ int x509_check_signature(struct x509_certificate *issuer,
- 		}
- 		goto skip_digest_oid;
- 	}
--
-+#endif /* CONFIG_INTERNAL_SHA512 */
- 	if (!x509_digest_oid(&oid)) {
- 		wpa_printf(MSG_DEBUG, "X509: Unrecognized digestAlgorithm");
- 		os_free(data);
-@@ -2052,24 +2054,30 @@ skip_digest_oid:
- 		wpa_hexdump(MSG_MSGDUMP, "X509: Certificate hash (SHA1)",
- 			    hash, hash_len);
- 		break;
-+#ifdef CONFIG_SHA256
- 	case 11: /* sha256WithRSAEncryption */
- 		sha256_vector(1, addr, len, hash);
- 		hash_len = 32;
- 		wpa_hexdump(MSG_MSGDUMP, "X509: Certificate hash (SHA256)",
- 			    hash, hash_len);
- 		break;
-+#endif /* CONFIG_SHA256 */
-+#ifdef CONFIG_INTERNAL_SHA384
- 	case 12: /* sha384WithRSAEncryption */
- 		sha384_vector(1, addr, len, hash);
- 		hash_len = 48;
- 		wpa_hexdump(MSG_MSGDUMP, "X509: Certificate hash (SHA384)",
- 			    hash, hash_len);
- 		break;
-+#endif /* CONFIG_INTERNAL_SHA384 */
-+#ifdef CONFIG_INTERNAL_SHA512
- 	case 13: /* sha512WithRSAEncryption */
- 		sha512_vector(1, addr, len, hash);
- 		hash_len = 64;
- 		wpa_hexdump(MSG_MSGDUMP, "X509: Certificate hash (SHA512)",
- 			    hash, hash_len);
- 		break;
-+#endif /* CONFIG_INTERNAL_SHA512 */
- 	case 2: /* md2WithRSAEncryption */
- 	default:
- 		wpa_printf(MSG_INFO, "X509: Unsupported certificate signature "
-diff --git a/tools/cmake/build.cmake b/tools/cmake/build.cmake
-index c323d9eac1..2e98b950af 100644
---- a/tools/cmake/build.cmake
-+++ b/tools/cmake/build.cmake
-@@ -100,8 +100,8 @@ function(__build_get_idf_git_revision)
-     if(EXISTS "${idf_path}/version.txt")
-         file(STRINGS "${idf_path}/version.txt" idf_ver_t)
-         set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${idf_path}/version.txt")
--    elseif(idf_ver_git)
--        set(idf_ver_t ${idf_ver_git})
-+#   elseif(idf_ver_git)
-+#       set(idf_ver_t ${idf_ver_git})
-     else()
-         set(idf_ver_t "v${IDF_VERSION_MAJOR}.${IDF_VERSION_MINOR}.${IDF_VERSION_PATCH}")
-     endif()
 diff --git a/tools/cmake/toolchain-clang-esp32c3.cmake b/tools/cmake/toolchain-clang-esp32c3.cmake
-index 3d7593a2d3..470b39febe 100644
+index 3d7593a2d30..470b39febe7 100644
 --- a/tools/cmake/toolchain-clang-esp32c3.cmake
 +++ b/tools/cmake/toolchain-clang-esp32c3.cmake
 @@ -19,6 +19,15 @@ set(CMAKE_C_FLAGS "${UNIQ_CMAKE_C_FLAGS}"

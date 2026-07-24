@@ -1,8 +1,8 @@
 diff --git a/components/esp_matter/CMakeLists.txt b/components/esp_matter/CMakeLists.txt
-index cd389d78..631d4b7f 100644
+index 9a96bc30..60870915 100644
 --- a/components/esp_matter/CMakeLists.txt
 +++ b/components/esp_matter/CMakeLists.txt
-@@ -62,8 +62,18 @@ idf_component_register( SRC_DIRS        ${SRC_DIRS_LIST}
+@@ -110,10 +110,20 @@ endif()
  # This has been added to fix the error and should be removed once fixed:
  # esp-matter/connectedhomeip/connectedhomeip/src/app/EventManagement.cpp:467:23: error: 'writer' is
  # used uninitialized in this function
@@ -12,6 +12,8 @@ index cd389d78..631d4b7f 100644
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=uninitialized;-Wno-missing-field-initializers;" APPEND)
 +#-Wno-error=maybe-uninitialized;
  idf_build_set_property(COMPILE_OPTIONS "-Wno-error=array-bounds" APPEND)
+-
+-target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=inconsistent-missing-override" APPEND)
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=sign-conversion" APPEND)
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=format" APPEND)
@@ -19,66 +21,40 @@ index cd389d78..631d4b7f 100644
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=#warnings" APPEND)
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=unused-private-field" APPEND)
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=non-c-typedef-for-linkage" APPEND)
++
++#target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
  
  if (CONFIG_ESP_MATTER_ENABLE_MATTER_SERVER)
      if (CONFIG_ESP_MATTER_ENABLE_DATA_MODEL)
-diff --git a/components/esp_matter/data_model/esp_matter_attribute.cpp b/components/esp_matter/data_model/esp_matter_attribute.cpp
-index 82950048..5eda8809 100644
---- a/components/esp_matter/data_model/esp_matter_attribute.cpp
-+++ b/components/esp_matter/data_model/esp_matter_attribute.cpp
-@@ -2285,7 +2285,7 @@ namespace attribute {
+diff --git a/components/esp_matter_bridge/CMakeLists.txt b/components/esp_matter_bridge/CMakeLists.txt
+index 9b7d5eaa..6b3818eb 100644
+--- a/components/esp_matter_bridge/CMakeLists.txt
++++ b/components/esp_matter_bridge/CMakeLists.txt
+@@ -10,5 +10,5 @@ idf_component_register(SRC_DIRS        ${src_dirs_list}
+                        REQUIRES        esp_matter esp_matter_console)
  
- attribute_t *create_air_quality(cluster_t *cluster, uint8_t value)
- {
--    return esp_matter::attribute::create(cluster, AirQuality::Attributes::AirQuality::Id, ATTRIBUTE_FLAG_MANAGED_INTERNALLY,
-+    return esp_matter::attribute::create(cluster, AirQuality::Attributes::AirQuality::Id, ATTRIBUTE_FLAG_NONE,
-                                          esp_matter_enum8(value));
- }
- 
-diff --git a/components/esp_matter/data_model/esp_matter_cluster.cpp b/components/esp_matter/data_model/esp_matter_cluster.cpp
-index 2ecd3922..98410063 100644
---- a/components/esp_matter/data_model/esp_matter_cluster.cpp
-+++ b/components/esp_matter/data_model/esp_matter_cluster.cpp
-@@ -1497,7 +1497,7 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags)
-         /* Attributes managed internally */
-         global::attribute::create_feature_map(cluster, 0);
- 
--        attribute::create_air_quality(cluster, 0);
-+        attribute::create_air_quality(cluster, config->air_quality);
- 
-         /* Attributes not managed internally */
-         global::attribute::create_cluster_revision(cluster, cluster_revision);
-diff --git a/components/esp_matter/data_model/esp_matter_cluster.h b/components/esp_matter/data_model/esp_matter_cluster.h
-index fb2c43dc..6aba2530 100644
---- a/components/esp_matter/data_model/esp_matter_cluster.h
-+++ b/components/esp_matter/data_model/esp_matter_cluster.h
-@@ -356,7 +356,10 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
- } /* thermostat_user_interface_configuration */
- 
- namespace air_quality {
--using config_t = common::config_t;
-+typedef struct config {
-+    uint8_t air_quality;
-+    config() : air_quality(0) {}
-+} config_t;
- 
- cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
- } /* air_quality */
+ if (CONFIG_ESP_MATTER_ENABLE_DATA_MODEL)
+-    target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
++#   target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
+ endif()
 diff --git a/connectedhomeip/connectedhomeip b/connectedhomeip/connectedhomeip
 --- a/connectedhomeip/connectedhomeip
 +++ b/connectedhomeip/connectedhomeip
 @@ -1 +1 @@
--Subproject commit cf84d0360c48dbc194c48b47b09169f302a9745b
-+Subproject commit cf84d0360c48dbc194c48b47b09169f302a9745b-dirty
-diff --git a/examples/light/CMakeLists.txt b/examples/light/CMakeLists.txt
-index abaf5015..0430a99d 100644
---- a/examples/light/CMakeLists.txt
-+++ b/examples/light/CMakeLists.txt
-@@ -46,6 +46,7 @@ set(EXTRA_COMPONENT_DIRS
-     "${MATTER_SDK_PATH}/config/esp32/components"
-     "${ESP_MATTER_PATH}/components"
-     "${ESP_MATTER_PATH}/device_hal/device"
-+    "$ENV{HOMEKIT_PATH}/components/homekit"
-     ${extra_components_dirs_append})
+-Subproject commit d46cc8c2886cbefc338544bdb2e2f8128f3e9970
++Subproject commit d46cc8c2886cbefc338544bdb2e2f8128f3e9970-dirty
+diff --git a/device_hal/device/esp32_devkit_c/esp_matter_device.cmake b/device_hal/device/esp32_devkit_c/esp_matter_device.cmake
+index a8fb0670..f5fc5aeb 100644
+--- a/device_hal/device/esp32_devkit_c/esp_matter_device.cmake
++++ b/device_hal/device/esp32_devkit_c/esp_matter_device.cmake
+@@ -1,7 +1,7 @@
+ cmake_minimum_required(VERSION 3.5)
+-if (NOT ("${IDF_TARGET}" STREQUAL "esp32" ))
+-    message(FATAL_ERROR "please set esp32 as the IDF_TARGET using 'idf.py set-target esp32'")
+-endif()
++#if (NOT ("${IDF_TARGET}" STREQUAL "esp32" ))
++#    message(FATAL_ERROR "please set esp32 as the IDF_TARGET using 'idf.py set-target esp32'")
++#endif()
  
- project(light)
+ SET(device_type     esp32_devkit_c)
+ SET(led_type        gpio)

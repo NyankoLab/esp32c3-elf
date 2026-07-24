@@ -52,10 +52,10 @@ struct hashed_elfsym
     }
 };
 
-// Base     181
+// Base     208
 // HomeKit  171
 // Matter   77
-#define BASE_COUNT      181
+#define BASE_COUNT      208
 #if HAVE_HOMEKIT
 #define HAP_COUNT       171
 #else
@@ -313,6 +313,34 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(mqtt_connected_internal),
     ESP_ELFSYM_EXPORT(mqtt_ready_internal),
 
+    // nvs
+    ESP_ELFSYM_EXPORT(nvs_open),
+    ESP_ELFSYM_EXPORT(nvs_open_from_partition),
+    ESP_ELFSYM_EXPORT(nvs_set_i8),
+    ESP_ELFSYM_EXPORT(nvs_set_u8),
+    ESP_ELFSYM_EXPORT(nvs_set_i16),
+    ESP_ELFSYM_EXPORT(nvs_set_u16),
+    ESP_ELFSYM_EXPORT(nvs_set_i32),
+    ESP_ELFSYM_EXPORT(nvs_set_u32),
+    ESP_ELFSYM_EXPORT(nvs_set_i64),
+    ESP_ELFSYM_EXPORT(nvs_set_u64),
+    ESP_ELFSYM_EXPORT(nvs_set_str),
+    ESP_ELFSYM_EXPORT(nvs_set_blob),
+    ESP_ELFSYM_EXPORT(nvs_get_i8),
+    ESP_ELFSYM_EXPORT(nvs_get_u8),
+    ESP_ELFSYM_EXPORT(nvs_get_i16),
+    ESP_ELFSYM_EXPORT(nvs_get_u16),
+    ESP_ELFSYM_EXPORT(nvs_get_i32),
+    ESP_ELFSYM_EXPORT(nvs_get_u32),
+    ESP_ELFSYM_EXPORT(nvs_get_i64),
+    ESP_ELFSYM_EXPORT(nvs_get_u64),
+    ESP_ELFSYM_EXPORT(nvs_get_str),
+    ESP_ELFSYM_EXPORT(nvs_get_blob),
+    ESP_ELFSYM_EXPORT(nvs_erase_key),
+    ESP_ELFSYM_EXPORT(nvs_erase_all),
+    ESP_ELFSYM_EXPORT(nvs_commit),
+    ESP_ELFSYM_EXPORT(nvs_close),
+
     // ota
     ESP_ELFSYM_EXPORT(ota_init),
 
@@ -352,6 +380,7 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     // wifi
     ESP_ELFSYM_EXPORT(wifi_ap),
     ESP_ELFSYM_EXPORT(wifi_sta),
+    ESP_ELFSYM_EXPORT(wifi_config),
 
     // esp_adc
 //  ESP_ELFSYM_EXPORT(esp_adc_cal_characterize),
@@ -864,9 +893,9 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZN4chip6Server7sServerE),
 
     // esp-matter
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute7get_valEtjjP21esp_matter_attr_val_t),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute6reportEtjjP21esp_matter_attr_val_t),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute6updateEtjjP21esp_matter_attr_val_t),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute7get_valEtjjP19esp_matter_attr_val),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute6reportEtjjP19esp_matter_attr_val),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute6updateEtjjP19esp_matter_attr_val),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster3getEPjj),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter20default_app_event_cbEPKN4chip11DeviceLayer15ChipDeviceEventEi),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter29default_app_identification_cbENS_14identification13callback_typeEthhPv),
@@ -876,7 +905,7 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZN10esp_matter16get_fabric_countEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter16get_pairing_codeERNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter10is_startedEv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP19esp_matter_attr_valPvEPFiNS_14identification13callback_typeEthhS7_ES7_),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter32set_commissionable_data_providerEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter33set_device_instance_info_providerEPKcS1_),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter11set_versionEPKc),

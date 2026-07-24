@@ -124,7 +124,9 @@ void app_main(void)
         }
     }
     else {
-        execv("main.elf", NULL);
+        if (execv("main.elf", NULL) < 0) {
+            execv("main.old", NULL);
+        }
     }
 
     ESP_ERROR_CHECK(esp_event_loop_create_default());
@@ -133,7 +135,9 @@ void app_main(void)
 
     /* Fallback */
     extern void wifi_ap(char const* name, char const* pass);
+    extern void wifi_config(char const* ssid, char const* password, bool connect);
     wifi_ap("ESP32C3", "ESP32C3");
+    wifi_config(NULL, NULL, true);
 #else
     ESP_ERROR_CHECK(esp_event_loop_create_default());
     ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL, NULL));

@@ -35,6 +35,7 @@ HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/efus
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_adc/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_adc/esp32c3/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_app_format/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_blockdev/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_bootloader_format/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_common/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_driver_gpio/include
@@ -43,9 +44,23 @@ HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_driver_spi/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_eth/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_event/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hal_ana_conv/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hal_ana_conv/esp32c3/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hal_gpio/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hal_gpio/esp32c3/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hal_gpspi/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hal_i2c/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hal_lcd/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hal_parlio/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hal_uart/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hal_uart/esp32c3/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hal_usb/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hal_usb/esp32c3/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_http_server/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hw_support/etm/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_hw_support/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_lcd/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_libc/platform_include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_netif/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_partition/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_ringbuf/include
@@ -79,6 +94,8 @@ HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/lwip
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/lwip/port/freertos/include
 
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/mbedtls/mbedtls/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/mbedtls/mbedtls/tf-psa-crypto/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/include
 //HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/mqtt/esp-mqtt/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/newlib/platform_include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/nvs_flash/include
@@ -87,6 +104,7 @@ HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/soc/
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/soc/esp32c3/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/soc/esp32c3/register
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/spi_flash/include
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/spi_flash/sim/stubs/soc/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/tcp_transport/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/vfs/include
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/wpa_supplicant/src
@@ -104,15 +122,28 @@ LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_a
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_app_format
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_coex
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_common
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_driver_dma
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_driver_gpio
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_driver_i2c
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_driver_spi
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_eth
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_event
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hal_ana_conv
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hal_clock
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hal_dma
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hal_gpio
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hal_gpspi
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hal_i2c
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hal_mspi
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hal_pmu
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hal_security
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hal_uart
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hal_wdt
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_http_server
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_hw_support
 //LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_gdbstub
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_lcd
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_libc
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_mm
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_netif
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_partition
@@ -131,9 +162,10 @@ LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/heap
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/http_parser
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/log
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/lwip
+LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/mbedtls
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/mbedtls/mbedtls/library
 //LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/mqtt
-LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/newlib
+//LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/newlib
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/nvs_flash
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/pthread
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/riscv
@@ -141,7 +173,7 @@ LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/soc
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/spi_flash
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/tcp_transport
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/vfs
-LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/wifi_provisioning
+//LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/wifi_provisioning
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/wpa_supplicant
 
 LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-idf/components/esp_phy/lib/esp32c3
@@ -224,14 +256,27 @@ OTHER_LDFLAGS = $(inherited) -lesp_adc
 OTHER_LDFLAGS = $(inherited) -lesp_app_format
 OTHER_LDFLAGS = $(inherited) -lesp_coex
 OTHER_LDFLAGS = $(inherited) -lesp_common
+OTHER_LDFLAGS = $(inherited) -lesp_driver_dma
 OTHER_LDFLAGS = $(inherited) -lesp_driver_gpio
 OTHER_LDFLAGS = $(inherited) -lesp_driver_i2c
 OTHER_LDFLAGS = $(inherited) -lesp_driver_spi
 OTHER_LDFLAGS = $(inherited) -lesp_eth
 OTHER_LDFLAGS = $(inherited) -lesp_event
+OTHER_LDFLAGS = $(inherited) -lesp_hal_ana_conv
+OTHER_LDFLAGS = $(inherited) -lesp_hal_clock
+OTHER_LDFLAGS = $(inherited) -lesp_hal_dma
+OTHER_LDFLAGS = $(inherited) -lesp_hal_gpio
+OTHER_LDFLAGS = $(inherited) -lesp_hal_gpspi
+OTHER_LDFLAGS = $(inherited) -lesp_hal_i2c
+OTHER_LDFLAGS = $(inherited) -lesp_hal_mspi
+OTHER_LDFLAGS = $(inherited) -lesp_hal_pmu
+OTHER_LDFLAGS = $(inherited) -lesp_hal_security
+OTHER_LDFLAGS = $(inherited) -lesp_hal_uart
+OTHER_LDFLAGS = $(inherited) -lesp_hal_wdt
 OTHER_LDFLAGS = $(inherited) -lesp_hw_support
 //OTHER_LDFLAGS = $(inherited) -lesp_gdbstub
 OTHER_LDFLAGS = $(inherited) -lesp_lcd
+OTHER_LDFLAGS = $(inherited) -lesp_libc
 OTHER_LDFLAGS = $(inherited) -lesp_mm
 OTHER_LDFLAGS = $(inherited) -lesp_netif
 OTHER_LDFLAGS = $(inherited) -lesp_partition
@@ -251,31 +296,104 @@ OTHER_LDFLAGS = $(inherited) -llog
 OTHER_LDFLAGS = $(inherited) -llwip
 OTHER_LDFLAGS = $(inherited) -lmbedcrypto
 OTHER_LDFLAGS = $(inherited) -lmbedtls
+OTHER_LDFLAGS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/mbedtls/mbedtls/library/libmbedtls.a
 //OTHER_LDFLAGS = $(inherited) -lmbedx509
 //OTHER_LDFLAGS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/mbedtls/libmbedtls.a
 //OTHER_LDFLAGS = $(inherited) -lmqtt
-OTHER_LDFLAGS = $(inherited) -lnewlib
+//OTHER_LDFLAGS = $(inherited) -lnewlib
 OTHER_LDFLAGS = $(inherited) -lnvs_flash
 OTHER_LDFLAGS = $(inherited) -lpthread
 OTHER_LDFLAGS = $(inherited) -lriscv
 OTHER_LDFLAGS = $(inherited) -lsoc
 OTHER_LDFLAGS = $(inherited) -lspi_flash
 OTHER_LDFLAGS = $(inherited) -ltcp_transport
+//OTHER_LDFLAGS = $(inherited) -ltfpsacrypto
 //OTHER_LDFLAGS = $(inherited) -lvfs
-OTHER_LDFLAGS = $(inherited) -lwifi_provisioning
+//OTHER_LDFLAGS = $(inherited) -lwifi_provisioning
 OTHER_LDFLAGS = $(inherited) -lwpa_supplicant
 
 //OTHER_LDFLAGS = $(inherited) -Wl,--end-group
 
-OTHER_LDFLAGS = $(inherited) -u nvs_sec_provider_include_impl
-OTHER_LDFLAGS = $(inherited) -u esp_system_include_coredump_init
+//OTHER_LDFLAGS = $(inherited) -u nvs_sec_provider_include_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_system_include_coredump_init
+//OTHER_LDFLAGS = $(inherited) -u data_model_utils_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_app_desc
+//OTHER_LDFLAGS = $(inherited) -u esp_efuse_startup_include_func
+//OTHER_LDFLAGS = $(inherited) -u start_app
+//OTHER_LDFLAGS = $(inherited) -u __ubsan_include
+//OTHER_LDFLAGS = $(inherited) -u esp_system_include_startup_funcs
+//OTHER_LDFLAGS = $(inherited) -u esp_security_init_include_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_sleep_gpio_include
+//OTHER_LDFLAGS = $(inherited) -Wl,--undefined=FreeRTOS_openocd_params
+//OTHER_LDFLAGS = $(inherited) -u app_main
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_memcpy_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_memmove_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_memcmp_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_strcpy_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_strncpy_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_strncmp_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_strcmp_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_heap_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_reent_syscalls_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_syscalls_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_pthread_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_assert_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_getentropy_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_include_init_funcs
+//OTHER_LDFLAGS = $(inherited) -u esp_libc_init_funcs
+//OTHER_LDFLAGS = $(inherited) -u pthread_include_pthread_impl
+//OTHER_LDFLAGS = $(inherited) -u pthread_include_pthread_cond_var_impl
+//OTHER_LDFLAGS = $(inherited) -u pthread_include_pthread_local_storage_impl
+//OTHER_LDFLAGS = $(inherited) -u pthread_include_pthread_rwlock_impl
+//OTHER_LDFLAGS = $(inherited) -u pthread_include_pthread_semaphore_impl
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__register_frame_info_bases
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__register_frame_info
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__register_frame
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__register_frame_info_table_bases
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__register_frame_info_table
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__register_frame_table
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__deregister_frame_info_bases
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__deregister_frame_info
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_Find_FDE
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetGR
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetCFA
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetIP
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetIPInfo
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetRegionStart
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetDataRelBase
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetTextRelBase
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_SetIP
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_SetGR
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_GetLanguageSpecificData
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_FindEnclosingFunction
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_Resume
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_RaiseException
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_DeleteException
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_ForcedUnwind
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_Resume_or_Rethrow
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=_Unwind_Backtrace
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__cxa_call_unexpected
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__gxx_personality_v0
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__cxa_throw
+//OTHER_LDFLAGS = $(inherited) -Wl,--wrap=__cxa_allocate_exception
+//OTHER_LDFLAGS = $(inherited) -u __cxa_guard_dummy
+//OTHER_LDFLAGS = $(inherited) -u __cxx_init_dummy
+//OTHER_LDFLAGS = $(inherited) -u __cxx_fatal_exception
+//OTHER_LDFLAGS = $(inherited) -u esp_timer_init_include_func
+//OTHER_LDFLAGS = $(inherited) -u include_esp_phy_override
+//OTHER_LDFLAGS = $(inherited) -u usb_serial_jtag_connection_monitor_include
+//OTHER_LDFLAGS = $(inherited) -u vfs_include_syscalls_impl
+//OTHER_LDFLAGS = $(inherited) -u esp_vfs_include_nullfs_register
+
 OTHER_LDFLAGS = $(inherited) -u data_model_utils_impl
 OTHER_LDFLAGS = $(inherited) -u esp_app_desc
 OTHER_LDFLAGS = $(inherited) -u esp_efuse_startup_include_func
+OTHER_LDFLAGS = $(inherited) -u esp_security_init_include_impl
+OTHER_LDFLAGS = $(inherited) -u mbedtls_psa_crypto_init_include_impl
+OTHER_LDFLAGS = $(inherited) -u esp_flash_spi_init_include_func
 OTHER_LDFLAGS = $(inherited) -u start_app
 OTHER_LDFLAGS = $(inherited) -u __ubsan_include
 OTHER_LDFLAGS = $(inherited) -u esp_system_include_startup_funcs
-OTHER_LDFLAGS = $(inherited) -u esp_security_init_include_impl
 OTHER_LDFLAGS = $(inherited) -u esp_sleep_gpio_include
 OTHER_LDFLAGS = $(inherited) -Wl,--undefined=FreeRTOS_openocd_params
 OTHER_LDFLAGS = $(inherited) -u app_main
@@ -333,7 +451,7 @@ OTHER_LDFLAGS = $(inherited) -u __cxa_guard_dummy
 OTHER_LDFLAGS = $(inherited) -u __cxx_init_dummy
 OTHER_LDFLAGS = $(inherited) -u __cxx_fatal_exception
 OTHER_LDFLAGS = $(inherited) -u esp_timer_init_include_func
-OTHER_LDFLAGS = $(inherited) -u include_esp_phy_override
+OTHER_LDFLAGS = $(inherited) -u nvs_sec_provider_include_impl
 OTHER_LDFLAGS = $(inherited) -u usb_serial_jtag_connection_monitor_include
 OTHER_LDFLAGS = $(inherited) -u vfs_include_syscalls_impl
 OTHER_LDFLAGS = $(inherited) -u esp_vfs_include_nullfs_register

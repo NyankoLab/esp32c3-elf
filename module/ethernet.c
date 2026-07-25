@@ -7,6 +7,7 @@
    CONDITIONS OF ANY KIND, either express or implied.
 */
 #include "esp32c3.h"
+#if 0
 #include <stdio.h>
 #include <string.h>
 #include "freertos/FreeRTOS.h"
@@ -214,3 +215,8 @@ void ethernet(char const* name, int miso, int mosi, int scs, int sclk, int inter
     snprintf(hostname, sizeof(hostname), "%s-%02X%02X%02X", name, macaddr[3], macaddr[4], macaddr[5]);
     esp_netif_set_hostname(eth_netif, hostname);
 }
+#else
+void ethernet(char const* name, int miso, int mosi, int scs, int sclk, int interrupt, int reset, void(*connected_handler)(void))
+{
+}
+#endif

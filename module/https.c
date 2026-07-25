@@ -6,8 +6,6 @@
 #if defined(CONFIG_ESP_WIFI_MBEDTLS_CRYPTO)
 #include <mbedtls/net_sockets.h>
 #include <mbedtls/ssl.h>
-#include <mbedtls/entropy.h>
-#include <mbedtls/ctr_drbg.h>
 #else
 #include <utils/common.h>
 #include <crypto/tls.h>
@@ -28,8 +26,6 @@ struct https_context
     void* temp;
 #if defined(CONFIG_ESP_WIFI_MBEDTLS_CRYPTO)
     mbedtls_net_context server_fd;
-    mbedtls_entropy_context entropy;
-    mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
 #else
@@ -59,17 +55,17 @@ static void https_handler(void* arg)
         goto final;
 
 #if defined(CONFIG_ESP_WIFI_MBEDTLS_CRYPTO)
-    mbedtls_ctr_drbg_init(&context->ctr_drbg);
+    if (psa_crypto_init() != PSA_SUCCESS)
+        goto final;
     mbedtls_net_init(&context->server_fd);
     mbedtls_ssl_init(&context->ssl);
     mbedtls_ssl_config_init(&context->conf);
-    mbedtls_entropy_init(&context->entropy);
-    if (mbedtls_ctr_drbg_seed(&context->ctr_drbg, mbedtls_entropy_func, &context->entropy, (uint8_t*)"", 1) != 0)
-        goto final;
     if (mbedtls_ssl_config_defaults(&context->conf, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM, MBEDTLS_SSL_PRESET_DEFAULT) != 0)
         goto final;
     mbedtls_ssl_conf_authmode(&context->conf, MBEDTLS_SSL_VERIFY_NONE);
+#if (MBEDTLS_VERSION_NUMBER < 0x04000000)
     mbedtls_ssl_conf_rng(&context->conf, mbedtls_ctr_drbg_random, &context->ctr_drbg);
+#endif
     if (mbedtls_ssl_setup(&context->ssl, &context->conf) != 0)
         goto final;
     context->server_fd.fd = context->socket;
@@ -287,8 +283,7 @@ void https_disconnect(void* arg)
         mbedtls_net_free(&context->server_fd);
         mbedtls_ssl_free(&context->ssl);
         mbedtls_ssl_config_free(&context->conf);
-        mbedtls_ctr_drbg_free(&context->ctr_drbg);
-        mbedtls_entropy_free(&context->entropy);
+        mbedtls_psa_crypto_free();
 #else
         if (context->tls)
         {

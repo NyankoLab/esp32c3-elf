@@ -80,6 +80,18 @@ index 1834290fc64..6810b91f3ab 100644
  #include <stdint.h>
  
  #include_next <assert.h>
+diff --git a/components/esp_system/ld/ld.flash.sections b/components/esp_system/ld/ld.flash.sections
+index 15e4d507ed7..9288cb30896 100644
+--- a/components/esp_system/ld/ld.flash.sections
++++ b/components/esp_system/ld/ld.flash.sections
+@@ -96,6 +96,7 @@
+   {
+     _flash_rodata_start = ABSOLUTE(.);
+ 
++    *(.rodata..L.*) 
+     SECTION_MAPPINGS(flash_rodata)
+ 
+ #if CONFIG_LIBC_PICOLIBC
 diff --git a/components/nvs_flash/src/nvs_page.cpp b/components/nvs_flash/src/nvs_page.cpp
 index 2a1226ea850..8f46a3b0d3d 100644
 --- a/components/nvs_flash/src/nvs_page.cpp

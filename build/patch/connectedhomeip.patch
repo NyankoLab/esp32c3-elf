@@ -522,6 +522,30 @@ index dbfe5c4c90..8313d9cfc7 100644
          {
              NetworkInterface * ifp = new NetworkInterface();
              uint8_t addressSize    = 0;
+diff --git a/src/platform/ESP32/ESP32Utils.cpp b/src/platform/ESP32/ESP32Utils.cpp
+index 70a20b98e2..ef4b74625b 100644
+--- a/src/platform/ESP32/ESP32Utils.cpp
++++ b/src/platform/ESP32/ESP32Utils.cpp
+@@ -286,11 +286,15 @@ CHIP_ERROR ESP32Utils::InitWiFiStack(void)
+     }
+ 
+     // Initialize the ESP WiFi layer.
+-    cfg = WIFI_INIT_CONFIG_DEFAULT();
+-    err = esp_wifi_init(&cfg);
+-    if (err != ESP_OK)
++    wifi_mode_t mode = WIFI_MODE_NULL;
++    if (esp_wifi_get_mode(&mode) == ESP_ERR_WIFI_NOT_INIT)
+     {
+-        return ESP32Utils::MapError(err);
++        cfg = WIFI_INIT_CONFIG_DEFAULT();
++        err = esp_wifi_init(&cfg);
++        if (err != ESP_OK)
++        {
++            return ESP32Utils::MapError(err);
++        }
+     }
+ 
+     err = esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, PlatformManagerImpl::HandleESPSystemEvent, NULL);
 diff --git a/src/platform/ESP32/PlatformManagerImpl.cpp b/src/platform/ESP32/PlatformManagerImpl.cpp
 index 2f1e5f4e2b..6ee1268e05 100644
 --- a/src/platform/ESP32/PlatformManagerImpl.cpp

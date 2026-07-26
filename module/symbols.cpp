@@ -73,16 +73,16 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     std::array<hashed_elfsym, ARRAY_COUNT> table;
     int i = 0;
 
-#define ESP_ELFSYM_EXPORT(_sym) \
+#define ESP_ELFSYM_EXPORT(_sym) ESP_ELFSYM_EXPORT2(_sym, _sym)
+#define ESP_ELFSYM_EXPORT2(_name, _sym) \
     (void)0; \
-    extern int _sym; \
-    auto hash ## _ ## _sym = fnv1a(#_sym); \
+    auto hash ## _ ## _name = fnv1a(#_name); \
     for (int j = 0; j < i; ++j) { \
-        if (table[j].name == hash ## _ ## _sym) \
+        if (table[j].name == hash ## _ ## _name) \
             return {}; \
     } \
-    table[i].name = hash ## _ ## _sym; \
-    table[i++].symbol = &_sym; \
+    extern int _sym; \
+    table[i++] = { hash ## _ ## _name, &_sym }; \
     (void)0
 #define ESP_ELFSYM_END (void)0;
 
@@ -244,8 +244,7 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED2Ev),
 
     // c++20
-    table[i].name = fnv1a("_ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6substrEjj");
-    table[i++].symbol = &_ZNKRSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6substrEjj;
+    ESP_ELFSYM_EXPORT2(_ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6substrEjj, _ZNKRSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6substrEjj);
 
     // common
     ESP_ELFSYM_EXPORT(init_udp_console),
@@ -268,12 +267,16 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
 //  ESP_ELFSYM_EXPORT(g_wifi_osi_funcs),
 //  ESP_ELFSYM_EXPORT(lwip_ioctl),
 //  ESP_ELFSYM_EXPORT(lwip_close),
-    ESP_ELFSYM_EXPORT(periph_module_enable),
-    ESP_ELFSYM_EXPORT(periph_module_reset),
+//  ESP_ELFSYM_EXPORT(periph_module_enable),
+//  ESP_ELFSYM_EXPORT(periph_module_reset),
     ESP_ELFSYM_EXPORT(uart_periph_signal),
     ESP_ELFSYM_EXPORT(GPIO_PIN_MUX_REG),
     ESP_ELFSYM_EXPORT(IP_EVENT),
     ESP_ELFSYM_EXPORT(WIFI_EVENT),
+
+    // other - deprecated
+    ESP_ELFSYM_EXPORT2(periph_module_enable, fake_periph_module_enable),
+    ESP_ELFSYM_EXPORT2(periph_module_reset, fake_periph_module_reset),
 
     // ethernet
     ESP_ELFSYM_EXPORT(ethernet),

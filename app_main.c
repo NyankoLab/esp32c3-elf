@@ -55,6 +55,10 @@ int mesh_sta_auth_expire_time(void)
     return 0;
 }
 
+// Breaking change since esp-idf v6
+void fake_periph_module_enable(int periph) {}
+void fake_periph_module_reset(int periph) {}
+
 static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data)
 {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {

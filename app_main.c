@@ -88,6 +88,10 @@ static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_
 
 void app_main(void)
 {
+    // This makes sure that stdio is always synchronized so that idf.py monitor
+    // and other tools read text output on time.
+    setvbuf(stdout, NULL, _IONBF, 0);
+
 #if 0
     /* Print chip information */
     esp_chip_info_t chip_info;

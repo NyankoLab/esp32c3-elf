@@ -10,6 +10,8 @@
 #include <esp_ota_ops.h>
 
 #include <crypto/CHIPCryptoPAL.h>
+#include <credentials/DeviceAttestationCredsProvider.h>
+#include <credentials/examples/DeviceAttestationCredsExample.h>
 #include <platform/CommissionableDataProvider.h>
 #include <setup_payload/ManualSetupPayloadGenerator.h>
 #include <setup_payload/SetupPayload.h>
@@ -107,7 +109,24 @@ esp_err_t default_app_identification_cb(identification::callback_type_t type, ui
     return ESP_OK;
 }
 
-class default_commissionable_data_provider : public chip::DeviceLayer::CommissionableDataProvider {
+static char product[32] IRAM_BSS_ATTR = { "elf" };
+static char vendor[32] IRAM_BSS_ATTR = { "esp32c3" };
+static char version[32] IRAM_BSS_ATTR = { VersionHelper };
+void set_product(const char* string)
+{
+    strcpy(product, string);
+}
+void set_vendor(const char* string)
+{
+    strcpy(vendor, string);
+}
+void set_version(const char* string)
+{
+    strcpy(version, string);
+}
+
+class default_commissionable_data_provider : public chip::DeviceLayer::CommissionableDataProvider
+{
 public:
     // Members functions that implement the CommissionableDataProvider
     CHIP_ERROR GetSetupDiscriminator(uint16_t& setupDiscriminator) override { setupDiscriminator = 3840; return CHIP_NO_ERROR; }
@@ -155,14 +174,12 @@ public:
     }
     CHIP_ERROR SetSetupPasscode(uint32_t setupPasscode) override { return CHIP_ERROR_NOT_IMPLEMENTED; }
 private:
-    CHIP_ERROR GenerateRandomPasscode(uint32_t &passcode);
+    CHIP_ERROR GenerateRandomPasscode(uint32_t& passcode);
     uint32_t mSetupPasscode = 0;
 };
 
 struct default_device_instance_info_provider : public chip::DeviceLayer::DeviceInstanceInfoProvider
 {
-    const char* vendor;
-    const char* name;
     CHIP_ERROR GetVendorName(char* buf, size_t bufSize) {
         strcpy(buf, vendor);
         return CHIP_NO_ERROR;
@@ -172,7 +189,7 @@ struct default_device_instance_info_provider : public chip::DeviceLayer::DeviceI
         return CHIP_NO_ERROR;
     }
     CHIP_ERROR GetProductName(char* buf, size_t bufSize) {
-        strcpy(buf, name);
+        strcpy(buf, product);
         return CHIP_NO_ERROR;
     }
     CHIP_ERROR GetProductId(uint16_t& productId) {
@@ -180,6 +197,8 @@ struct default_device_instance_info_provider : public chip::DeviceLayer::DeviceI
         return CHIP_NO_ERROR;
     }
     CHIP_ERROR GetPartNumber(char* buf, size_t bufSize) {
+//      strcpy(buf, "ESP32-C3");
+//      return CHIP_NO_ERROR;
         return CHIP_DEVICE_ERROR_CONFIG_NOT_FOUND;
     }
     CHIP_ERROR GetProductURL(char* buf, size_t bufSize) {
@@ -189,15 +208,16 @@ struct default_device_instance_info_provider : public chip::DeviceLayer::DeviceI
         return CHIP_DEVICE_ERROR_CONFIG_NOT_FOUND;
     }
     CHIP_ERROR GetSerialNumber(char* buf, size_t bufSize) {
-        esp_netif_ip_info_t ip_info = {};
-        esp_netif_t* netif = eth_netif ? eth_netif : sta_netif;
-        if (netif && esp_netif_get_ip_info(netif, &ip_info) == ESP_OK) {
-            snprintf(buf, bufSize, "%d", esp_ip4_addr4_16(&ip_info.ip));
-        }
-        else {
-            strcpy(buf, "0");
-        }
-        return CHIP_NO_ERROR;
+//      esp_netif_ip_info_t ip_info = {};
+//      esp_netif_t* netif = eth_netif ? eth_netif : sta_netif;
+//      if (netif && esp_netif_get_ip_info(netif, &ip_info) == ESP_OK) {
+//          snprintf(buf, bufSize, "%d", esp_ip4_addr4_16(&ip_info.ip));
+//      }
+//      else {
+//          strcpy(buf, "0");
+//      }
+//      return CHIP_NO_ERROR;
+        return CHIP_DEVICE_ERROR_CONFIG_NOT_FOUND;
     }
     CHIP_ERROR GetManufacturingDate(uint16_t& year, uint8_t& month, uint8_t& day) {
         year = (__DATE__[7] - '0') * 1000 + (__DATE__[8] - '0') * 100 + (__DATE__[9] - '0') * 10 + (__DATE__[10] - '0');
@@ -228,24 +248,16 @@ struct default_device_instance_info_provider : public chip::DeviceLayer::DeviceI
     }
 };
 
-void set_commissionable_data_provider()
+extern "C" void __wrap__ZN10esp_matter15setup_providersEv()
 {
-    static default_commissionable_data_provider* provider IRAM_BSS_ATTR = new default_commissionable_data_provider;
-    chip::DeviceLayer::SetCommissionableDataProvider(provider);
-}
-
-void set_device_instance_info_provider(const char* vendor, const char* name)
-{
-    static default_device_instance_info_provider* provider IRAM_BSS_ATTR = new default_device_instance_info_provider;
-    provider->vendor = vendor;
-    provider->name = name;
-    chip::DeviceLayer::SetDeviceInstanceInfoProvider(provider);
-}
-
-static char version[32] IRAM_BSS_ATTR = { VersionHelper };
-void set_version(const char* string)
-{
-    strcpy(version, string);
+//  set_commissionable_data_provider();
+//  set_device_instance_info_provider();
+//  set_device_info_provider();
+    static default_commissionable_data_provider commissionable_data_provider;
+    static default_device_instance_info_provider device_instance_info_provider;
+    chip::DeviceLayer::SetCommissionableDataProvider(&commissionable_data_provider);
+    chip::DeviceLayer::SetDeviceInstanceInfoProvider(&device_instance_info_provider);
+    chip::Credentials::SetDeviceAttestationCredentialsProvider(chip::Credentials::Examples::GetExampleDACProvider());
 }
 
 int get_fabric_count()

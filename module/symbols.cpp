@@ -649,8 +649,8 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZN10esp_matter16get_pairing_codeERNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter10is_startedEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter32set_commissionable_data_providerEv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter33set_device_instance_info_providerEPKcS1_),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter11set_productEPKc),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter10set_vendorEPKc),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter11set_versionEPKc),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter5startEPFvPKN4chip11DeviceLayer15ChipDeviceEventEiEi),
 

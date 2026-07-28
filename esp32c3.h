@@ -2,7 +2,6 @@
 
 #pragma clang diagnostic ignored "-Wstrict-prototypes"
 
-#define HAVE_HOMEKIT 0
 #define HAVE_MATTER 1
 #define HAVE_PREPATCH 0
 

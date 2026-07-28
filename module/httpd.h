@@ -6,10 +6,6 @@
 extern "C" {
 #endif
 
-#if HAVE_HOMEKIT
-#define HTTPD_FULL
-#endif
-
 #ifndef HTTPD_FULL
 
 esp_err_t httpd_start(httpd_handle_t* handle, const httpd_config_t* config);

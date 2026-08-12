@@ -58,7 +58,7 @@ void wifi_sta(char const* name)
 
     // MAC
     uint8_t macaddr[6] = {};
-    esp_wifi_get_mac(WIFI_IF_AP, macaddr);
+    esp_wifi_get_mac(WIFI_IF_STA, macaddr);
 
     // STA
     ESP_ERROR_CHECK(esp_wifi_start());

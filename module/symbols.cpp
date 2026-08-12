@@ -645,8 +645,11 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6get_idEPj),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13get_priv_dataEt),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter13factory_resetEv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter12get_passcodeEv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter17get_discriminatorEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter16get_fabric_countEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter16get_pairing_codeERNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter10get_qrcodeERNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter10is_startedEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP21esp_matter_attr_val_tPvEPFiNS_14identification13callback_typeEthhS7_ES7_),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter11set_productEPKc),
@@ -705,8 +708,8 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14contact_sensor6createEPjPNS1_6configEhPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12light_sensor3addEPjPNS1_6configE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12light_sensor6createEPjPNS1_6configEhPv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock6createEPjPNS1_6configEhPv),
 
     // endpoint - 1.2
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12air_purifier3addEPjPNS1_6configE),

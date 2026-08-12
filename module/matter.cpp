@@ -14,6 +14,7 @@
 #include <credentials/examples/DeviceAttestationCredsExample.h>
 #include <platform/CommissionableDataProvider.h>
 #include <setup_payload/ManualSetupPayloadGenerator.h>
+#include <setup_payload/QRCodeSetupPayloadGenerator.h>
 #include <setup_payload/SetupPayload.h>
 
 #include "helper.h"
@@ -185,7 +186,7 @@ struct default_device_instance_info_provider : public chip::DeviceLayer::DeviceI
         return CHIP_NO_ERROR;
     }
     CHIP_ERROR GetVendorId(uint16_t& vendorId) {
-        vendorId = 0;
+        vendorId = 0xFFF1;
         return CHIP_NO_ERROR;
     }
     CHIP_ERROR GetProductName(char* buf, size_t bufSize) {
@@ -193,13 +194,12 @@ struct default_device_instance_info_provider : public chip::DeviceLayer::DeviceI
         return CHIP_NO_ERROR;
     }
     CHIP_ERROR GetProductId(uint16_t& productId) {
-        productId = 0;
+        productId = 0x8000;
         return CHIP_NO_ERROR;
     }
     CHIP_ERROR GetPartNumber(char* buf, size_t bufSize) {
-//      strcpy(buf, "ESP32-C3");
-//      return CHIP_NO_ERROR;
-        return CHIP_DEVICE_ERROR_CONFIG_NOT_FOUND;
+        strcpy(buf, "ESP32C3");
+        return CHIP_NO_ERROR;
     }
     CHIP_ERROR GetProductURL(char* buf, size_t bufSize) {
         return CHIP_DEVICE_ERROR_CONFIG_NOT_FOUND;
@@ -208,15 +208,15 @@ struct default_device_instance_info_provider : public chip::DeviceLayer::DeviceI
         return CHIP_DEVICE_ERROR_CONFIG_NOT_FOUND;
     }
     CHIP_ERROR GetSerialNumber(char* buf, size_t bufSize) {
-//      esp_netif_ip_info_t ip_info = {};
-//      esp_netif_t* netif = eth_netif ? eth_netif : sta_netif;
-//      if (netif && esp_netif_get_ip_info(netif, &ip_info) == ESP_OK) {
-//          snprintf(buf, bufSize, "%d", esp_ip4_addr4_16(&ip_info.ip));
-//      }
-//      else {
-//          strcpy(buf, "0");
-//      }
-//      return CHIP_NO_ERROR;
+        esp_netif_t* netif = eth_netif ? eth_netif : sta_netif;
+        if (netif) {
+            const char* hostname = nullptr;
+            esp_netif_get_hostname(netif, &hostname);
+            if (hostname) {
+                strcpy(buf, hostname);
+                return CHIP_NO_ERROR;
+            }
+        }
         return CHIP_DEVICE_ERROR_CONFIG_NOT_FOUND;
     }
     CHIP_ERROR GetManufacturingDate(uint16_t& year, uint8_t& month, uint8_t& day) {
@@ -240,11 +240,11 @@ struct default_device_instance_info_provider : public chip::DeviceLayer::DeviceI
         return CHIP_NO_ERROR;
     }
     CHIP_ERROR GetHardwareVersionString(char* buf, size_t bufSize) {
-        strcpy(buf, "v" __XSTRING(ESP_IDF_VERSION_MAJOR) "." __XSTRING(ESP_IDF_VERSION_MINOR) "." __XSTRING(ESP_IDF_VERSION_PATCH));
+        strcpy(buf, __XSTRING(ESP_IDF_VERSION_MAJOR) "." __XSTRING(ESP_IDF_VERSION_MINOR) "." __XSTRING(ESP_IDF_VERSION_PATCH));
         return CHIP_NO_ERROR;
     }
     CHIP_ERROR GetRotatingDeviceIdUniqueId(chip::MutableByteSpan& uniqueIdSpan) {
-        return CHIP_ERROR_WRONG_KEY_TYPE;
+        return CHIP_NO_ERROR;
     }
 };
 
@@ -267,17 +267,36 @@ int get_fabric_count()
     return chip::Server::GetInstance().GetFabricTable().FabricCount();
 }
 
+int get_passcode()
+{
+    if (esp_matter::is_started() == false)
+        return 0;
+    chip::DeviceLayer::CommissionableDataProvider* provider = chip::DeviceLayer::GetCommissionableDataProvider();
+    if (provider == nullptr)
+        return 0;
+    uint32_t setupPasscode;
+    provider->GetSetupPasscode(setupPasscode);
+    return setupPasscode;
+}
+
+int get_discriminator()
+{
+    if (esp_matter::is_started() == false)
+        return 0;
+    chip::DeviceLayer::CommissionableDataProvider* provider = chip::DeviceLayer::GetCommissionableDataProvider();
+    if (provider == nullptr)
+        return 0;
+    uint16_t setupDiscriminator;
+    provider->GetSetupDiscriminator(setupDiscriminator);
+    return setupDiscriminator;
+}
+
 void get_pairing_code(std::string& code)
 {
     if (esp_matter::is_started() == false)
         return;
-    chip::DeviceLayer::CommissionableDataProvider* provider = chip::DeviceLayer::GetCommissionableDataProvider();
-    if (provider == nullptr)
-        return;
-    uint32_t setupPasscode;
-    uint16_t setupDiscriminator;
-    provider->GetSetupPasscode(setupPasscode);
-    provider->GetSetupDiscriminator(setupDiscriminator);
+    uint32_t setupPasscode = get_passcode();
+    uint16_t setupDiscriminator = get_discriminator();
 
     chip::PayloadContents payload;
     payload.setUpPINCode = setupPasscode;
@@ -285,6 +304,26 @@ void get_pairing_code(std::string& code)
 
     chip::ManualSetupPayloadGenerator generator(payload);
     generator.payloadDecimalStringRepresentation(code);
+}
+
+void get_qrcode(std::string& code)
+{
+    if (esp_matter::is_started() == false)
+        return;
+    chip::DeviceLayer::DeviceInstanceInfoProvider* provider = chip::DeviceLayer::GetDeviceInstanceInfoProvider();
+    if (provider == nullptr)
+        return;
+    chip::SetupPayload payload;
+//  payload.vendorID = 0xFFF1;
+//  payload.productID = 0x8000;
+    provider->GetVendorId(payload.vendorID);
+    provider->GetProductId(payload.productID);
+//  payload.commissioningFlow = CommissioningFlow::kStandard;
+    payload.rendezvousInformation.SetValue(chip::RendezvousInformationFlag::kOnNetwork);
+    payload.discriminator.SetLongValue(get_discriminator());
+    payload.setUpPINCode = get_passcode();
+    chip::QRCodeSetupPayloadGenerator generator(payload);
+    generator.payloadBase38Representation(code);
 }
 
 }   // namespace esp_matter

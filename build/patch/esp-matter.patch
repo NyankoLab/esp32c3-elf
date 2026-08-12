@@ -52,11 +52,36 @@ index 82950048..5eda8809 100644
                                           esp_matter_enum8(value));
  }
  
+diff --git a/components/esp_matter/data_model/esp_matter_attribute_bounds.cpp b/components/esp_matter/data_model/esp_matter_attribute_bounds.cpp
+index c4458ae4..0f657542 100644
+--- a/components/esp_matter/data_model/esp_matter_attribute_bounds.cpp
++++ b/components/esp_matter/data_model/esp_matter_attribute_bounds.cpp
+@@ -461,8 +461,8 @@ void add_bounds_cb(cluster_t *cluster)
+                 break;
+             }
+             case Thermostat::Attributes::MinSetpointDeadBand::Id: {
+-                int16_t min = 0, max = 1270;
+-                esp_matter::attribute::add_bounds(current_attribute, esp_matter_int16(min), esp_matter_int16(max));
++                int8_t min = 0, max = 127;
++                esp_matter::attribute::add_bounds(current_attribute, esp_matter_int8(min), esp_matter_int8(max));
+                 break;
+             }
+             case Thermostat::Attributes::ControlSequenceOfOperation::Id: {
 diff --git a/components/esp_matter/data_model/esp_matter_cluster.cpp b/components/esp_matter/data_model/esp_matter_cluster.cpp
-index cc8e22a8..bab91d4a 100644
+index cc8e22a8..24ff20f4 100644
 --- a/components/esp_matter/data_model/esp_matter_cluster.cpp
 +++ b/components/esp_matter/data_model/esp_matter_cluster.cpp
-@@ -1541,7 +1541,7 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags)
+@@ -328,6 +328,9 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags)
+         attribute::create_hardware_version_string(cluster, NULL, 0);
+         attribute::create_software_version(cluster, 0);
+         attribute::create_software_version_string(cluster, NULL, 0);
++        attribute::create_manufacturing_date(cluster, NULL, 0);
++        attribute::create_part_number(cluster, NULL, 0);
++        attribute::create_serial_number(cluster, NULL, 0);
+         attribute::create_unique_id(cluster, NULL, 0);
+         attribute::create_capability_minima(cluster, NULL, 0, 0);
+         attribute::create_specification_version(cluster, 0);
+@@ -1541,7 +1544,7 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags)
          /* Attributes managed internally */
          global::attribute::create_feature_map(cluster, 0);
  
@@ -81,11 +106,26 @@ index 3650d975..e359f314 100644
  
  cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
  } // namespace air_quality
+diff --git a/components/esp_matter/data_model/esp_matter_data_model.cpp b/components/esp_matter/data_model/esp_matter_data_model.cpp
+index f726c63e..057638a5 100644
+--- a/components/esp_matter/data_model/esp_matter_data_model.cpp
++++ b/components/esp_matter/data_model/esp_matter_data_model.cpp
+@@ -1139,7 +1139,8 @@ esp_err_t add_bounds(attribute_t *attribute, esp_matter_attr_val_t min, esp_matt
+     VerifyOrReturnError(
+         ((current_attribute->attribute_val_type == min.type) && (current_attribute->attribute_val_type == max.type)),
+         ESP_ERR_INVALID_ARG,
+-        ESP_LOGE(TAG, "Cannot set bounds because of val type mismatch: expected: %d, min: %d, max: %d",
++        ESP_LOGE(TAG, "Cannot set bounds because of val type mismatch: attribute: %d, cluster: %d, expected: %d, min: %d, max: %d",
++                 current_attribute->attribute_id, current_attribute->cluster_id,
+                  current_attribute->attribute_val_type, min.type, max.type));
+     current_attribute->bounds = (esp_matter_attr_bounds_t *)esp_matter_mem_calloc(1, sizeof(esp_matter_attr_bounds_t));
+     if (!current_attribute->bounds) {
 diff --git a/connectedhomeip/connectedhomeip b/connectedhomeip/connectedhomeip
+index 2c2e3a94..b87051a9 160000
 --- a/connectedhomeip/connectedhomeip
 +++ b/connectedhomeip/connectedhomeip
 @@ -1 +1 @@
--Subproject commit b87051a95fc110c0cfbac278f232df55c89866de
+-Subproject commit 2c2e3a94d04b38154f4a8388016dc2f5717633be
 +Subproject commit b87051a95fc110c0cfbac278f232df55c89866de-dirty
 diff --git a/device_hal/device/esp32_devkit_c/esp_matter_device.cmake b/device_hal/device/esp32_devkit_c/esp_matter_device.cmake
 index a8fb0670..ad4e4177 100644

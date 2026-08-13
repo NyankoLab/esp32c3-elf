@@ -230,7 +230,7 @@ final:
 
 esp_err_t httpd_start(httpd_handle_t* handle, const httpd_config_t* config)
 {
-    (*handle) = (httpd_handle_t)xTaskCreate(httpd_handler, "httpd", HTTPD_STACK_SIZE, NULL, 5, NULL);
+    (*handle) = (httpd_handle_t)xTaskCreate(httpd_handler, "httpd", HTTPD_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
     return ESP_OK;
 }
 

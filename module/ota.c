@@ -194,7 +194,7 @@ void ota_init(int port)
         lwip_bind(context->udp_socket, (struct sockaddr*)&sockaddr, sizeof(sockaddr));
 
 #if USE_TASK
-        xTaskCreate(ota_handler_task, "OTA", 3072, NULL, 5, NULL);
+        xTaskCreate(ota_handler_task, "OTA", 3072, NULL, tskIDLE_PRIORITY, NULL);
 #else
         int mode = 1;
         lwip_ioctl(context->udp_socket, FIONBIO, &mode);

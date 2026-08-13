@@ -10,3 +10,6 @@
 [submodule "esp-matter"]
 	path = esp-matter
 	url = https://github.com/espressif/esp-matter.git
+[submodule "mini-esphome"]
+	path = mini-esphome
+	url = https://github.com/NyankoLab/mini-esphome

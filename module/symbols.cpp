@@ -27,6 +27,7 @@
 #define SNTP_SERVER_DNS 1
 #define SNTP_GET_SERVERS_FROM_DHCP 0
 
+#define HAVE_ESPHOME 1
 #define HAVE_MATTER 1
 #define HAVE_PREPATCH 0
 
@@ -52,14 +53,12 @@ struct hashed_elfsym
 };
 
 // Base     208
+// ESPHome  7
 // Matter   77
 #define BASE_COUNT      208
-#if HAVE_MATTER
-#define MATTER_COUNT    77
-#else
-#define MATTER_COUNT    0
-#endif
-#define ARRAY_COUNT     BASE_COUNT + MATTER_COUNT
+#define ESPHOME_COUNT   (HAVE_ESPHOME ? 7 : 0)
+#define MATTER_COUNT    (HAVE_MATTER ? 77 : 0)
+#define ARRAY_COUNT     BASE_COUNT + ESPHOME_COUNT + MATTER_COUNT
 
 consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
 {
@@ -627,6 +626,17 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(xTaskGetTickCount),
     ESP_ELFSYM_EXPORT(xTimerCreate),
     ESP_ELFSYM_EXPORT(xTimerGenericCommand),
+
+#if HAVE_ESPHOME
+//  ESP_ELFSYM_EXPORT(_ZN7ESPHome3API4SendEiiz),
+    ESP_ELFSYM_EXPORT(_ZN7ESPHome3API4SendEiiPv),
+    ESP_ELFSYM_EXPORT(_ZN7ESPHome6Server9BroadcastEiPv),
+    ESP_ELFSYM_EXPORT(_ZN7ESPHome6Server5StartEPFviiPKvE),
+    ESP_ELFSYM_EXPORT(_ZN7ESPHome5Setup4NameE),
+    ESP_ELFSYM_EXPORT(_ZN7ESPHome5Setup5ModelE),
+    ESP_ELFSYM_EXPORT(_ZN7ESPHome5Setup12ManufacturerE),
+    ESP_ELFSYM_EXPORT(_ZN7ESPHome5Setup12FriendlyNameE),
+#endif
 
 #if HAVE_MATTER
     // chip

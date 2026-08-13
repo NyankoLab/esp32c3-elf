@@ -24,6 +24,7 @@
 		D6FC9A702CEB43C9009AF784 /* httpd.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A6D2CEB43C8009AF784 /* httpd.c */; };
 		D6FC9AA22CECD11B009AF784 /* ota.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A9F2CECD11B009AF784 /* ota.c */; };
 		D6FC9AA32CECD11B009AF784 /* temperature.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9AA02CECD11B009AF784 /* temperature.c */; };
+		F50FFEEE302C8B1B00DF502C /* libmini-esphome.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F50FFEED302C8B1B00DF502C /* libmini-esphome.a */; };
 		F543D84F2FBAF06600DE9187 /* mbedtls.c in Sources */ = {isa = PBXBuildFile; fileRef = F543D84E2FBAF05B00DE9187 /* mbedtls.c */; };
 		F543D8502FC5530E00DE9187 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FA569D2FA09182008340EA /* memory.cpp */; };
 		F54D9C002DAAA9EB00B429A9 /* lcd.c in Sources */ = {isa = PBXBuildFile; fileRef = F54D9BFF2DAAA9EB00B429A9 /* lcd.c */; };
@@ -80,6 +81,7 @@
 		D6FC9A9F2CECD11B009AF784 /* ota.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ota.c; path = ../module/ota.c; sourceTree = "<group>"; };
 		D6FC9AA02CECD11B009AF784 /* temperature.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = temperature.c; path = ../module/temperature.c; sourceTree = "<group>"; };
 		D6FC9AA12CECD11B009AF784 /* temperature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = temperature.h; path = ../module/temperature.h; sourceTree = "<group>"; };
+		F50FFEED302C8B1B00DF502C /* libmini-esphome.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libmini-esphome.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F543D84E2FBAF05B00DE9187 /* mbedtls.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mbedtls.c; sourceTree = "<group>"; };
 		F54D9BFF2DAAA9EB00B429A9 /* lcd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lcd.c; sourceTree = "<group>"; };
 		F54D9C012DAAAD1000B429A9 /* lcd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lcd.h; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				D6741A642CE5D31A0024FB04 /* libelf_loader.a in Frameworks */,
 				D6865F8529ADF4A200EBC297 /* libfreertos-mqtt.a in Frameworks */,
 				D6865F7029AD085F00EBC297 /* liblittlefs.a in Frameworks */,
+				F50FFEEE302C8B1B00DF502C /* libmini-esphome.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +114,7 @@
 		300264BD24266097004559E0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F50FFEED302C8B1B00DF502C /* libmini-esphome.a */,
 				D6741A632CE5D31A0024FB04 /* libelf_loader.a */,
 				D6865F8429ADF4A200EBC297 /* libfreertos-mqtt.a */,
 				D6865F6F29AD085F00EBC297 /* liblittlefs.a */,

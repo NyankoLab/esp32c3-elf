@@ -2,6 +2,7 @@
 
 #pragma clang diagnostic ignored "-Wstrict-prototypes"
 
+#define HAVE_ESPHOME 1
 #define HAVE_MATTER 1
 #define HAVE_PREPATCH 0
 

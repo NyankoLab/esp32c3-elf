@@ -105,6 +105,19 @@ index 2a1226ea850..8f46a3b0d3d 100644
  
          if (!block) {
              return ESP_ERR_NO_MEM;
+diff --git a/tools/cmake/third_party/GetGitRevisionDescription.cmake b/tools/cmake/third_party/GetGitRevisionDescription.cmake
+index 53428e2cb8d..381d173b308 100644
+--- a/tools/cmake/third_party/GetGitRevisionDescription.cmake
++++ b/tools/cmake/third_party/GetGitRevisionDescription.cmake
+@@ -118,7 +118,7 @@ function(git_describe _var _repo_dir)
+         describe
+         "--always"
+         "--tags"
+-        "--dirty"
++#       "--dirty"
+         ${ARGN}
+         WORKING_DIRECTORY
+         "${CMAKE_CURRENT_SOURCE_DIR}"
 diff --git a/tools/cmake/toolchain-clang-esp32c3.cmake b/tools/cmake/toolchain-clang-esp32c3.cmake
 index 3b6755d05b7..c517946d9da 100644
 --- a/tools/cmake/toolchain-clang-esp32c3.cmake
@@ -125,3 +138,16 @@ index 3b6755d05b7..c517946d9da 100644
                          ${CMAKE_CXX_FLAGS}"
                          UNIQ_CMAKE_CXX_FLAGS)
  set(CMAKE_CXX_FLAGS "${UNIQ_CMAKE_CXX_FLAGS}"
+diff --git a/tools/idf_py_actions/tools.py b/tools/idf_py_actions/tools.py
+index 2ab73dc937c..bcda82efab6 100644
+--- a/tools/idf_py_actions/tools.py
++++ b/tools/idf_py_actions/tools.py
+@@ -113,7 +113,7 @@ def idf_version() -> str | None:
+                     f'--work-tree={os.environ["IDF_PATH"]}',
+                     'describe',
+                     '--tags',
+-                    '--dirty',
++#                   '--dirty',
+                     '--match',
+                     'v*.*',
+                 ]

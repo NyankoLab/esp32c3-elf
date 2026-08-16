@@ -21,7 +21,7 @@ ALTERNATE_LINKER = $CLANGPLATFORM_DIR/riscv32-esp-elf-lld
 
 GCC_PREFIX_HEADER = $CLANGPLATFORM_DIR/light/build/config/sdkconfig.h
 
-HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-clang/include/c++/v1
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-clang/lib/clang-runtimes/riscv32-esp-unknown-elf/rv32imc-zicsr-zifencei_ilp32_no-rtti/include/c++/v1
 
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-clang/lib/clang-runtimes/riscv32-esp-unknown-elf/rv32imc-zicsr-zifencei_ilp32_no-rtti/include
 

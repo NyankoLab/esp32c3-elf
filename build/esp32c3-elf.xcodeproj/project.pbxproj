@@ -25,6 +25,27 @@
 		D6FC9AA22CECD11B009AF784 /* ota.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A9F2CECD11B009AF784 /* ota.c */; };
 		D6FC9AA32CECD11B009AF784 /* temperature.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9AA02CECD11B009AF784 /* temperature.c */; };
 		F50FFEEE302C8B1B00DF502C /* libmini-esphome.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F50FFEED302C8B1B00DF502C /* libmini-esphome.a */; };
+		F50FFEFD3035F9C800DF502C /* app_main.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A322CE393DD0024FB04 /* app_main.c */; };
+		F50FFEFE3035F9C800DF502C /* dlfcn.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A7A2CF22403001C8439 /* dlfcn.c */; };
+		F50FFEFF3035F9C800DF502C /* ethernet.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5E41C2DA4325F00BA4DF0 /* ethernet.c */; };
+		F50FFF003035F9C800DF502C /* fs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6741A672CE5E4240024FB04 /* fs.c */; };
+		F50FFF013035F9C800DF502C /* httpd.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A6D2CEB43C8009AF784 /* httpd.c */; };
+		F50FFF023035F9C800DF502C /* https.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A692CEB43C8009AF784 /* https.c */; };
+		F50FFF033035F9C800DF502C /* lcd.c in Sources */ = {isa = PBXBuildFile; fileRef = F54D9BFF2DAAA9EB00B429A9 /* lcd.c */; };
+		F50FFF043035F9C800DF502C /* matter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5BF0D202FA7859900F82963 /* matter.cpp */; };
+		F50FFF053035F9C800DF502C /* mqtt.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A682CEB43C8009AF784 /* mqtt.c */; };
+		F50FFF063035F9C800DF502C /* ota.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9A9F2CECD11B009AF784 /* ota.c */; };
+		F50FFF073035F9C800DF502C /* symbols.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D65A9C022CE848CC0022B1E0 /* symbols.cpp */; settings = {COMPILER_FLAGS = "-I../elf_loader/include"; }; };
+		F50FFF083035F9C800DF502C /* temperature.c in Sources */ = {isa = PBXBuildFile; fileRef = D6FC9AA02CECD11B009AF784 /* temperature.c */; };
+		F50FFF093035F9C800DF502C /* wifi.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5E4122DA3E62F00BA4DF0 /* wifi.c */; };
+		F50FFF0C3035F9C800DF502C /* cxx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6619E402DA2303F001C8599 /* cxx.cpp */; };
+		F50FFF0D3035F9C800DF502C /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E412DA2303F001C8599 /* file.c */; };
+		F50FFF0E3035F9C800DF502C /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FA569B2FA0915A008340EA /* hash.cpp */; };
+		F50FFF0F3035F9C800DF502C /* homekit.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E422DA2303F001C8599 /* homekit.c */; };
+		F50FFF103035F9C800DF502C /* mbedtls.c in Sources */ = {isa = PBXBuildFile; fileRef = F543D84E2FBAF05B00DE9187 /* mbedtls.c */; };
+		F50FFF113035F9C800DF502C /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FA569D2FA09182008340EA /* memory.cpp */; };
+		F50FFF123035F9C800DF502C /* nvs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E432DA2303F001C8599 /* nvs.c */; };
+		F50FFF133035F9C800DF502C /* vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E442DA2303F001C8599 /* vfs.c */; };
 		F543D84F2FBAF06600DE9187 /* mbedtls.c in Sources */ = {isa = PBXBuildFile; fileRef = F543D84E2FBAF05B00DE9187 /* mbedtls.c */; };
 		F543D8502FC5530E00DE9187 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FA569D2FA09182008340EA /* memory.cpp */; };
 		F54D9C002DAAA9EB00B429A9 /* lcd.c in Sources */ = {isa = PBXBuildFile; fileRef = F54D9BFF2DAAA9EB00B429A9 /* lcd.c */; };
@@ -82,6 +103,7 @@
 		D6FC9AA02CECD11B009AF784 /* temperature.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = temperature.c; path = ../module/temperature.c; sourceTree = "<group>"; };
 		D6FC9AA12CECD11B009AF784 /* temperature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = temperature.h; path = ../module/temperature.h; sourceTree = "<group>"; };
 		F50FFEED302C8B1B00DF502C /* libmini-esphome.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libmini-esphome.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F50FFF1D3035F9C800DF502C /* libesp32c3-elf-lib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libesp32c3-elf-lib.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F543D84E2FBAF05B00DE9187 /* mbedtls.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mbedtls.c; sourceTree = "<group>"; };
 		F54D9BFF2DAAA9EB00B429A9 /* lcd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lcd.c; sourceTree = "<group>"; };
 		F54D9C012DAAAD1000B429A9 /* lcd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lcd.h; sourceTree = "<group>"; };
@@ -105,6 +127,13 @@
 				D6865F8529ADF4A200EBC297 /* libfreertos-mqtt.a in Frameworks */,
 				D6865F7029AD085F00EBC297 /* liblittlefs.a in Frameworks */,
 				F50FFEEE302C8B1B00DF502C /* libmini-esphome.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F50FFF143035F9C800DF502C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				30A9A7BB25ADC792000FA104 /* libesp32c3-elf.so */,
+				F50FFF1D3035F9C800DF502C /* libesp32c3-elf-lib.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -254,6 +284,22 @@
 			productReference = 30A9A7BB25ADC792000FA104 /* libesp32c3-elf.so */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
+		F50FFEFB3035F9C800DF502C /* esp32c3-elf-lib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F50FFF1A3035F9C800DF502C /* Build configuration list for PBXNativeTarget "esp32c3-elf-lib" */;
+			buildPhases = (
+				F50FFEFC3035F9C800DF502C /* Sources */,
+				F50FFF143035F9C800DF502C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "esp32c3-elf-lib";
+			productName = "esp32c3-elf";
+			productReference = F50FFF1D3035F9C800DF502C /* libesp32c3-elf-lib.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -282,6 +328,7 @@
 			projectRoot = "";
 			targets = (
 				30A9A7BA25ADC792000FA104 /* esp32c3-elf */,
+				F50FFEFB3035F9C800DF502C /* esp32c3-elf-lib */,
 			);
 		};
 /* End PBXProject section */
@@ -334,6 +381,34 @@
 				F543D8502FC5530E00DE9187 /* memory.cpp in Sources */,
 				D6619E462DA2303F001C8599 /* nvs.c in Sources */,
 				D6619E472DA2303F001C8599 /* vfs.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F50FFEFC3035F9C800DF502C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F50FFEFD3035F9C800DF502C /* app_main.c in Sources */,
+				F50FFEFE3035F9C800DF502C /* dlfcn.c in Sources */,
+				F50FFEFF3035F9C800DF502C /* ethernet.c in Sources */,
+				F50FFF003035F9C800DF502C /* fs.c in Sources */,
+				F50FFF013035F9C800DF502C /* httpd.c in Sources */,
+				F50FFF023035F9C800DF502C /* https.c in Sources */,
+				F50FFF033035F9C800DF502C /* lcd.c in Sources */,
+				F50FFF043035F9C800DF502C /* matter.cpp in Sources */,
+				F50FFF053035F9C800DF502C /* mqtt.c in Sources */,
+				F50FFF063035F9C800DF502C /* ota.c in Sources */,
+				F50FFF073035F9C800DF502C /* symbols.cpp in Sources */,
+				F50FFF083035F9C800DF502C /* temperature.c in Sources */,
+				F50FFF093035F9C800DF502C /* wifi.c in Sources */,
+				F50FFF0C3035F9C800DF502C /* cxx.cpp in Sources */,
+				F50FFF0D3035F9C800DF502C /* file.c in Sources */,
+				F50FFF0E3035F9C800DF502C /* hash.cpp in Sources */,
+				F50FFF0F3035F9C800DF502C /* homekit.c in Sources */,
+				F50FFF103035F9C800DF502C /* mbedtls.c in Sources */,
+				F50FFF113035F9C800DF502C /* memory.cpp in Sources */,
+				F50FFF123035F9C800DF502C /* nvs.c in Sources */,
+				F50FFF133035F9C800DF502C /* vfs.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +576,42 @@
 			};
 			name = Release;
 		};
+		F50FFF1B3035F9C800DF502C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D66C4B1829A860C100F27A29 /* ClangPlatform.esp32c3.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_EXTENSION = a;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					DEMO,
+					"$(inherited)",
+				);
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		F50FFF1C3035F9C800DF502C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D66C4B1829A860C100F27A29 /* ClangPlatform.esp32c3.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_EXTENSION = a;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					DEMO,
+					"$(inherited)",
+				);
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -518,6 +629,15 @@
 			buildConfigurations = (
 				D644A04A231ED82900B75B77 /* Debug */,
 				D644A04B231ED82900B75B77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F50FFF1A3035F9C800DF502C /* Build configuration list for PBXNativeTarget "esp32c3-elf-lib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F50FFF1B3035F9C800DF502C /* Debug */,
+				F50FFF1C3035F9C800DF502C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

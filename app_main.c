@@ -59,6 +59,12 @@ int mesh_sta_auth_expire_time(void)
 void fake_periph_module_enable(int periph) {}
 void fake_periph_module_reset(int periph) {}
 
+int main(void) __attribute__((weak));
+int main(void)
+{
+    return 0;
+}
+
 static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data)
 {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
@@ -145,6 +151,7 @@ void app_main(void)
         if (execv("main.elf", NULL) < 0) {
             execv("main.old", NULL);
         }
+        main();
     }
 
     ESP_ERROR_CHECK(esp_event_loop_create_default());

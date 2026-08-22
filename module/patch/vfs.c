@@ -70,9 +70,11 @@ ssize_t __wrap__write_r_console(struct _reent* r, int fd, const void* data, size
     if (fd >= 0) {
         lwip_sendto(udp_fd, data, size, 0, (struct sockaddr*)&udp_sockaddr, sizeof(udp_sockaddr));
     }
-    uint32_t baudrate = uart_ll_get_baudrate(&UART0, esp_clk_apb_freq());
+    uint32_t baudrate = 0;
     if (mutex && uart0_tx != U0TXD_GPIO_NUM) {
         xSemaphoreTake(mutex, portMAX_DELAY);
+        baudrate = uart_ll_get_baudrate(&UART0, esp_clk_apb_freq());
+        baudrate = ((baudrate + 150) / 300) * 300;
         while (uart_ll_get_txfifo_len(&UART0) < UART_LL_FIFO_DEF_LEN);
         ets_delay_us(1000);
         esp_rom_gpio_connect_out_signal(U0TXD_GPIO_NUM, UART_PERIPH_SIGNAL(UART_NUM_0, SOC_UART_PERIPH_SIGNAL_TX), 0, 0);
@@ -105,7 +107,7 @@ ssize_t __wrap__write_r_console(struct _reent* r, int fd, const void* data, size
     }
     usb_serial_jtag_ll_txfifo_flush();
 #endif
-    if (mutex && uart0_tx != U0TXD_GPIO_NUM) {
+    if (baudrate != 0) {
         while (uart_ll_get_txfifo_len(&UART0) < UART_LL_FIFO_DEF_LEN);
         ets_delay_us(1000);
         esp_rom_gpio_connect_out_signal(uart0_tx, UART_PERIPH_SIGNAL(UART_NUM_0, SOC_UART_PERIPH_SIGNAL_TX), 0, 0);

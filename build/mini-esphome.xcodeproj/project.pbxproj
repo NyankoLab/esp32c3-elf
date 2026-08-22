@@ -95,7 +95,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					30A9A7BA25ADC792000FA104 = {
 						CreatedOnToolsVersion = 12.3;
@@ -142,7 +142,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEAD_CODE_STRIPPING = YES;
 				EXECUTABLE_EXTENSION = a;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Debug;
 		};
@@ -153,7 +153,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEAD_CODE_STRIPPING = YES;
 				EXECUTABLE_EXTENSION = a;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Release;
 		};
@@ -222,6 +222,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "mini-esphome";
 				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SYMROOT = ../bin;
 				USE_HEADERMAP = NO;
 			};
@@ -290,6 +291,7 @@
 				OBJROOT = ../build/temp;
 				PRODUCT_NAME = "mini-esphome";
 				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SYMROOT = ../bin;
 				USE_HEADERMAP = NO;
 			};

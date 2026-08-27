@@ -340,4 +340,317 @@ CHIP_ERROR ConfigurationManagerImpl::GetSoftwareVersionString(char * buf, size_t
 
 void emberAfDoorLockClusterInitCallback(chip::EndpointId endpoint) {}
 
+namespace esp_matter {
+namespace endpoint {
+namespace common {
+
+esp_err_t add(int id, endpoint_t *endpoint, app_base_config *config)
+{
+    switch (id) {
+//  case ESP_MATTER_ROOT_NODE_DEVICE_TYPE_ID:
+//      return root_node::add(endpoint, (root_node::config_t*)config);
+//  case ESP_MATTER_OTA_REQUESTOR_DEVICE_TYPE_ID:
+//      return ota_requestor::add(endpoint, (ota_requestor::config_t*)config);
+//  case ESP_MATTER_OTA_PROVIDER_DEVICE_TYPE_ID:
+//      return ota_provider::add(endpoint, (ota_provider::config_t*)config);
+//  case ESP_MATTER_POWER_SOURCE_DEVICE_TYPE_ID:
+//      return power_source::add(endpoint, (power_source::config_t*)config);
+//  case ESP_MATTER_AGGREGATOR_DEVICE_TYPE_ID:
+//      return aggregator::add(endpoint, (aggregator::config_t*)config);
+//  case ESP_MATTER_BRIDGED_NODE_DEVICE_TYPE_ID:
+//      return bridged_node::add(endpoint, (bridged_node::config_t*)config);
+//  case ESP_MATTER_CONTROL_BRIDGE_DEVICE_TYPE_ID:
+//      return control_bridge::add(endpoint, (control_bridge::config_t*)config);
+    case ESP_MATTER_ON_OFF_LIGHT_DEVICE_TYPE_ID:
+        return on_off_light::add(endpoint, (on_off_light::config_t*)config);
+    case ESP_MATTER_DIMMABLE_LIGHT_DEVICE_TYPE_ID:
+        return dimmable_light::add(endpoint, (dimmable_light::config_t*)config);
+    case ESP_MATTER_COLOR_TEMPERATURE_LIGHT_DEVICE_TYPE_ID:
+        return color_temperature_light::add(endpoint, (color_temperature_light::config_t*)config);
+    case ESP_MATTER_EXTENDED_COLOR_LIGHT_DEVICE_TYPE_ID:
+        return extended_color_light::add(endpoint, (extended_color_light::config_t*)config);
+    case ESP_MATTER_ON_OFF_LIGHT_SWITCH_DEVICE_TYPE_ID:
+        return on_off_light_switch::add(endpoint, (on_off_light_switch::config_t*)config);
+    case ESP_MATTER_DIMMER_SWITCH_DEVICE_TYPE_ID:
+        return dimmer_switch::add(endpoint, (dimmer_switch::config_t*)config);
+    case ESP_MATTER_COLOR_DIMMER_SWITCH_DEVICE_TYPE_ID:
+        return color_dimmer_switch::add(endpoint, (color_dimmer_switch::config_t*)config);
+    case ESP_MATTER_GENERIC_SWITCH_DEVICE_TYPE_ID:
+        return generic_switch::add(endpoint, (generic_switch::config_t*)config);
+    case ESP_MATTER_ON_OFF_PLUG_IN_UNIT_DEVICE_TYPE_ID:
+        return on_off_plug_in_unit::add(endpoint, (on_off_plug_in_unit::config_t*)config);
+    case ESP_MATTER_DIMMABLE_PLUG_IN_UNIT_DEVICE_TYPE_ID:
+        return dimmable_plug_in_unit::add(endpoint, (dimmable_plug_in_unit::config_t*)config);
+    case ESP_MATTER_MOUNTED_ON_OFF_CONTROL_DEVICE_TYPE_ID:
+        return mounted_on_off_control::add(endpoint, (mounted_on_off_control::config_t*)config);
+    case ESP_MATTER_MOUNTED_DIMMABLE_LOAD_CONTROL_DEVICE_TYPE_ID:
+        return mounted_dimmable_load_control::add(endpoint, (mounted_dimmable_load_control::config_t*)config);
+    case ESP_MATTER_TEMPERATURE_SENSOR_DEVICE_TYPE_ID:
+        return temperature_sensor::add(endpoint, (temperature_sensor::config_t*)config);
+    case ESP_MATTER_OCCUPANCY_SENSOR_DEVICE_TYPE_ID:
+        return occupancy_sensor::add(endpoint, (occupancy_sensor::config_t*)config);
+    case ESP_MATTER_CONTACT_SENSOR_DEVICE_TYPE_ID:
+        return contact_sensor::add(endpoint, (contact_sensor::config_t*)config);
+    case ESP_MATTER_LIGHT_SENSOR_DEVICE_TYPE_ID:
+        return light_sensor::add(endpoint, (light_sensor::config_t*)config);
+    case ESP_MATTER_PRESSURE_SENSOR_DEVICE_TYPE_ID:
+        return pressure_sensor::add(endpoint, (pressure_sensor::config_t*)config);
+    case ESP_MATTER_FLOW_SENSOR_DEVICE_TYPE_ID:
+        return flow_sensor::add(endpoint, (flow_sensor::config_t*)config);
+    case ESP_MATTER_HUMIDITY_SENSOR_DEVICE_TYPE_ID:
+        return humidity_sensor::add(endpoint, (humidity_sensor::config_t*)config);
+//  case ESP_MATTER_ROOM_AIR_CONDITIONER_DEVICE_TYPE_ID:
+//      return room_air_conditioner::add(endpoint, (room_air_conditioner::config_t*)config);
+//  case ESP_MATTER_REFRIGERATOR_DEVICE_TYPE_ID:
+//      return refrigerator::add(endpoint, (refrigerator::config_t*)config);
+//  case ESP_MATTER_TEMPERATURE_CONTROLLED_CABINET_DEVICE_TYPE_ID:
+//      return temperature_controlled_cabinet::add(endpoint, (temperature_controlled_cabinet::config_t*)config);
+//  case ESP_MATTER_LAUNDRY_WASHER_DEVICE_TYPE_ID:
+//      return laundry_washer::add(endpoint, (laundry_washer::config_t*)config);
+//  case ESP_MATTER_DISH_WASHER_DEVICE_TYPE_ID:
+//      return dish_washer::add(endpoint, (dish_washer::config_t*)config);
+//  case ESP_MATTER_MICROWAVE_OVEN_DEVICE_TYPE_ID:
+//      return microwave_oven::add(endpoint, (microwave_oven::config_t*)config);
+//  case ESP_MATTER_SMOKE_CO_ALARM_DEVICE_TYPE_ID:
+//      return smoke_co_alarm::add(endpoint, (smoke_co_alarm::config_t*)config);
+//  case ESP_MATTER_LAUNDRY_DRYER_DEVICE_TYPE_ID:
+//      return laundry_dryer::add(endpoint, (laundry_dryer::config_t*)config);
+    case ESP_MATTER_FAN_DEVICE_TYPE_ID:
+        return fan::add(endpoint, (fan::config_t*)config);
+    case ESP_MATTER_THERMOSTAT_DEVICE_TYPE_ID:
+        return thermostat::add(endpoint, (thermostat::config_t*)config);
+    case ESP_MATTER_AIR_QUALITY_SENSOR_DEVICE_TYPE_ID:
+        return air_quality_sensor::add(endpoint, (air_quality_sensor::config_t*)config);
+    case ESP_MATTER_AIR_PURIFIER_DEVICE_TYPE_ID:
+        return air_purifier::add(endpoint, (air_purifier::config_t*)config);
+    case ESP_MATTER_DOOR_LOCK_DEVICE_TYPE_ID:
+        return door_lock::add(endpoint, (door_lock::config_t*)config);
+    case ESP_MATTER_WINDOW_COVERING_DEVICE_TYPE_ID:
+        return window_covering::add(endpoint, (window_covering::config_t*)config);
+//  case ESP_MATTER_PUMP_DEVICE_TYPE_ID:
+//      return pump::add(endpoint, (pump::config_t*)config);
+//  case ESP_MATTER_PUMP_CONTROLLER_DEVICE_TYPE_ID:
+//      return pump_controller::add(endpoint, (pump_controller::config_t*)config);
+//  case ESP_MATTER_MODE_SELECT_DEVICE_TYPE_ID:
+//      return mode_select::add(endpoint, (mode_select::config_t*)config);
+//  case ESP_MATTER_ROBOTIC_VACUUM_CLEANER_DEVICE_TYPE_ID:
+//      return robotic_vacuum_cleaner::add(endpoint, (robotic_vacuum_cleaner::config_t*)config);
+//  case ESP_MATTER_WATER_LEAK_DETECTOR_DEVICE_TYPE_ID:
+//      return water_leak_detector::add(endpoint, (water_leak_detector::config_t*)config);
+    case ESP_MATTER_RAIN_SENSOR_DEVICE_TYPE_ID:
+        return rain_sensor::add(endpoint, (rain_sensor::config_t*)config);
+//  case ESP_MATTER_COOK_SURFACE_DEVICE_TYPE_ID:
+//      return cook_surface::add(endpoint, (cook_surface::config_t*)config);
+//  case ESP_MATTER_COOKTOP_DEVICE_TYPE_ID:
+//      return cooktop::add(endpoint, (cooktop::config_t*)config);
+    case ESP_MATTER_ELECTRICAL_SENSOR_DEVICE_TYPE_ID:
+        return electrical_sensor::add(endpoint, (electrical_sensor::config_t*)config);
+//  case ESP_MATTER_OVEN_DEVICE_TYPE_ID:
+//      return oven::add(endpoint, (oven::config_t*)config);
+//  case ESP_MATTER_WATER_FREEZE_DETECTOR_DEVICE_TYPE_ID:
+//      return water_freeze_detector::add(endpoint, (water_freeze_detector::config_t*)config);
+//  case ESP_MATTER_ENERGY_EVSE_DEVICE_TYPE_ID:
+//      return energy_evse::add(endpoint, (energy_evse::config_t*)config);
+//  case ESP_MATTER_EXTRACTOR_HOOD_DEVICE_TYPE_ID:
+//      return extractor_hood::add(endpoint, (extractor_hood::config_t*)config);
+//  case ESP_MATTER_WATER_VALVE_DEVICE_TYPE_ID:
+//      return water_valve::add(endpoint, (water_valve::config_t*)config);
+//  case ESP_MATTER_DEVICE_ENERGY_MANAGEMENT_DEVICE_TYPE_ID:
+//      return device_energy_management::add(endpoint, (device_energy_management::config_t*)config);
+//  case ESP_MATTER_SECONDARY_NETWORK_INTERFACE_DEVICE_TYPE_ID:
+//      return secondary_network_interface::add(endpoint, (secondary_network_interface::config_t*)config);
+//  case ESP_MATTER_WATER_HEATER_DEVICE_TYPE_ID:
+//      return water_heater::add(endpoint, (water_heater::config_t*)config);
+//  case ESP_MATTER_SOLAR_POWER_DEVICE_TYPE_ID:
+//      return solar_power::add(endpoint, (solar_power::config_t*)config);
+//  case ESP_MATTER_BATTERY_STORAGE_DEVICE_TYPE_ID:
+//      return battery_storage::add(endpoint, (battery_storage::config_t*)config);
+//  case ESP_MATTER_THREAD_BORDER_ROUTER_DEVICE_TYPE_ID:
+//      return thread_border_router::add(endpoint, (thread_border_router::config_t*)config);
+//  case ESP_MATTER_HEAT_PUMP_DEVICE_TYPE_ID:
+//      return heat_pump::add(endpoint, (heat_pump::config_t*)config);
+//  case ESP_MATTER_THERMOSTAT_CONTROLLER_DEVICE_TYPE_ID:
+//      return thermostat_controller::add(endpoint, (thermostat_controller::config_t*)config);
+//  case ESP_MATTER_CAMERA_DEVICE_TYPE_ID:
+//      return camera::add(endpoint, (camera::config_t*)config);
+//  case ESP_MATTER_CLOSURE_CONTROLLER_DEVICE_TYPE_ID:
+//      return closure_controller::add(endpoint, (closure_controller::config_t*)config);
+//  case ESP_MATTER_CLOSURE_DEVICE_TYPE_ID:
+//      return closure::add(endpoint, (closure::config_t*)config);
+//  case ESP_MATTER_CLOSURE_PANEL_DEVICE_TYPE_ID:
+//      return closure_panel::add(endpoint, (closure_panel::config_t*)config);
+//  case ESP_MATTER_CHIME_DEVICE_TYPE_ID:
+//      return chime::add(endpoint, (chime::config_t*)config);
+//  case ESP_MATTER_ELECTRICAL_UTILITY_METER_DEVICE_TYPE_ID:
+//      return electrical_utility_meter::add(endpoint, (electrical_utility_meter::config_t*)config);
+//  case ESP_MATTER_ELECTRICAL_ENERGY_TARIFF_DEVICE_TYPE_ID:
+//      return electrical_energy_tariff::add(endpoint, (electrical_energy_tariff::config_t*)config);
+//  case ESP_MATTER_ELECTRICAL_METER_DEVICE_TYPE_ID:
+//      return electrical_meter::add(endpoint, (electrical_meter::config_t*)config);
+    }
+    return add_device_type(endpoint, uint16_t(id), uint16_t(id >> 16));
+}
+
+endpoint_t *create(int id, node_t *node, app_base_config *config, uint8_t flags, void *priv_data)
+{
+#if 1
+    endpoint_t *endpoint = endpoint::create(node, flags, priv_data);
+    VerifyOrReturnValue(endpoint != nullptr, NULL, ESP_LOGE(TAG, "Failed to create endpoint"));
+
+    cluster_t *descriptor_cluster = cluster::descriptor::create(endpoint, &(config->descriptor), CLUSTER_FLAG_SERVER);
+    VerifyOrReturnValue(descriptor_cluster != nullptr, NULL, ESP_LOGE(TAG, "Failed to create descriptor cluster"));
+
+    VerifyOrReturnValue(ESP_OK == add(id, endpoint, config), NULL, ESP_LOGE(TAG, "Failed to add cluster"));
+    return endpoint;
+#else
+    switch (id) {
+//  case ESP_MATTER_ROOT_NODE_DEVICE_TYPE_ID:
+//      return root_node::create(node, (root_node::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_OTA_REQUESTOR_DEVICE_TYPE_ID:
+//      return ota_requestor::create(node, (ota_requestor::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_OTA_PROVIDER_DEVICE_TYPE_ID:
+//      return ota_provider::create(node, (ota_provider::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_POWER_SOURCE_DEVICE_TYPE_ID:
+//      return power_source::create(node, (power_source::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_AGGREGATOR_DEVICE_TYPE_ID:
+//      return aggregator::create(node, (aggregator::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_BRIDGED_NODE_DEVICE_TYPE_ID:
+//      return bridged_node::create(node, (bridged_node::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_CONTROL_BRIDGE_DEVICE_TYPE_ID:
+//      return control_bridge::create(node, (control_bridge::config_t*)config, flags, priv_data);
+    case ESP_MATTER_ON_OFF_LIGHT_DEVICE_TYPE_ID:
+        return on_off_light::create(node, (on_off_light::config_t*)config, flags, priv_data);
+    case ESP_MATTER_DIMMABLE_LIGHT_DEVICE_TYPE_ID:
+        return dimmable_light::create(node, (dimmable_light::config_t*)config, flags, priv_data);
+    case ESP_MATTER_COLOR_TEMPERATURE_LIGHT_DEVICE_TYPE_ID:
+        return color_temperature_light::create(node, (color_temperature_light::config_t*)config, flags, priv_data);
+    case ESP_MATTER_EXTENDED_COLOR_LIGHT_DEVICE_TYPE_ID:
+        return extended_color_light::create(node, (extended_color_light::config_t*)config, flags, priv_data);
+    case ESP_MATTER_ON_OFF_LIGHT_SWITCH_DEVICE_TYPE_ID:
+        return on_off_light_switch::create(node, (on_off_light_switch::config_t*)config, flags, priv_data);
+    case ESP_MATTER_DIMMER_SWITCH_DEVICE_TYPE_ID:
+        return dimmer_switch::create(node, (dimmer_switch::config_t*)config, flags, priv_data);
+    case ESP_MATTER_COLOR_DIMMER_SWITCH_DEVICE_TYPE_ID:
+        return color_dimmer_switch::create(node, (color_dimmer_switch::config_t*)config, flags, priv_data);
+    case ESP_MATTER_GENERIC_SWITCH_DEVICE_TYPE_ID:
+        return generic_switch::create(node, (generic_switch::config_t*)config, flags, priv_data);
+    case ESP_MATTER_ON_OFF_PLUG_IN_UNIT_DEVICE_TYPE_ID:
+        return on_off_plug_in_unit::create(node, (on_off_plug_in_unit::config_t*)config, flags, priv_data);
+    case ESP_MATTER_DIMMABLE_PLUG_IN_UNIT_DEVICE_TYPE_ID:
+        return dimmable_plug_in_unit::create(node, (dimmable_plug_in_unit::config_t*)config, flags, priv_data);
+    case ESP_MATTER_MOUNTED_ON_OFF_CONTROL_DEVICE_TYPE_ID:
+        return mounted_on_off_control::create(node, (mounted_on_off_control::config_t*)config, flags, priv_data);
+    case ESP_MATTER_MOUNTED_DIMMABLE_LOAD_CONTROL_DEVICE_TYPE_ID:
+        return mounted_dimmable_load_control::create(node, (mounted_dimmable_load_control::config_t*)config, flags, priv_data);
+    case ESP_MATTER_TEMPERATURE_SENSOR_DEVICE_TYPE_ID:
+        return temperature_sensor::create(node, (temperature_sensor::config_t*)config, flags, priv_data);
+    case ESP_MATTER_OCCUPANCY_SENSOR_DEVICE_TYPE_ID:
+        return occupancy_sensor::create(node, (occupancy_sensor::config_t*)config, flags, priv_data);
+    case ESP_MATTER_CONTACT_SENSOR_DEVICE_TYPE_ID:
+        return contact_sensor::create(node, (contact_sensor::config_t*)config, flags, priv_data);
+    case ESP_MATTER_LIGHT_SENSOR_DEVICE_TYPE_ID:
+        return light_sensor::create(node, (light_sensor::config_t*)config, flags, priv_data);
+    case ESP_MATTER_PRESSURE_SENSOR_DEVICE_TYPE_ID:
+        return pressure_sensor::create(node, (pressure_sensor::config_t*)config, flags, priv_data);
+    case ESP_MATTER_FLOW_SENSOR_DEVICE_TYPE_ID:
+        return flow_sensor::create(node, (flow_sensor::config_t*)config, flags, priv_data);
+    case ESP_MATTER_HUMIDITY_SENSOR_DEVICE_TYPE_ID:
+        return humidity_sensor::create(node, (humidity_sensor::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_ROOM_AIR_CONDITIONER_DEVICE_TYPE_ID:
+//      return room_air_conditioner::create(node, (room_air_conditioner::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_REFRIGERATOR_DEVICE_TYPE_ID:
+//      return refrigerator::create(node, (refrigerator::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_TEMPERATURE_CONTROLLED_CABINET_DEVICE_TYPE_ID:
+//      return temperature_controlled_cabinet::create(node, (temperature_controlled_cabinet::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_LAUNDRY_WASHER_DEVICE_TYPE_ID:
+//      return laundry_washer::create(node, (laundry_washer::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_DISH_WASHER_DEVICE_TYPE_ID:
+//      return dish_washer::create(node, (dish_washer::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_MICROWAVE_OVEN_DEVICE_TYPE_ID:
+//      return microwave_oven::create(node, (microwave_oven::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_SMOKE_CO_ALARM_DEVICE_TYPE_ID:
+//      return smoke_co_alarm::create(node, (smoke_co_alarm::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_LAUNDRY_DRYER_DEVICE_TYPE_ID:
+//      return laundry_dryer::create(node, (laundry_dryer::config_t*)config, flags, priv_data);
+    case ESP_MATTER_FAN_DEVICE_TYPE_ID:
+        return fan::create(node, (fan::config_t*)config, flags, priv_data);
+    case ESP_MATTER_THERMOSTAT_DEVICE_TYPE_ID:
+        return thermostat::create(node, (thermostat::config_t*)config, flags, priv_data);
+    case ESP_MATTER_AIR_QUALITY_SENSOR_DEVICE_TYPE_ID:
+        return air_quality_sensor::create(node, (air_quality_sensor::config_t*)config, flags, priv_data);
+    case ESP_MATTER_AIR_PURIFIER_DEVICE_TYPE_ID:
+        return air_purifier::create(node, (air_purifier::config_t*)config, flags, priv_data);
+    case ESP_MATTER_DOOR_LOCK_DEVICE_TYPE_ID:
+        return door_lock::create(node, (door_lock::config_t*)config, flags, priv_data);
+    case ESP_MATTER_WINDOW_COVERING_DEVICE_TYPE_ID:
+        return window_covering::create(node, (window_covering::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_PUMP_DEVICE_TYPE_ID:
+//      return pump::create(node, (pump::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_PUMP_CONTROLLER_DEVICE_TYPE_ID:
+//      return pump_controller::create(node, (pump_controller::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_MODE_SELECT_DEVICE_TYPE_ID:
+//      return mode_select::create(node, (mode_select::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_ROBOTIC_VACUUM_CLEANER_DEVICE_TYPE_ID:
+//      return robotic_vacuum_cleaner::create(node, (robotic_vacuum_cleaner::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_WATER_LEAK_DETECTOR_DEVICE_TYPE_ID:
+//      return water_leak_detector::create(node, (water_leak_detector::config_t*)config, flags, priv_data);
+    case ESP_MATTER_RAIN_SENSOR_DEVICE_TYPE_ID:
+        return rain_sensor::create(node, (rain_sensor::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_COOK_SURFACE_DEVICE_TYPE_ID:
+//      return cook_surface::create(node, (cook_surface::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_COOKTOP_DEVICE_TYPE_ID:
+//      return cooktop::create(node, (cooktop::config_t*)config, flags, priv_data);
+    case ESP_MATTER_ELECTRICAL_SENSOR_DEVICE_TYPE_ID:
+        return electrical_sensor::create(node, (electrical_sensor::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_OVEN_DEVICE_TYPE_ID:
+//      return oven::create(node, (oven::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_WATER_FREEZE_DETECTOR_DEVICE_TYPE_ID:
+//      return water_freeze_detector::create(node, (water_freeze_detector::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_ENERGY_EVSE_DEVICE_TYPE_ID:
+//      return energy_evse::create(node, (energy_evse::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_EXTRACTOR_HOOD_DEVICE_TYPE_ID:
+//      return extractor_hood::create(node, (extractor_hood::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_WATER_VALVE_DEVICE_TYPE_ID:
+//      return water_valve::create(node, (water_valve::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_DEVICE_ENERGY_MANAGEMENT_DEVICE_TYPE_ID:
+//      return device_energy_management::create(node, (device_energy_management::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_SECONDARY_NETWORK_INTERFACE_DEVICE_TYPE_ID:
+//     return secondary_network_interface::create(node, (secondary_network_interface::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_WATER_HEATER_DEVICE_TYPE_ID:
+//      return water_heater::create(node, (water_heater::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_SOLAR_POWER_DEVICE_TYPE_ID:
+//      return solar_power::create(node, (solar_power::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_BATTERY_STORAGE_DEVICE_TYPE_ID:
+//      return battery_storage::create(node, (battery_storage::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_THREAD_BORDER_ROUTER_DEVICE_TYPE_ID:
+//      return thread_border_router::create(node, (thread_border_router::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_HEAT_PUMP_DEVICE_TYPE_ID:
+//      return heat_pump::create(node, (heat_pump::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_THERMOSTAT_CONTROLLER_DEVICE_TYPE_ID:
+//      return thermostat_controller::create(node, (thermostat_controller::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_CAMERA_DEVICE_TYPE_ID:
+//      return camera::create(node, (camera::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_CLOSURE_CONTROLLER_DEVICE_TYPE_ID:
+//      return closure_controller::create(node, (closure_controller::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_CLOSURE_DEVICE_TYPE_ID:
+//      return closure::create(node, (closure::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_CLOSURE_PANEL_DEVICE_TYPE_ID:
+//      return closure_panel::create(node, (closure_panel::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_CHIME_DEVICE_TYPE_ID:
+//      return chime::create(node, (chime::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_ELECTRICAL_UTILITY_METER_DEVICE_TYPE_ID:
+//      return electrical_utility_meter::create(node, (electrical_utility_meter::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_ELECTRICAL_ENERGY_TARIFF_DEVICE_TYPE_ID:
+//      return electrical_energy_tariff::create(node, (electrical_energy_tariff::config_t*)config, flags, priv_data);
+//  case ESP_MATTER_ELECTRICAL_METER_DEVICE_TYPE_ID:
+//      return electrical_meter::create(node, (electrical_meter::config_t*)config, flags, priv_data);
+    }
+    return nullptr;
+#endif
+}
+
+} // namespace common
+} // namespace endpoint
+} // namespace esp_matter
+
 #endif

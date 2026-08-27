@@ -41,6 +41,7 @@ export IDF_TARGET=esp32c3
 export IDF_MAINTAINER=1
 
 cd light
+idf.py -DIDF_TOOLCHAIN=clang update-dependencies
 idf.py -DIDF_TOOLCHAIN=clang set-target esp32c3
 cp ../sdkconfig.esp32c3 sdkconfig
 idf.py -DIDF_TOOLCHAIN=clang menuconfig

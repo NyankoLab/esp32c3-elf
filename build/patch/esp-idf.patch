@@ -81,7 +81,7 @@ index 1834290fc64..6810b91f3ab 100644
  
  #include_next <assert.h>
 diff --git a/components/esp_system/ld/ld.flash.sections b/components/esp_system/ld/ld.flash.sections
-index 15e4d507ed7..9288cb30896 100644
+index 22cc9e2ae47..b0f544cefe6 100644
 --- a/components/esp_system/ld/ld.flash.sections
 +++ b/components/esp_system/ld/ld.flash.sections
 @@ -96,6 +96,7 @@
@@ -89,7 +89,7 @@ index 15e4d507ed7..9288cb30896 100644
      _flash_rodata_start = ABSOLUTE(.);
  
 +    *(.rodata..L.*) 
-     SECTION_MAPPINGS(flash_rodata)
+     SECTION_MAPPINGS_WITH_PADDING(flash_rodata)
  
  #if CONFIG_LIBC_PICOLIBC
 diff --git a/components/nvs_flash/src/nvs_page.cpp b/components/nvs_flash/src/nvs_page.cpp
@@ -119,13 +119,13 @@ index 53428e2cb8d..381d173b308 100644
          WORKING_DIRECTORY
          "${CMAKE_CURRENT_SOURCE_DIR}"
 diff --git a/tools/cmake/toolchain-clang-esp32c3.cmake b/tools/cmake/toolchain-clang-esp32c3.cmake
-index 3b6755d05b7..c517946d9da 100644
+index 9833188d7db..8222b94ccce 100644
 --- a/tools/cmake/toolchain-clang-esp32c3.cmake
 +++ b/tools/cmake/toolchain-clang-esp32c3.cmake
-@@ -19,6 +19,15 @@ set(CMAKE_C_FLAGS "${UNIQ_CMAKE_C_FLAGS}"
-     FORCE)
- 
- remove_duplicated_flags("--target=riscv32-esp-elf -march=rv32imc_zicsr_zifencei -mabi=ilp32 \
+@@ -1,2 +1,13 @@
+ set(_CMAKE_TOOLCHAIN_PREFIX riscv32-esp-elf-)
+ include($ENV{IDF_PATH}/tools/cmake/toolchain.cmake)
++set(CMAKE_CXX_FLAGS " \
 +-fno-aligned-allocation -fno-sized-deallocation -stdlib=libc++ \
 +-D_LIBCPP_DISABLE_AVAILABILITY \
 +-D_LIBCPP___CONFIG_SITE \
@@ -135,11 +135,10 @@ index 3b6755d05b7..c517946d9da 100644
 +-D_LIBCPP_HARDENING_MODE_DEFAULT=_LIBCPP_HARDENING_MODE_NONE \
 +-D_LIBCPP_HAS_WIDE_CHARACTERS \
 +-D_LIBCPP_VERBOSE_ABORT=\\(void\\) \
-                         ${CMAKE_CXX_FLAGS}"
-                         UNIQ_CMAKE_CXX_FLAGS)
- set(CMAKE_CXX_FLAGS "${UNIQ_CMAKE_CXX_FLAGS}"
++${CMAKE_CXX_FLAGS}" CACHE STRING "C++ Compiler Base Flags" FORCE)
+\ No newline at end of file
 diff --git a/tools/idf_py_actions/tools.py b/tools/idf_py_actions/tools.py
-index 2ab73dc937c..bcda82efab6 100644
+index 61f993e1e5e..012d5cc8d69 100644
 --- a/tools/idf_py_actions/tools.py
 +++ b/tools/idf_py_actions/tools.py
 @@ -113,7 +113,7 @@ def idf_version() -> str | None:

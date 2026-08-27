@@ -54,10 +54,10 @@ struct hashed_elfsym
 
 // Base     208
 // ESPHome  7
-// Matter   77
+// Matter   28
 #define BASE_COUNT      208
 #define ESPHOME_COUNT   (HAVE_ESPHOME ? 7 : 0)
-#define MATTER_COUNT    (HAVE_MATTER ? 77 : 0)
+#define MATTER_COUNT    (HAVE_MATTER ? 28 : 0)
 #define ARRAY_COUNT     BASE_COUNT + ESPHOME_COUNT + MATTER_COUNT
 
 consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
@@ -646,17 +646,11 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZN4chip6Server7sServerE),
 
     // esp-matter
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute7get_valEtjjP21esp_matter_attr_val_t),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute6reportEtjjP21esp_matter_attr_val_t),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute6updateEtjjP21esp_matter_attr_val_t),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster3getEPjj),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter20default_app_event_cbEPKN4chip11DeviceLayer15ChipDeviceEventEi),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter29default_app_identification_cbENS_14identification13callback_typeEthhPv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6get_idEPj),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13get_priv_dataEt),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter13factory_resetEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter12get_passcodeEv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter17get_discriminatorEv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter17get_discriminatorEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter16get_fabric_countEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter16get_pairing_codeERNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter10get_qrcodeERNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE),
@@ -667,95 +661,187 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZN10esp_matter11set_versionEPKc),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter5startEPFvPKN4chip11DeviceLayer15ChipDeviceEventEiEi),
 
+    // attribute
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute10add_boundsEPj21esp_matter_attr_val_tS2_),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute6createEPjjt21esp_matter_attr_val_tt),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute7get_valEtjjP21esp_matter_attr_val_t),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute6reportEtjjP21esp_matter_attr_val_t),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter9attribute6updateEtjjP21esp_matter_attr_val_t),
+
     // cluster
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster10thermostat9attribute18create_ac_capacityEPjt),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster10thermostat9attribute25create_ac_louver_positionEPjh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster10thermostat9attribute26create_outdoor_temperatureEPj8nullableIsE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster3getEPjj),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster10thermostat9attribute18create_ac_capacityEPjt),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster10thermostat9attribute25create_ac_louver_positionEPjh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster10thermostat9attribute26create_outdoor_temperatureEPj8nullableIsE),
 
     // measurement
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster25concentration_measurement6createEPjPNS1_6configEhj),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster41carbon_monoxide_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster40carbon_dioxide_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster42nitrogen_dioxide_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster31ozone_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster38formaldehyde_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster29pm1_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster30pm25_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster30pm10_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster31radon_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster58total_volatile_organic_compounds_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster23temperature_measurement6createEPjPNS1_6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster29relative_humidity_measurement6createEPjPNS1_6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster17occupancy_sensing6createEPjPNS1_6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster23illuminance_measurement6createEPjPNS1_6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster20pressure_measurement6createEPjPNS1_6configEh),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster16flow_measurement6createEPjPNS1_6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster25concentration_measurement6createEPjPNS1_6configEhj),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster41carbon_monoxide_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster40carbon_dioxide_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster42nitrogen_dioxide_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster31ozone_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster38formaldehyde_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster29pm1_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster30pm25_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster30pm10_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster31radon_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster58total_volatile_organic_compounds_concentration_measurement6createEPjPNS0_25concentration_measurement6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster23temperature_measurement6createEPjPNS1_6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster29relative_humidity_measurement6createEPjPNS1_6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster17occupancy_sensing6createEPjPNS1_6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster23illuminance_measurement6createEPjPNS1_6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster20pressure_measurement6createEPjPNS1_6configEh),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster16flow_measurement6createEPjPNS1_6configEh),
 
+    // endpoint
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6common3addEiPjPNS0_15app_base_configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6common6createEiPjPNS0_15app_base_configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6get_idEPj),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13get_priv_dataEt),
+
+#if 0
     // endpoint - 1.0
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12on_off_light3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12on_off_light6createEPjPNS1_6configEhPv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14dimmable_light3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14dimmable_light6createEPjPNS1_6configEhPv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint23color_temperature_light3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint23color_temperature_light6createEPjPNS1_6configEhPv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20extended_color_light3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20extended_color_light6createEPjPNS1_6configEhPv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19on_off_plug_in_unit3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19on_off_plug_in_unit6createEPjPNS1_6configEhPv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint21dimmable_plug_in_unit3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint21dimmable_plug_in_unit6createEPjPNS1_6configEhPv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint10thermostat3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint10thermostat6createEPjPNS1_6configEhPv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15window_covering3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15window_covering6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock6createEPjPNS1_6configEhPv),
+//??ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20door_lock_controller3addEPjPNS1_6configE),
+//??ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20door_lock_controller6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15window_covering3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15window_covering6createEPjPNS1_6configEhPv),
+//??ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint26window_covering_controller3addEPjPNS1_6configE),
+//??ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint26window_covering_controller6createEPjPNS1_6configEhPv),
+
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint18temperature_sensor3addEPjPNS1_6configE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint18temperature_sensor6createEPjPNS1_6configEhPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15humidity_sensor3addEPjPNS1_6configE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15humidity_sensor6createEPjPNS1_6configEhPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint16occupancy_sensor3addEPjPNS1_6configE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint16occupancy_sensor6createEPjPNS1_6configEhPv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14contact_sensor3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14contact_sensor6createEPjPNS1_6configEhPv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12light_sensor3addEPjPNS1_6configE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12light_sensor6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14contact_sensor3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14contact_sensor6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15pressure_sensor3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15pressure_sensor6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11flow_sensor3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11flow_sensor6createEPjPNS1_6configEhPv),
+//??ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13on_off_sensor3addEPjPNS1_6configE),
+//??ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13on_off_sensor6createEPjPNS1_6configEhPv),
+
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint10thermostat3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint10thermostat6createEPjPNS1_6configEhPv),
+//??ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20heating_cooling_unit3addEPjPNS1_6configE),
+//??ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20heating_cooling_unit6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint4pump3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint4pump6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15pump_controller3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15pump_controller6createEPjPNS1_6configEhPv),
+
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19on_off_plug_in_unit3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19on_off_plug_in_unit6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint21dimmable_plug_in_unit3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint21dimmable_plug_in_unit6createEPjPNS1_6configEhPv),
+
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20extended_color_light3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20extended_color_light6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint23color_temperature_light3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint23color_temperature_light6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12on_off_light3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12on_off_light6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14dimmable_light3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14dimmable_light6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19on_off_light_switch3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19on_off_light_switch6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13dimmer_switch3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13dimmer_switch6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19color_dimmer_switch3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19color_dimmer_switch6createEPjPNS1_6configEhPv),
 
     // endpoint - 1.2
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12air_purifier3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12air_purifier6createEPjPNS1_6configEhPv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint3fan3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint3fan6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint18air_quality_sensor3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint18air_quality_sensor6createEPjPNS1_6configEhPv),
 //  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14smoke_co_alarm3addEPjPNS1_6configE),
 //  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14smoke_co_alarm6createEPjPNS1_6configEhPv),
+
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint3fan3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint3fan6createEPjPNS1_6configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12air_purifier3addEPjPNS1_6configE),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12air_purifier6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20room_air_conditioner3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv),
+
 //  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint22robotic_vacuum_cleaner3addEPjPNS1_6configE),
 //  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint22robotic_vacuum_cleaner6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint30temperature_controlled_cabinet3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint30temperature_controlled_cabinet6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12refrigerator3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12refrigerator6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14laundry_washer3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14laundry_washer6createEPjPNS1_6configEhPv),
+//??ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint10dishwasher3addEPjPNS1_6configE),
+//??ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint10dishwasher6createEPjPNS1_6configEhPv),
+
+    // endpoint - 1.3
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11water_valve3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11water_valve6createEPjPNS1_6configEhPv),
+
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19water_leak_detector3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19water_leak_detector6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint21water_freeze_detector3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint21water_freeze_detector6createEPjPNS1_6configEhPv),
+
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12cook_surface3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12cook_surface6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint7cooktop3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint7cooktop6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14microwave_oven3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14microwave_oven6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14extractor_hood3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint14extractor_hood6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint4oven3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint4oven6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13laundry_dryer3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13laundry_dryer6createEPjPNS1_6configEhPv),
+
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11rain_sensor3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11rain_sensor6createEPjPNS1_6configEhPv),
+
 //  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11energy_evse3addEPjPNS1_6configE),
 //  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11energy_evse6createEPjPNS1_6configEhPv),
 
-    // endpoint - 1.3
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint18air_quality_sensor3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint18air_quality_sensor6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20room_air_conditioner3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint20room_air_conditioner6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19water_leak_detector3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint19water_leak_detector6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11water_valve3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11water_valve6createEPjPNS1_6configEhPv),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12water_heater3addEPjPNS1_6configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12water_heater6createEPjPNS1_6configEhPv),
+    // endpoint - 1.4
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint17electrical_sensor3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint17electrical_sensor6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint24device_energy_management3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint24device_energy_management6createEPjPNS1_6configEhPv),
+
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint21thermostat_controller3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint21thermostat_controller6createEPjPNS1_6configEhPv),
+
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint22mounted_on_off_control3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint22mounted_on_off_control6createEPjPNS1_6configEhPv),
+
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11solar_power3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint11solar_power6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15battery_storage3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint15battery_storage6createEPjPNS1_6configEhPv),
 //  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9heat_pump3addEPjPNS1_6configE),
 //  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9heat_pump6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12water_heater3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint12water_heater6createEPjPNS1_6configEhPv),
 
-    // endpoint - 1.4
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint5chime3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint5chime6createEPjPNS1_6configEhPv),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint7closure3addEPjPNS1_6configE),
-//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint7closure6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint29mounted_dimmable_load_control6createEPjPNS0_14dimmable_light6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint29mounted_dimmable_load_control3addEPjPNS0_14dimmable_light6configE),
 
     // endpoint - 1.5
 //  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6camera3addEPjPNS1_6configE),
 //  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6camera6createEPjPNS1_6configEhPv),
+
+    // endpoint - ???
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint5chime3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint5chime6createEPjPNS1_6configEhPv),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint7closure3addEPjPNS1_6configE),
+//  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint7closure6createEPjPNS1_6configEhPv),
+#endif
 #endif
 
     // end

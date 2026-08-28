@@ -421,6 +421,7 @@ EXCLUDED_ARCHS =
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-matter/components/esp_matter
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-matter/components/esp_matter/data_model
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-matter/components/esp_matter/utils
+HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-matter/components/esp_matter/utils/jsontlv
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-matter/components/esp_matter_console
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-matter/connectedhomeip/connectedhomeip/src
 HEADER_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/../esp-matter/connectedhomeip/connectedhomeip/src/include

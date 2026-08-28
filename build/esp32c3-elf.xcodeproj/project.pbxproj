@@ -107,6 +107,7 @@
 		F543D84E2FBAF05B00DE9187 /* mbedtls.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mbedtls.c; sourceTree = "<group>"; };
 		F54D9BFF2DAAA9EB00B429A9 /* lcd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lcd.c; sourceTree = "<group>"; };
 		F54D9C012DAAAD1000B429A9 /* lcd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lcd.h; sourceTree = "<group>"; };
+		F55E6A093041BA4800F42B33 /* matter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = matter.h; sourceTree = "<group>"; };
 		F5BF0D202FA7859900F82963 /* matter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = matter.cpp; sourceTree = "<group>"; };
 		F5F5E4112DA3E62F00BA4DF0 /* wifi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wifi.h; sourceTree = "<group>"; };
 		F5F5E4122DA3E62F00BA4DF0 /* wifi.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = wifi.c; sourceTree = "<group>"; };
@@ -225,6 +226,7 @@
 				F54D9BFF2DAAA9EB00B429A9 /* lcd.c */,
 				F54D9C012DAAAD1000B429A9 /* lcd.h */,
 				F5BF0D202FA7859900F82963 /* matter.cpp */,
+				F55E6A093041BA4800F42B33 /* matter.h */,
 				D6FC9A682CEB43C8009AF784 /* mqtt.c */,
 				D6FC9A6C2CEB43C8009AF784 /* mqtt.h */,
 				D6FC9A9F2CECD11B009AF784 /* ota.c */,

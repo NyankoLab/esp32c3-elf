@@ -1,34 +1,20 @@
 diff --git a/components/esp_matter/CMakeLists.txt b/components/esp_matter/CMakeLists.txt
-index cd389d78..eb8c388f 100644
+index 9a96bc30..c9aad5bf 100644
 --- a/components/esp_matter/CMakeLists.txt
 +++ b/components/esp_matter/CMakeLists.txt
-@@ -51,7 +51,15 @@ endif(CONFIG_ESP_MATTER_ENABLE_MATTER_SERVER)
- 
- 
- 
--set(REQUIRES_LIST       chip bt esp_matter_console nvs_flash app_update esp_secure_cert_mgr mbedtls esp_system openthread json)
-+set(REQUIRES_LIST       chip bt esp_matter_console nvs_flash app_update esp_secure_cert_mgr mbedtls esp_system openthread)
-+
-+# IDF v6.0 removed the built-in json component; use espressif__cjson from the component registry.
-+# For older IDF versions, use the built-in json component.
-+if("${IDF_VERSION_MAJOR}.${IDF_VERSION_MINOR}" VERSION_GREATER_EQUAL "6.0")
-+    list(APPEND REQUIRES_LIST espressif__cjson)
-+else()
-+    list(APPEND REQUIRES_LIST json)
-+endif()
- 
- idf_component_register( SRC_DIRS        ${SRC_DIRS_LIST}
-                         INCLUDE_DIRS    ${INCLUDE_DIRS_LIST}
-@@ -62,8 +70,18 @@ idf_component_register( SRC_DIRS        ${SRC_DIRS_LIST}
+@@ -110,10 +110,21 @@ endif()
  # This has been added to fix the error and should be removed once fixed:
  # esp-matter/connectedhomeip/connectedhomeip/src/app/EventManagement.cpp:467:23: error: 'writer' is
  # used uninitialized in this function
 -idf_build_set_property(COMPILE_OPTIONS "-Wno-error=uninitialized;-Wno-error=maybe-uninitialized;-Wno-missing-field-initializers;" APPEND)
++#idf_build_set_property(COMPILE_OPTIONS "-Wno-error=uninitialized;-Wno-error=maybe-uninitialized;-Wno-missing-field-initializers;" APPEND)
 +idf_build_set_property(COMPILE_OPTIONS "-D__FILE__=__FILE_NAME__" APPEND)
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-builtin-macro-redefined" APPEND)
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=uninitialized;-Wno-missing-field-initializers;" APPEND)
 +#-Wno-error=maybe-uninitialized;
  idf_build_set_property(COMPILE_OPTIONS "-Wno-error=array-bounds" APPEND)
+-
+-target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=inconsistent-missing-override" APPEND)
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=sign-conversion" APPEND)
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=format" APPEND)
@@ -36,178 +22,95 @@ index cd389d78..eb8c388f 100644
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=#warnings" APPEND)
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=unused-private-field" APPEND)
 +idf_build_set_property(COMPILE_OPTIONS "-Wno-error=non-c-typedef-for-linkage" APPEND)
++
++#target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
  
  if (CONFIG_ESP_MATTER_ENABLE_MATTER_SERVER)
      if (CONFIG_ESP_MATTER_ENABLE_DATA_MODEL)
-diff --git a/components/esp_matter/data_model/esp_matter_attribute.cpp b/components/esp_matter/data_model/esp_matter_attribute.cpp
-index 82950048..5eda8809 100644
---- a/components/esp_matter/data_model/esp_matter_attribute.cpp
-+++ b/components/esp_matter/data_model/esp_matter_attribute.cpp
-@@ -2285,7 +2285,7 @@ namespace attribute {
- 
- attribute_t *create_air_quality(cluster_t *cluster, uint8_t value)
- {
--    return esp_matter::attribute::create(cluster, AirQuality::Attributes::AirQuality::Id, ATTRIBUTE_FLAG_MANAGED_INTERNALLY,
-+    return esp_matter::attribute::create(cluster, AirQuality::Attributes::AirQuality::Id, ATTRIBUTE_FLAG_NONE,
-                                          esp_matter_enum8(value));
- }
- 
-diff --git a/components/esp_matter/data_model/esp_matter_attribute_bounds.cpp b/components/esp_matter/data_model/esp_matter_attribute_bounds.cpp
-index c4458ae4..0f657542 100644
---- a/components/esp_matter/data_model/esp_matter_attribute_bounds.cpp
-+++ b/components/esp_matter/data_model/esp_matter_attribute_bounds.cpp
-@@ -461,8 +461,8 @@ void add_bounds_cb(cluster_t *cluster)
-                 break;
-             }
-             case Thermostat::Attributes::MinSetpointDeadBand::Id: {
--                int16_t min = 0, max = 1270;
--                esp_matter::attribute::add_bounds(current_attribute, esp_matter_int16(min), esp_matter_int16(max));
-+                int8_t min = 0, max = 127;
-+                esp_matter::attribute::add_bounds(current_attribute, esp_matter_int8(min), esp_matter_int8(max));
-                 break;
-             }
-             case Thermostat::Attributes::ControlSequenceOfOperation::Id: {
-diff --git a/components/esp_matter/data_model/esp_matter_cluster.cpp b/components/esp_matter/data_model/esp_matter_cluster.cpp
-index cc8e22a8..24ff20f4 100644
---- a/components/esp_matter/data_model/esp_matter_cluster.cpp
-+++ b/components/esp_matter/data_model/esp_matter_cluster.cpp
-@@ -328,6 +328,9 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags)
+diff --git a/components/esp_matter/data_model/legacy/esp_matter_cluster.cpp b/components/esp_matter/data_model/legacy/esp_matter_cluster.cpp
+index 18d0f9bd..fe15da04 100644
+--- a/components/esp_matter/data_model/legacy/esp_matter_cluster.cpp
++++ b/components/esp_matter/data_model/legacy/esp_matter_cluster.cpp
+@@ -249,6 +249,9 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags)
          attribute::create_hardware_version_string(cluster, NULL, 0);
          attribute::create_software_version(cluster, 0);
          attribute::create_software_version_string(cluster, NULL, 0);
 +        attribute::create_manufacturing_date(cluster, NULL, 0);
 +        attribute::create_part_number(cluster, NULL, 0);
 +        attribute::create_serial_number(cluster, NULL, 0);
-         attribute::create_unique_id(cluster, NULL, 0);
          attribute::create_capability_minima(cluster, NULL, 0, 0);
          attribute::create_specification_version(cluster, 0);
-@@ -1541,7 +1544,7 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags)
-         /* Attributes managed internally */
-         global::attribute::create_feature_map(cluster, 0);
+         attribute::create_max_paths_per_invoke(cluster, 0);
+diff --git a/components/esp_matter_bridge/CMakeLists.txt b/components/esp_matter_bridge/CMakeLists.txt
+index 9b7d5eaa..6b3818eb 100644
+--- a/components/esp_matter_bridge/CMakeLists.txt
++++ b/components/esp_matter_bridge/CMakeLists.txt
+@@ -10,5 +10,5 @@ idf_component_register(SRC_DIRS        ${src_dirs_list}
+                        REQUIRES        esp_matter esp_matter_console)
  
--        attribute::create_air_quality(cluster, 0);
-+        attribute::create_air_quality(cluster, config->air_quality);
+ if (CONFIG_ESP_MATTER_ENABLE_DATA_MODEL)
+-    target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
++#   target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
+ endif()
+diff --git a/components/esp_matter_console/CMakeLists.txt b/components/esp_matter_console/CMakeLists.txt
+index ed5cbc26..968a4d6e 100644
+--- a/components/esp_matter_console/CMakeLists.txt
++++ b/components/esp_matter_console/CMakeLists.txt
+@@ -15,5 +15,5 @@ idf_component_register(SRC_DIRS ${src_dirs}
+                     PRIV_REQUIRES ${priv_req})
  
-         /* Attributes not managed internally */
-         global::attribute::create_cluster_revision(cluster, cluster_revision);
-diff --git a/components/esp_matter/data_model/esp_matter_cluster.h b/components/esp_matter/data_model/esp_matter_cluster.h
-index 3650d975..e359f314 100644
---- a/components/esp_matter/data_model/esp_matter_cluster.h
-+++ b/components/esp_matter/data_model/esp_matter_cluster.h
-@@ -438,7 +438,10 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
- } // namespace thermostat_user_interface_configuration
+ if (CONFIG_ENABLE_CHIP_SHELL)
+-    target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
++#   target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
+ endif()
+diff --git a/components/esp_matter_controller/CMakeLists.txt b/components/esp_matter_controller/CMakeLists.txt
+index 8f4fb727..07c4424b 100644
+--- a/components/esp_matter_controller/CMakeLists.txt
++++ b/components/esp_matter_controller/CMakeLists.txt
+@@ -50,5 +50,5 @@ idf_component_register(SRC_DIRS ${src_dirs_list}
+ idf_build_set_property(COMPILE_OPTIONS "-Wno-write-strings" APPEND)
  
- namespace air_quality {
--using config_t = common::config_t;
-+typedef struct config {
-+    uint8_t air_quality;
-+    config() : air_quality(0) {}
-+} config_t;
+ if (CONFIG_ESP_MATTER_CONTROLLER_ENABLE)
+-    target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
++#   target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
+ endif()
+diff --git a/components/esp_matter_ota_provider/CMakeLists.txt b/components/esp_matter_ota_provider/CMakeLists.txt
+index 91a7671b..732dcac3 100644
+--- a/components/esp_matter_ota_provider/CMakeLists.txt
++++ b/components/esp_matter_ota_provider/CMakeLists.txt
+@@ -15,5 +15,5 @@ idf_component_register(SRCS "${srcs}"
+                        REQUIRES esp_matter esp_http_client)
  
- cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
- } // namespace air_quality
-diff --git a/components/esp_matter/data_model/esp_matter_data_model.cpp b/components/esp_matter/data_model/esp_matter_data_model.cpp
-index f726c63e..057638a5 100644
---- a/components/esp_matter/data_model/esp_matter_data_model.cpp
-+++ b/components/esp_matter/data_model/esp_matter_data_model.cpp
-@@ -1139,7 +1139,8 @@ esp_err_t add_bounds(attribute_t *attribute, esp_matter_attr_val_t min, esp_matt
-     VerifyOrReturnError(
-         ((current_attribute->attribute_val_type == min.type) && (current_attribute->attribute_val_type == max.type)),
-         ESP_ERR_INVALID_ARG,
--        ESP_LOGE(TAG, "Cannot set bounds because of val type mismatch: expected: %d, min: %d, max: %d",
-+        ESP_LOGE(TAG, "Cannot set bounds because of val type mismatch: attribute: %d, cluster: %d, expected: %d, min: %d, max: %d",
-+                 current_attribute->attribute_id, current_attribute->cluster_id,
-                  current_attribute->attribute_val_type, min.type, max.type));
-     current_attribute->bounds = (esp_matter_attr_bounds_t *)esp_matter_mem_calloc(1, sizeof(esp_matter_attr_bounds_t));
-     if (!current_attribute->bounds) {
+ if (CONFIG_ESP_MATTER_OTA_PROVIDER_ENABLED)
+-    target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
++#   target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
+ endif()
+diff --git a/components/esp_matter_rainmaker/CMakeLists.txt b/components/esp_matter_rainmaker/CMakeLists.txt
+index 96f70180..a339e723 100644
+--- a/components/esp_matter_rainmaker/CMakeLists.txt
++++ b/components/esp_matter_rainmaker/CMakeLists.txt
+@@ -12,5 +12,5 @@ idf_component_register(SRCS             ${SRCS_LIST}
+                        REQUIRES         ${REQUIRES_LIST})
+ 
+ if (${rainmaker_enabled})
+-    target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
++#   target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
+ endif()
 diff --git a/connectedhomeip/connectedhomeip b/connectedhomeip/connectedhomeip
-index 2c2e3a94..b87051a9 160000
 --- a/connectedhomeip/connectedhomeip
 +++ b/connectedhomeip/connectedhomeip
 @@ -1 +1 @@
--Subproject commit 2c2e3a94d04b38154f4a8388016dc2f5717633be
-+Subproject commit b87051a95fc110c0cfbac278f232df55c89866de-dirty
+-Subproject commit 93abd8e6891bb578ea63254fb29d099936f345c8
++Subproject commit 93abd8e6891bb578ea63254fb29d099936f345c8-dirty
 diff --git a/device_hal/device/esp32_devkit_c/esp_matter_device.cmake b/device_hal/device/esp32_devkit_c/esp_matter_device.cmake
-index a8fb0670..ad4e4177 100644
+index a8fb0670..e5560183 100644
 --- a/device_hal/device/esp32_devkit_c/esp_matter_device.cmake
 +++ b/device_hal/device/esp32_devkit_c/esp_matter_device.cmake
 @@ -1,6 +1,6 @@
  cmake_minimum_required(VERSION 3.5)
  if (NOT ("${IDF_TARGET}" STREQUAL "esp32" ))
 -    message(FATAL_ERROR "please set esp32 as the IDF_TARGET using 'idf.py set-target esp32'")
-+#    message(FATAL_ERROR "please set esp32 as the IDF_TARGET using 'idf.py set-target esp32'")
++#   message(FATAL_ERROR "please set esp32 as the IDF_TARGET using 'idf.py set-target esp32'")
  endif()
  
  SET(device_type     esp32_devkit_c)
-diff --git a/device_hal/led_driver/ws2812/led_driver.c b/device_hal/led_driver/ws2812/led_driver.c
-index 33879e89..2d107ce3 100644
---- a/device_hal/led_driver/ws2812/led_driver.c
-+++ b/device_hal/led_driver/ws2812/led_driver.c
-@@ -12,7 +12,6 @@
- // limitations under the License
- 
- #include <color_format.h>
--#include <driver/rmt.h>
- #include <esp_log.h>
- #include <led_strip.h>
- #include <led_driver.h>
-@@ -26,28 +25,7 @@ static RGB_color_t mRGB;
- 
- led_driver_handle_t led_driver_init(led_driver_config_t *config)
- {
--    ESP_LOGI(TAG, "Initializing light driver");
--    esp_err_t err = ESP_OK;
--    rmt_config_t rmt_cfg = RMT_DEFAULT_CONFIG_TX(config->gpio, config->channel);
--    rmt_cfg.clk_div = 2;
--    err = rmt_config(&rmt_cfg);
--    if (err != ESP_OK) {
--        ESP_LOGE(TAG, "rmt_cfg failed");
--        return NULL;
--    }
--    err = rmt_driver_install(rmt_cfg.channel, 0, 0);
--    if (err != ESP_OK) {
--        ESP_LOGE(TAG, "rmt_driver_install failed");
--        return NULL;
--    }
--
--    led_strip_config_t strip_config = LED_STRIP_DEFAULT_CONFIG(1, (led_strip_dev_t)rmt_cfg.channel);
--    led_strip_t *strip = led_strip_new_rmt_ws2812(&strip_config);
--    if (!strip) {
--        ESP_LOGE(TAG, "W2812 driver install failed");
--        return NULL;
--    }
--    return (led_driver_handle_t)strip;
-+    return (led_driver_handle_t)NULL;
- }
- 
- esp_err_t led_driver_set_power(led_driver_handle_t handle, bool power)
-diff --git a/idf_component.yml b/idf_component.yml
-index 84a661c6..957ccdc3 100644
---- a/idf_component.yml
-+++ b/idf_component.yml
-@@ -96,7 +96,7 @@ dependencies:
-             - if: "idf_version >=4.3"
- 
-     espressif/esp_encrypted_img:
--        version: "2.3.0"
-+        version: "2.7.0"
-         require: public
-         rules:
-             - if: "idf_version >=4.4"
-@@ -110,11 +110,15 @@ dependencies:
-             - if: "idf_version >=5.0"
-             - if: "target != esp32h2"
- 
-+    espressif/cjson:
-+        version: "^1.7.19"
-+        rules:
-+            - if: "idf_version >=6.0"
-     espressif/json_parser: "~1.0.0"
-     espressif/json_generator: "~1.1.0"
- 
-     espressif/esp_rcp_update:
--        version: "~1.3.0"
-+        version: "~1.5.0"
-         rules:
-             - if: "idf_version >=5.0"
- 

@@ -673,8 +673,8 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZN10esp_matter7cluster3getEPjj),
 
     // endpoint
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint3addEiPjPNS0_15app_base_configE),
-    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6createEiPjPNS0_15app_base_configEhPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint3addEiPjPv),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6createEiPjPvhS2_),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6get_idEPj),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13get_priv_dataEt),
 

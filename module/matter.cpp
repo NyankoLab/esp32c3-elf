@@ -249,6 +249,19 @@ struct default_device_instance_info_provider : public chip::DeviceLayer::DeviceI
     }
 };
 
+extern "C" node_t *__real__ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP19esp_matter_attr_valPvEPFiNS_14identification13callback_typeEthhS7_ES7_(node::config_t *config, attribute::callback_t attribute_callback, identification::callback_t identify_callback, void* priv_data);
+extern "C" node_t *__wrap__ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP19esp_matter_attr_valPvEPFiNS_14identification13callback_typeEthhS7_ES7_(node::config_t *config, attribute::callback_t attribute_callback, identification::callback_t identify_callback, void* priv_data)
+{
+    node_t *node = __real__ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP19esp_matter_attr_valPvEPFiNS_14identification13callback_typeEthhS7_ES7_(config, attribute_callback, identify_callback, priv_data);
+    cluster_t *cluster = cluster::get((uint16_t)0, Clusters::BasicInformation::Id);
+    if (cluster) {
+        esp_matter::cluster::basic_information::attribute::create_manufacturing_date(cluster, NULL, 0);
+        esp_matter::cluster::basic_information::attribute::create_part_number(cluster, NULL, 0);
+        esp_matter::cluster::basic_information::attribute::create_serial_number(cluster, NULL, 0);
+    }
+    return node;
+}
+
 extern "C" void __wrap__ZN10esp_matter15setup_providersEv()
 {
 //  set_commissionable_data_provider();
@@ -440,7 +453,11 @@ cluster_t *create(int id, endpoint_t *endpoint, void *config, uint8_t flags)
     case Clusters::Pm1ConcentrationMeasurement::Id:
         return pm1_concentration_measurement::create(endpoint, (pm1_concentration_measurement::config_t*)config, flags);
     case Clusters::Pm25ConcentrationMeasurement::Id:
+#if CONFIG_ESP_MATTER_ENABLE_GENERATED_DATA_MODEL
+        return pm2_5_concentration_measurement::create(endpoint, (pm2_5_concentration_measurement::config_t*)config, flags);
+#else
         return pm25_concentration_measurement::create(endpoint, (pm25_concentration_measurement::config_t*)config, flags);
+#endif
     case Clusters::Pm10ConcentrationMeasurement::Id:
         return pm10_concentration_measurement::create(endpoint, (pm10_concentration_measurement::config_t*)config, flags);
     case Clusters::RadonConcentrationMeasurement::Id:
@@ -589,7 +606,7 @@ cluster_t *create(int id, endpoint_t *endpoint, void *config, uint8_t flags)
 namespace esp_matter {
 namespace endpoint {
 
-esp_err_t add(int id, endpoint_t *endpoint, app_base_config *config)
+esp_err_t add(int id, endpoint_t *endpoint, void *config)
 {
     switch (id) {
 //  case ESP_MATTER_ROOT_NODE_DEVICE_TYPE_ID:
@@ -749,15 +766,15 @@ esp_err_t add(int id, endpoint_t *endpoint, app_base_config *config)
     return add_device_type(endpoint, uint16_t(id), uint16_t(id >> 16));
 }
 
-endpoint_t *create(int id, node_t *node, app_base_config *config, uint8_t flags, void *priv_data)
+endpoint_t *create(int id, node_t *node, void *config, uint8_t flags, void *priv_data)
 {
     endpoint_t *endpoint = endpoint::create(node, flags, priv_data);
-    VerifyOrReturnValue(endpoint != nullptr, NULL, ESP_LOGE(TAG, "Failed to create endpoint"));
+    VerifyOrReturnValue(endpoint != nullptr, NULL, ESP_LOGE(TAG, "Failed to create endpoint. device_type_id: 0x%08" PRIX32, id));
 
-    cluster_t *descriptor_cluster = cluster::descriptor::create(endpoint, &(config->descriptor), CLUSTER_FLAG_SERVER);
-    VerifyOrReturnValue(descriptor_cluster != nullptr, NULL, ESP_LOGE(TAG, "Failed to create descriptor cluster"));
+    cluster_t *descriptor_cluster = cluster::descriptor::create(endpoint, (cluster::descriptor::config_t*)config, CLUSTER_FLAG_SERVER);
+    VerifyOrReturnValue(descriptor_cluster != nullptr, NULL, ESP_LOGE(TAG, "Failed to create descriptor cluster. device_type_id: 0x%08" PRIX32, id));
 
-    VerifyOrReturnValue(ESP_OK == add(id, endpoint, config), NULL, ESP_LOGE(TAG, "Failed to add cluster"));
+    VerifyOrReturnValue(add(id, endpoint, config) == ESP_OK, NULL, ESP_LOGE(TAG, "Failed to add device type. device_type_id: 0x%08" PRIX32, id));
     return endpoint;
 }
 

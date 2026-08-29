@@ -28,19 +28,54 @@ index 9a96bc30..c9aad5bf 100644
  if (CONFIG_ESP_MATTER_ENABLE_MATTER_SERVER)
      if (CONFIG_ESP_MATTER_ENABLE_DATA_MODEL)
 diff --git a/components/esp_matter/data_model/legacy/esp_matter_cluster.cpp b/components/esp_matter/data_model/legacy/esp_matter_cluster.cpp
-index 18d0f9bd..fe15da04 100644
+index 18d0f9bd..fd5fa819 100644
 --- a/components/esp_matter/data_model/legacy/esp_matter_cluster.cpp
 +++ b/components/esp_matter/data_model/legacy/esp_matter_cluster.cpp
-@@ -249,6 +249,9 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags)
-         attribute::create_hardware_version_string(cluster, NULL, 0);
-         attribute::create_software_version(cluster, 0);
-         attribute::create_software_version_string(cluster, NULL, 0);
-+        attribute::create_manufacturing_date(cluster, NULL, 0);
-+        attribute::create_part_number(cluster, NULL, 0);
-+        attribute::create_serial_number(cluster, NULL, 0);
-         attribute::create_capability_minima(cluster, NULL, 0, 0);
-         attribute::create_specification_version(cluster, 0);
-         attribute::create_max_paths_per_invoke(cluster, 0);
+@@ -1352,6 +1352,24 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags)
+             attribute::create_fan_mode_sequence(cluster, config->fan_mode_sequence);
+             attribute::create_percent_setting(cluster, config->percent_setting);
+             attribute::create_percent_current(cluster, config->percent_current);
++            if (has(feature::multi_speed::get_id())) {
++                feature::multi_speed::add(cluster, &(config->features.multi_speed));
++            }
++            if (has(feature::fan_auto::get_id())) {
++                feature::fan_auto::add(cluster);
++            }
++            if (has(feature::rocking::get_id())) {
++                feature::rocking::add(cluster, &(config->features.rocking));
++            }
++            if (has(feature::wind::get_id())) {
++                feature::wind::add(cluster, &(config->features.wind));
++            }
++            if (has(feature::step::get_id())) {
++                feature::step::add(cluster);
++            }
++            if (has(feature::airflow_direction::get_id())) {
++                feature::airflow_direction::add(cluster, &(config->features.airflow_direction));
++            }
+         } else {
+             ESP_LOGE(TAG, "Config is NULL. Cannot add some attributes.");
+         }
+diff --git a/components/esp_matter/data_model/legacy/esp_matter_cluster_impl.h b/components/esp_matter/data_model/legacy/esp_matter_cluster_impl.h
+index 5a740c9d..daebc492 100644
+--- a/components/esp_matter/data_model/legacy/esp_matter_cluster_impl.h
++++ b/components/esp_matter/data_model/legacy/esp_matter_cluster_impl.h
+@@ -315,7 +315,14 @@ typedef struct config {
+     nullable<uint8_t> percent_setting;
+     uint8_t percent_current;
+     void *delegate;
+-    config() : fan_mode(0), fan_mode_sequence(2), percent_setting(0), percent_current(0), delegate(nullptr) {}
++    struct {
++        feature::multi_speed::config_t multi_speed;
++        feature::rocking::config_t rocking;
++        feature::wind::config_t wind;
++        feature::airflow_direction::config_t airflow_direction;
++    } features;
++    uint32_t feature_flags;
++    config() : fan_mode(0), fan_mode_sequence(2), percent_setting(0), percent_current(0), delegate(nullptr), feature_flags(0) {}
+ } config_t;
+ 
+ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
 diff --git a/components/esp_matter_bridge/CMakeLists.txt b/components/esp_matter_bridge/CMakeLists.txt
 index 9b7d5eaa..6b3818eb 100644
 --- a/components/esp_matter_bridge/CMakeLists.txt

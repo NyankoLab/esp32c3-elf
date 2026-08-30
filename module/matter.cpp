@@ -111,6 +111,12 @@ esp_err_t default_app_identification_cb(identification::callback_type_t type, ui
     return ESP_OK;
 }
 
+void reporting_attribute_change_callback(uint16_t endpoint, uint32_t clusterId, uint32_t attributeId)
+{
+    esp_matter::lock::ScopedChipStackLock lock(portMAX_DELAY);
+    MatterReportingAttributeChangeCallback(endpoint, clusterId, attributeId);
+}
+
 static char product[32] IRAM_BSS_ATTR = { "elf" };
 static char vendor[32] IRAM_BSS_ATTR = { "esp32c3" };
 static char version[32] IRAM_BSS_ATTR = { VersionHelper };

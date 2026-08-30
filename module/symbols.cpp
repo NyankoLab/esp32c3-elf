@@ -656,6 +656,7 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZN10esp_matter10get_qrcodeERNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter10is_startedEv),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP19esp_matter_attr_valPvEPFiNS_14identification13callback_typeEthhS7_ES7_),
+    ESP_ELFSYM_EXPORT(_ZN10esp_matter35reporting_attribute_change_callbackEtjj),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter11set_productEPKc),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter10set_vendorEPKc),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter11set_versionEPKc),
@@ -677,9 +678,6 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6createEiPjPvhS2_),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint6get_idEPj),
     ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint13get_priv_dataEt),
-
-    // notify
-    ESP_ELFSYM_EXPORT(_Z38MatterReportingAttributeChangeCallbacktjj),
 #if 0
     // endpoint - 1.0
 //  ESP_ELFSYM_EXPORT(_ZN10esp_matter8endpoint9door_lock3addEPjPNS1_6configE),

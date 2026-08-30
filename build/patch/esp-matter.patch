@@ -27,6 +27,34 @@ index 9a96bc30..c9aad5bf 100644
  
  if (CONFIG_ESP_MATTER_ENABLE_MATTER_SERVER)
      if (CONFIG_ESP_MATTER_ENABLE_DATA_MODEL)
+diff --git a/components/esp_matter/data_model/esp_matter_delegate_callbacks.cpp b/components/esp_matter/data_model/esp_matter_delegate_callbacks.cpp
+index 28bd0886..6cab4263 100644
+--- a/components/esp_matter/data_model/esp_matter_delegate_callbacks.cpp
++++ b/components/esp_matter/data_model/esp_matter_delegate_callbacks.cpp
+@@ -815,12 +815,15 @@ void ElectricalGridConditionsDelegateInitCB(void *delegate, uint16_t endpoint_id
+ 
+ static void MeterIdentificationShutdownCB(void *managed_instance, uint16_t /*endpoint_id*/)
+ {
++#if CONFIG_SUPPORT_METER_IDENTIFICATION_CLUSTER
+     delete static_cast<MeterIdentification::Instance*>(managed_instance);
++#endif
+ }
+ 
+ /* Not a delegate but an Initialization callback */
+ void MeterIdentificationDelegateInitCB(void *delegate, uint16_t endpoint_id)
+ {
++#if CONFIG_SUPPORT_METER_IDENTIFICATION_CLUSTER
+     cluster_t *cl = cluster::get(endpoint_id, MeterIdentification::Id);
+     VerifyOrReturn(cl != nullptr);
+     MeterIdentification::Instance *meter_identification_instance = static_cast<MeterIdentification::Instance*>(get_delegate_managed_instance(cl));
+@@ -830,6 +833,7 @@ void MeterIdentificationDelegateInitCB(void *delegate, uint16_t endpoint_id)
+         set_delegate_shutdown_callback_and_managed_instance(cl, MeterIdentificationShutdownCB, meter_identification_instance);
+     }
+     LogErrorOnFailure(meter_identification_instance->Init());
++#endif
+ }
+ 
+ void ApplicationLauncherDelegateInitCB(void *delegate, uint16_t endpoint_id)
 diff --git a/components/esp_matter/data_model/legacy/esp_matter_cluster.cpp b/components/esp_matter/data_model/legacy/esp_matter_cluster.cpp
 index 18d0f9bd..fd5fa819 100644
 --- a/components/esp_matter/data_model/legacy/esp_matter_cluster.cpp
@@ -76,6 +104,21 @@ index 5a740c9d..daebc492 100644
  } config_t;
  
  cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
+diff --git a/components/esp_matter/data_model_provider/esp_matter_data_model_provider.cpp b/components/esp_matter/data_model_provider/esp_matter_data_model_provider.cpp
+index 8a7fdb0a..0d52ce3d 100644
+--- a/components/esp_matter/data_model_provider/esp_matter_data_model_provider.cpp
++++ b/components/esp_matter/data_model_provider/esp_matter_data_model_provider.cpp
+@@ -370,8 +370,8 @@ ActionReturnStatus provider::WriteAttribute(const WriteAttributeRequest &request
+ 
+     // Helper to execute POST_UPDATE callback
+     auto execute_post_update = [&]() {
+-        attribute::execute_callback(attribute::POST_UPDATE, request.path.mEndpointId, request.path.mClusterId,
+-                                    request.path.mAttributeId, &new_val);
++//      attribute::execute_callback(attribute::POST_UPDATE, request.path.mEndpointId, request.path.mClusterId,
++//                                  request.path.mAttributeId, &new_val);
+     };
+ 
+     // mRegistry handles its own storage
 diff --git a/components/esp_matter_bridge/CMakeLists.txt b/components/esp_matter_bridge/CMakeLists.txt
 index 9b7d5eaa..6b3818eb 100644
 --- a/components/esp_matter_bridge/CMakeLists.txt

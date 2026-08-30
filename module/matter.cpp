@@ -358,7 +358,32 @@ CHIP_ERROR ConfigurationManagerImpl::GetSoftwareVersionString(char * buf, size_t
 } // namespace DeviceLayer
 } // namespace chip
 
-void emberAfDoorLockClusterInitCallback(chip::EndpointId endpoint) {}
+void emberAfDoorLockClusterInitCallback(EndpointId endpoint) {}
+void emberAfPluginLevelControlCoupledColorTempChangeCallback(EndpointId endpoint) {}
+bool emberAfColorControlClusterStopMoveStepCallback(CommandHandler * commandObj,
+                                                    const ConcreteCommandPath & commandPath,
+                                                    const ColorControl::Commands::StopMoveStep::DecodableType & commandData) { return false; }
+void emberAfColorControlClusterServerInitCallback(EndpointId endpoint) {}
+bool emberAfColorControlClusterMoveToColorTemperatureCallback(CommandHandler * commandObj,
+                                                              const ConcreteCommandPath & commandPath,
+                                                              const ColorControl::Commands::MoveToColorTemperature::DecodableType & commandData) { return false; }
+bool emberAfColorControlClusterMoveColorTemperatureCallback(CommandHandler * commandObj,
+                                                            const ConcreteCommandPath & commandPath,
+                                                            const ColorControl::Commands::MoveColorTemperature::DecodableType & commandData) { return false; }
+bool emberAfColorControlClusterStepColorTemperatureCallback(CommandHandler * commandObj,
+                                                            const ConcreteCommandPath & commandPath,
+                                                            const ColorControl::Commands::StepColorTemperature::DecodableType & commandData) { return false; }
+bool emberAfColorControlClusterMoveToColorCallback(CommandHandler * commandObj,
+                                                   const ConcreteCommandPath & commandPath,
+                                                   const ColorControl::Commands::MoveToColor::DecodableType & commandData) { return false; }
+bool emberAfColorControlClusterMoveColorCallback(CommandHandler * commandObj,
+                                                 const ConcreteCommandPath & commandPath,
+                                                 const ColorControl::Commands::MoveColor::DecodableType & commandData) { return false; }
+bool emberAfColorControlClusterStepColorCallback(CommandHandler * commandObj,
+                                                 const ConcreteCommandPath & commandPath,
+                                                 const ColorControl::Commands::StepColor::DecodableType & commandData) { return false; }
+void MatterColorControlClusterServerShutdownCallback(EndpointId endpoint) {}
+void MatterColorControlPluginServerInitCallback() {}
 
 namespace esp_matter {
 namespace cluster {

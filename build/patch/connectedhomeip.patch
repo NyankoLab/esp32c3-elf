@@ -41,7 +41,7 @@ index be3b91acba..5718adf7c0 100644
              - if: "idf_version >=5.0"
  
 diff --git a/src/crypto/CHIPCryptoPALPSA.cpp b/src/crypto/CHIPCryptoPALPSA.cpp
-index f4a02a4e15..6e20bf2ade 100644
+index c64175ae73..0ce8cc1666 100644
 --- a/src/crypto/CHIPCryptoPALPSA.cpp
 +++ b/src/crypto/CHIPCryptoPALPSA.cpp
 @@ -20,6 +20,19 @@
@@ -122,7 +122,7 @@ index 9afa5ca400..f745ef2dfd 100644
  } // namespace Crypto
  } // namespace chip
 diff --git a/src/crypto/CHIPCryptoPALmbedTLSCert.cpp b/src/crypto/CHIPCryptoPALmbedTLSCert.cpp
-index 00053ee5b7..f4b504401f 100644
+index 49fc6ed958..f4b504401f 100644
 --- a/src/crypto/CHIPCryptoPALmbedTLSCert.cpp
 +++ b/src/crypto/CHIPCryptoPALmbedTLSCert.cpp
 @@ -1,5 +1,5 @@
@@ -156,13 +156,14 @@ index 00053ee5b7..f4b504401f 100644
      P256ECDSASignature signature;
      MutableByteSpan out_raw_sig_span(signature.Bytes(), signature.Capacity());
  
-@@ -64,16 +69,45 @@ CHIP_ERROR VerifyCertificateSigningRequest(const uint8_t * csr_buf, size_t csr_l
+@@ -64,17 +69,45 @@ CHIP_ERROR VerifyCertificateSigningRequest(const uint8_t * csr_buf, size_t csr_l
  
      // Verify the signature algorithm and public key type
      VerifyOrExit(csr.CHIP_CRYPTO_PAL_PRIVATE(sig_md) == MBEDTLS_MD_SHA256, error = CHIP_ERROR_UNSUPPORTED_SIGNATURE_TYPE);
 -    VerifyOrExit(csr.CHIP_CRYPTO_PAL_PRIVATE(sig_pk) == MBEDTLS_PK_ECDSA, error = CHIP_ERROR_WRONG_KEY_TYPE);
  
 -    keypair = mbedtls_pk_ec(csr.CHIP_CRYPTO_PAL_PRIVATE_X509(pk));
+-    VerifyOrExit(keypair != nullptr, error = CHIP_ERROR_WRONG_KEY_TYPE);
 +#if (MBEDTLS_VERSION_NUMBER >= 0x04000000)
 +    VerifyOrExit(csr.CHIP_CRYPTO_PAL_PRIVATE(sig_pk) == MBEDTLS_PK_SIGALG_ECDSA, error = CHIP_ERROR_WRONG_KEY_TYPE);
 +#else
@@ -208,7 +209,7 @@ index 00053ee5b7..f4b504401f 100644
  
      // Convert DER signature to raw signature
      error = EcdsaAsn1SignatureToRaw(kP256_FE_Length,
-@@ -83,7 +117,7 @@ CHIP_ERROR VerifyCertificateSigningRequest(const uint8_t * csr_buf, size_t csr_l
+@@ -84,7 +117,7 @@ CHIP_ERROR VerifyCertificateSigningRequest(const uint8_t * csr_buf, size_t csr_l
  
      VerifyOrExit(error == CHIP_NO_ERROR, error = CHIP_ERROR_INVALID_ARGUMENT);
      VerifyOrExit(out_raw_sig_span.size() == (kP256_FE_Length * 2), error = CHIP_ERROR_INTERNAL);
@@ -217,7 +218,7 @@ index 00053ee5b7..f4b504401f 100644
  
      // Verify the signature using the public key
      error = pubkey.ECDSA_validate_msg_signature(csr.CHIP_CRYPTO_PAL_PRIVATE_X509(cri).CHIP_CRYPTO_PAL_PRIVATE_X509(p),
-@@ -507,26 +541,49 @@ CHIP_ERROR ExtractPubkeyFromX509Cert(const ByteSpan & certificate, Crypto::P256P
+@@ -508,26 +541,49 @@ CHIP_ERROR ExtractPubkeyFromX509Cert(const ByteSpan & certificate, Crypto::P256P
  #if defined(MBEDTLS_X509_CRT_PARSE_C)
      CHIP_ERROR error = CHIP_NO_ERROR;
      mbedtls_x509_crt mbed_cert;

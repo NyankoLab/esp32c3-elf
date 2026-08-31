@@ -152,20 +152,30 @@ index 3650d975..35153376 100644
  
  cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
  } // namespace air_quality
-diff --git a/components/esp_matter/data_model/esp_matter_data_model.cpp b/components/esp_matter/data_model/esp_matter_data_model.cpp
-index f726c63e..057638a5 100644
---- a/components/esp_matter/data_model/esp_matter_data_model.cpp
-+++ b/components/esp_matter/data_model/esp_matter_data_model.cpp
-@@ -1139,7 +1139,8 @@ esp_err_t add_bounds(attribute_t *attribute, esp_matter_attr_val_t min, esp_matt
-     VerifyOrReturnError(
-         ((current_attribute->attribute_val_type == min.type) && (current_attribute->attribute_val_type == max.type)),
-         ESP_ERR_INVALID_ARG,
--        ESP_LOGE(TAG, "Cannot set bounds because of val type mismatch: expected: %d, min: %d, max: %d",
-+        ESP_LOGE(TAG, "Cannot set bounds because of val type mismatch: attribute: %d, cluster: %d, expected: %d, min: %d, max: %d",
-+                 current_attribute->attribute_id, current_attribute->cluster_id,
-                  current_attribute->attribute_val_type, min.type, max.type));
-     current_attribute->bounds = (esp_matter_attr_bounds_t *)esp_matter_mem_calloc(1, sizeof(esp_matter_attr_bounds_t));
-     if (!current_attribute->bounds) {
+diff --git a/components/esp_matter/data_model/esp_matter_delegate_callbacks.cpp b/components/esp_matter/data_model/esp_matter_delegate_callbacks.cpp
+index d423efc3..47f361ed 100644
+--- a/components/esp_matter/data_model/esp_matter_delegate_callbacks.cpp
++++ b/components/esp_matter/data_model/esp_matter_delegate_callbacks.cpp
+@@ -522,11 +522,13 @@ void CommissionerControlDelegateInitCB(void *delegate, uint16_t endpoint_id)
+ 
+ void ActionsDelegateInitCB(void *delegate, uint16_t endpoint_id)
+ {
++#if CONFIG_SUPPORT_ACTIONS_CLUSTER
+     VerifyOrReturn(delegate != nullptr);
+     static Actions::ActionsServer *actionsServer = nullptr;
+     Actions::Delegate *actions_delegate = static_cast<Actions::Delegate*>(delegate);
+     actionsServer = new Actions::ActionsServer(endpoint_id, *actions_delegate);
+     actionsServer->Init();
++#endif
+ }
+ 
+ 
+diff --git a/connectedhomeip/connectedhomeip b/connectedhomeip/connectedhomeip
+--- a/connectedhomeip/connectedhomeip
++++ b/connectedhomeip/connectedhomeip
+@@ -1 +1 @@
+-Subproject commit 392b307067a10514615ea4fbd3edae5da5b25133
++Subproject commit 392b307067a10514615ea4fbd3edae5da5b25133-dirty
 diff --git a/device_hal/device/esp32_devkit_c/esp_matter_device.cmake b/device_hal/device/esp32_devkit_c/esp_matter_device.cmake
 index a8fb0670..ad4e4177 100644
 --- a/device_hal/device/esp32_devkit_c/esp_matter_device.cmake

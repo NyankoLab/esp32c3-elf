@@ -392,6 +392,9 @@ bool emberAfColorControlClusterStepColorCallback(CommandHandler * commandObj,
 void MatterColorControlClusterServerShutdownCallback(EndpointId endpoint) {}
 void MatterColorControlPluginServerInitCallback() {}
 #endif
+#if CONFIG_SUPPORT_POWER_SOURCE_CLUSTER == 0
+void MatterPowerSourcePluginServerInitCallback() {}
+#endif
 
 namespace esp_matter {
 namespace cluster {

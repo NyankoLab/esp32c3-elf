@@ -174,12 +174,6 @@ index 96f70180..a339e723 100644
 -    target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
 +#   target_compile_options(${COMPONENT_LIB} PRIVATE "-Wstringop-truncation" "-Wstringop-overflow")
  endif()
-diff --git a/connectedhomeip/connectedhomeip b/connectedhomeip/connectedhomeip
---- a/connectedhomeip/connectedhomeip
-+++ b/connectedhomeip/connectedhomeip
-@@ -1 +1 @@
--Subproject commit 93abd8e6891bb578ea63254fb29d099936f345c8
-+Subproject commit 93abd8e6891bb578ea63254fb29d099936f345c8-dirty
 diff --git a/device_hal/device/esp32_devkit_c/esp_matter_device.cmake b/device_hal/device/esp32_devkit_c/esp_matter_device.cmake
 index a8fb0670..e5560183 100644
 --- a/device_hal/device/esp32_devkit_c/esp_matter_device.cmake

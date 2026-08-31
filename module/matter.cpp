@@ -365,6 +365,7 @@ CHIP_ERROR ConfigurationManagerImpl::GetSoftwareVersionString(char * buf, size_t
 } // namespace chip
 
 void emberAfDoorLockClusterInitCallback(EndpointId endpoint) {}
+#if CONFIG_SUPPORT_COLOR_CONTROL_CLUSTER == 0
 void emberAfPluginLevelControlCoupledColorTempChangeCallback(EndpointId endpoint) {}
 bool emberAfColorControlClusterStopMoveStepCallback(CommandHandler * commandObj,
                                                     const ConcreteCommandPath & commandPath,
@@ -390,6 +391,10 @@ bool emberAfColorControlClusterStepColorCallback(CommandHandler * commandObj,
                                                  const ColorControl::Commands::StepColor::DecodableType & commandData) { return false; }
 void MatterColorControlClusterServerShutdownCallback(EndpointId endpoint) {}
 void MatterColorControlPluginServerInitCallback() {}
+#endif
+#if CONFIG_SUPPORT_POWER_SOURCE_CLUSTER == 0
+void MatterPowerSourcePluginServerInitCallback() {}
+#endif
 
 namespace esp_matter {
 namespace cluster {

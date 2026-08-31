@@ -197,7 +197,7 @@ static void httpd_handler(void* arg)
                         }
                         fds[i] = -1;
                         reqs[i] = NULL;
-                        ESP_LOGI(TAG, "%d is disconnected", fd);
+//                      ESP_LOGI(TAG, "%d is disconnected", fd);
                     }
                 }
             }

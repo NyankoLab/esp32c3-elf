@@ -436,9 +436,9 @@ LIBRARY_SEARCH_PATHS = $(inherited) $CLANGPLATFORM_DIR/light/build/esp-idf/esp_m
 
 OTHER_CFLAGS = $(inherited) -DCHIP_HAVE_CONFIG_H
 
-//OTHER_LDFLAGS = $(inherited) -lstdc++
 OTHER_LDFLAGS = $(inherited) -lchip
 OTHER_LDFLAGS = $(inherited) -lesp_matter
 OTHER_LDFLAGS = $(inherited) -lmbedx509
 
 OTHER_LDFLAGS = $(inherited) -Wl,-wrap,_ZN10esp_matter15setup_providersEv
+OTHER_LDFLAGS = $(inherited) -Wl,-wrap,_ZN10esp_matter4node6createEPNS0_6configEPFiNS_9attribute13callback_typeEtjjP19esp_matter_attr_valPvEPFiNS_14identification13callback_typeEthhS7_ES7_

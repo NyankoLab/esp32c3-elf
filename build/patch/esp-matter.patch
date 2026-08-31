@@ -170,12 +170,6 @@ index d423efc3..47f361ed 100644
  }
  
  
-diff --git a/connectedhomeip/connectedhomeip b/connectedhomeip/connectedhomeip
---- a/connectedhomeip/connectedhomeip
-+++ b/connectedhomeip/connectedhomeip
-@@ -1 +1 @@
--Subproject commit 392b307067a10514615ea4fbd3edae5da5b25133
-+Subproject commit 392b307067a10514615ea4fbd3edae5da5b25133-dirty
 diff --git a/device_hal/device/esp32_devkit_c/esp_matter_device.cmake b/device_hal/device/esp32_devkit_c/esp_matter_device.cmake
 index a8fb0670..ad4e4177 100644
 --- a/device_hal/device/esp32_devkit_c/esp_matter_device.cmake

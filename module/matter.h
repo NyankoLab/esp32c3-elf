@@ -9,21 +9,8 @@ using namespace chip::app;
 using namespace chip::app::Clusters;
 
 struct PowerTopologyDelegate : public PowerTopology::Delegate {
-    CHIP_ERROR GetAvailableEndpointAtIndex(size_t index, EndpointId & endpointId) override {
-        if (index == 0) {
-            endpointId = mEndpoint;
-            return CHIP_NO_ERROR;
-        }
-        return CHIP_ERROR_PROVIDER_LIST_EXHAUSTED;
-    }
-    CHIP_ERROR GetActiveEndpointAtIndex(size_t index, EndpointId & endpointId) override {
-        if (index == 0) {
-            endpointId = mEndpoint;
-            return CHIP_NO_ERROR;
-        }
-        return CHIP_ERROR_PROVIDER_LIST_EXHAUSTED;
-    }
-    EndpointId mEndpoint = 0;
+    CHIP_ERROR GetAvailableEndpointAtIndex(size_t index, EndpointId & endpointId) override { return CHIP_ERROR_PROVIDER_LIST_EXHAUSTED; }
+    CHIP_ERROR GetActiveEndpointAtIndex(size_t index, EndpointId & endpointId) override { return CHIP_ERROR_PROVIDER_LIST_EXHAUSTED; }
 };
 
 struct ElectricalPowerMeasurementDelegate : public ElectricalPowerMeasurement::Delegate {
@@ -52,8 +39,9 @@ struct ElectricalPowerMeasurementDelegate : public ElectricalPowerMeasurement::D
 //          return CHIP_NO_ERROR;
 //      }
 //      default:
-            return CHIP_ERROR_PROVIDER_LIST_EXHAUSTED;
+//          break;
 //      }
+        return CHIP_ERROR_PROVIDER_LIST_EXHAUSTED;
     }
     CHIP_ERROR EndAccuracyRead() override { return CHIP_NO_ERROR; }
     CHIP_ERROR StartRangesRead() override { return CHIP_NO_ERROR; }

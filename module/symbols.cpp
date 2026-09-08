@@ -608,12 +608,12 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     // esp_wifi_default
 //  ESP_ELFSYM_EXPORT(esp_netif_attach_wifi_station),
 //  ESP_ELFSYM_EXPORT(esp_netif_attach_wifi_ap),
-    ESP_ELFSYM_EXPORT(esp_wifi_set_default_wifi_sta_handlers),
-    ESP_ELFSYM_EXPORT(esp_wifi_set_default_wifi_ap_handlers),
+//  ESP_ELFSYM_EXPORT(esp_wifi_set_default_wifi_sta_handlers),
+//  ESP_ELFSYM_EXPORT(esp_wifi_set_default_wifi_ap_handlers),
 //  ESP_ELFSYM_EXPORT(esp_wifi_set_default_wifi_nan_handlers),
-    ESP_ELFSYM_EXPORT(esp_wifi_clear_default_wifi_driver_and_handlers),
-    ESP_ELFSYM_EXPORT(esp_netif_create_default_wifi_ap),
-    ESP_ELFSYM_EXPORT(esp_netif_create_default_wifi_sta),
+//  ESP_ELFSYM_EXPORT(esp_wifi_clear_default_wifi_driver_and_handlers),
+//  ESP_ELFSYM_EXPORT(esp_netif_create_default_wifi_ap),
+//  ESP_ELFSYM_EXPORT(esp_netif_create_default_wifi_sta),
 //  ESP_ELFSYM_EXPORT(esp_netif_create_default_wifi_nan),
 //  ESP_ELFSYM_EXPORT(esp_netif_destroy_default_wifi),
 //  ESP_ELFSYM_EXPORT(esp_netif_create_wifi),
@@ -626,6 +626,13 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT(xTaskGetTickCount),
     ESP_ELFSYM_EXPORT(xTimerCreate),
     ESP_ELFSYM_EXPORT(xTimerGenericCommand),
+
+    // gpio
+    ESP_ELFSYM_EXPORT(gpio_install_isr_service),
+    ESP_ELFSYM_EXPORT(gpio_uninstall_isr_service),
+    ESP_ELFSYM_EXPORT(gpio_isr_handler_add),
+    ESP_ELFSYM_EXPORT(gpio_isr_handler_remove),
+    ESP_ELFSYM_EXPORT(gpio_isr_register),
 
 #if HAVE_ESPHOME
 //  ESP_ELFSYM_EXPORT(_ZN7ESPHome3API4SendEiiz),

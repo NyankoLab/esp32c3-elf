@@ -270,9 +270,6 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     ESP_ELFSYM_EXPORT2(periph_module_enable, fake_periph_module_enable),
     ESP_ELFSYM_EXPORT2(periph_module_reset, fake_periph_module_reset),
 
-    // ethernet
-    ESP_ELFSYM_EXPORT(ethernet),
-
     // httpd
     ESP_ELFSYM_EXPORT(httpd_start),
     ESP_ELFSYM_EXPORT(httpd_register_uri_handler),
@@ -457,7 +454,7 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
 //  ESP_ELFSYM_EXPORT(esp_netif_leave_ip6_multicast_group),
 //  ESP_ELFSYM_EXPORT(esp_netif_set_mac),
     ESP_ELFSYM_EXPORT(esp_netif_get_mac),
-    ESP_ELFSYM_EXPORT(esp_netif_set_hostname),
+//  ESP_ELFSYM_EXPORT(esp_netif_set_hostname),
     ESP_ELFSYM_EXPORT(esp_netif_get_hostname),
 //  ESP_ELFSYM_EXPORT(esp_netif_is_netif_up),
     ESP_ELFSYM_EXPORT(esp_netif_get_ip_info),
@@ -570,7 +567,7 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
 //  ESP_ELFSYM_EXPORT(esp_wifi_get_config),
     ESP_ELFSYM_EXPORT(esp_wifi_ap_get_sta_list),
 //  ESP_ELFSYM_EXPORT(esp_wifi_ap_get_sta_aid),
-    ESP_ELFSYM_EXPORT(esp_wifi_set_storage),
+//  ESP_ELFSYM_EXPORT(esp_wifi_set_storage),
 //  ESP_ELFSYM_EXPORT(esp_wifi_set_vendor_ie),
 //  ESP_ELFSYM_EXPORT(esp_wifi_set_vendor_ie_cb),
 //  ESP_ELFSYM_EXPORT(esp_wifi_set_max_tx_power),
@@ -620,8 +617,11 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
 //  ESP_ELFSYM_EXPORT(esp_netif_create_default_wifi_mesh_netifs),
 
     // freertos
+    ESP_ELFSYM_EXPORT(vPortYieldFromISR),
+    ESP_ELFSYM_EXPORT(ulTaskGenericNotifyTake),
     ESP_ELFSYM_EXPORT(vTaskDelay),
     ESP_ELFSYM_EXPORT(vTaskDelete),
+    ESP_ELFSYM_EXPORT(vTaskGenericNotifyGiveFromISR),
     ESP_ELFSYM_EXPORT(xTaskCreatePinnedToCore),
     ESP_ELFSYM_EXPORT(xTaskGetTickCount),
     ESP_ELFSYM_EXPORT(xTimerCreate),

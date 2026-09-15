@@ -71,7 +71,7 @@ static void mqtt_information(char* buffer, size_t size)
     mqtt_publish(mqtt_prefix(buffer, size, "ESP", "ResetReason", 0), reason, 0, 0);
 }
 
-static void mqtt_loop(TimerHandle_t timer)
+void mqtt_loop(TimerHandle_t timer)
 {
     if (mqtt_is_connected == false)
         return;
@@ -305,12 +305,14 @@ void mqtt_setup(const char* hostname, const char* build, const char* version, co
         mqtt_init(malloc(256), 256, malloc(512), 512);
         mqtt_connect(&ip_addr, port, 1, &mqtt_info, mqtt_event_handler);
 #endif
+#if HAVE_MPOLL == 0
         static TimerHandle_t timer IRAM_BSS_ATTR;
         if (timer == NULL)
         {
             timer = xTimerCreate("MQTT Timer", 10000 / portTICK_PERIOD_MS, pdTRUE, mqtt_client, mqtt_loop);
         }
         xTimerStart(timer, 0);
+#endif
     }
 }
 

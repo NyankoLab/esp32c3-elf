@@ -40,6 +40,8 @@ while [[ $# > 0 ]] ; do
         ;;
         -syslibroot)
         shift ;;
+        -no_warn_duplicate_libraries)
+        ;;
         *)
         ARGS=$ARGS" "$1
         ;;

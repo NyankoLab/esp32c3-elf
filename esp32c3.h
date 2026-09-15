@@ -4,6 +4,7 @@
 
 #define HAVE_ESPHOME 1
 #define HAVE_MATTER 1
+#define HAVE_MPOLL 1
 #define HAVE_PREPATCH 0
 
 #include <stdarg.h>

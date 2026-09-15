@@ -44,7 +44,7 @@ static void https_handler(void* arg)
         goto final;
 
     struct sockaddr_in sockaddr = {};
-    sockaddr.sin_len = sizeof(sockaddr);
+    sockaddr.sin_len = sizeof(struct sockaddr_in);
     sockaddr.sin_family = AF_INET;
     sockaddr.sin_port = htons(443);
     sockaddr.sin_addr.s_addr = context->ip.u_addr.ip4.addr;

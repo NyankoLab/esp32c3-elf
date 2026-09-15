@@ -121,8 +121,10 @@ void wifi_config(char const* ssid, char const* password, bool connect)
             config.sta.ssid[0] = '?';
         if (config.sta.password[0] == 0)
             config.sta.password[0] = '?';
+        config.sta.ft_enabled = true;
 //      ESP_LOGI(TAG, "SSID: %s", config.sta.ssid);
 //      ESP_LOGI(TAG, "PASSWORD: %s", config.sta.password);
+        ESP_ERROR_CHECK(esp_wifi_set_ps(WIFI_PS_MAX_MODEM));
         ESP_ERROR_CHECK(esp_wifi_disconnect());
         ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &config));
         ESP_ERROR_CHECK(esp_wifi_connect());

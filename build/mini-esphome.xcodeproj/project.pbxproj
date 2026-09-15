@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F50FFEE9302C8AFA00DF502C /* Server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F50FFEE6302C8AFA00DF502C /* Server.cpp */; };
+		F50FFEE9302C8AFA00DF502C /* Server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F50FFEE6302C8AFA00DF502C /* Server.cpp */; settings = {COMPILER_FLAGS = "-DHAVE_MPOLL=1"; }; };
 		F50FFEEA302C8AFA00DF502C /* Message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F50FFEE4302C8AFA00DF502C /* Message.cpp */; };
 		F50FFEEB302C8AFA00DF502C /* Setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F50FFEE8302C8AFA00DF502C /* Setup.cpp */; };
 		F50FFEEC302C8AFA00DF502C /* API.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F50FFEE2302C8AFA00DF502C /* API.cpp */; };
@@ -95,7 +95,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 2640;
+				LastUpgradeCheck = 2700;
 				TargetAttributes = {
 					30A9A7BA25ADC792000FA104 = {
 						CreatedOnToolsVersion = 12.3;
@@ -142,7 +142,8 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEAD_CODE_STRIPPING = YES;
 				EXECUTABLE_EXTENSION = a;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 			};
 			name = Debug;
 		};
@@ -153,7 +154,8 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				DEAD_CODE_STRIPPING = YES;
 				EXECUTABLE_EXTENSION = a;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 			};
 			name = Release;
 		};

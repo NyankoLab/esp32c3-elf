@@ -1,11 +1,11 @@
 #include "esp32c3.h"
 #include <sys/socket.h>
+#include "mpoll.h"
 #include "httpd.h"
 
 #ifndef HTTPD_FULL
 
 #define HTTPD_STACK_SIZE 3584
-#define HTTPD_MAX_CONNECTIONS 16
 
 #define TAG __FILE_NAME__
 
@@ -16,26 +16,164 @@ struct httpd_uri_node
 };
 static struct httpd_uri_node* uri_node IRAM_BSS_ATTR;
 
+static int listen_fd = 0;
+#if HAVE_MPOLL == 0
+static int fds[CONFIG_LWIP_MAX_SOCKETS] = {};
+#endif
+static httpd_req_t* reqs[CONFIG_LWIP_MAX_SOCKETS] = {};
+
+static int httpd_recv(int fd, int revents)
+{
+    bool closed = false;
+    if (revents & POLLIN)
+    {
+        const int buf_size = 1440;
+        char* buf = malloc(buf_size);
+        int length = lwip_recv(fd, buf, buf_size, 0);
+        if (length <= 0)
+        {
+            closed = true;
+        }
+        else
+        {
+            httpd_req_t* req = reqs[fd - LWIP_SOCKET_OFFSET];
+            if (req->sess_ctx == NULL)
+            {
+                if (strncmp(buf, "GET", 3) != 0)
+                {
+                    closed = true;
+                }
+                else
+                {
+                    req->method = fd;
+                    for (int i = 0; i < CONFIG_HTTPD_MAX_URI_LEN; ++i)
+                    {
+                        length = i;
+                        char c = buf[i + 4];
+                        if (c == ' ')
+                            c = 0;
+                        ((char*)req->uri)[i] = c;
+                        if (c == 0)
+                            break;
+                    }
+                    struct httpd_uri_node* node = uri_node;
+                    if (strstr(req->uri, "..") == NULL)
+                    {
+                        int ext = 0;
+                        if (strstr(req->uri, ".css"))
+                            ext = '.css';
+                        else if (strstr(req->uri, ".svg"))
+                            ext = '.svg';
+                        if (ext)
+                        {
+                            snprintf(buf, buf_size, "www%s", req->uri);
+                            httpd_req_url_decode(buf);
+                            FILE* file = fopen(buf, "rb");
+                            if (file)
+                            {
+                                httpd_uri_t dummy = {};
+                                req->sess_ctx = &dummy;
+                                switch (ext)
+                                {
+                                    case '.css':
+                                        httpd_resp_set_type(req, "text/css");
+                                        break;
+                                    case '.svg':
+                                        httpd_resp_set_type(req, "image/svg+xml");
+                                        break;
+                                }
+                                for (;;)
+                                {
+                                    int length = fread(buf, 1, buf_size, file);
+                                    if (length == 0)
+                                        break;
+                                    httpd_resp_send_chunk(req, buf, length);
+                                }
+                                fclose(file);
+                                httpd_resp_send_chunk(req, NULL, 0);
+                                req->sess_ctx = NULL;
+                                node = NULL;
+                            }
+                        }
+                    }
+                    while (node)
+                    {
+                        int left = length;
+                        int right = strlen(node->uri_handler.uri);
+                        if ((left == right || right > 1) && strncmp(req->uri, node->uri_handler.uri, right) == 0)
+                        {
+                            req->sess_ctx = &node->uri_handler;
+                            break;
+                        }
+                        node = node->next;
+                    }
+                }
+            }
+            if (req->sess_ctx == NULL)
+            {
+                closed = true;
+            }
+            if (req->sess_ctx)
+            {
+                httpd_uri_t* uri = req->sess_ctx;
+                if (uri->handler(req) != ESP_FAIL)
+                {
+                    closed = true;
+                }
+            }
+        }
+        free(buf);
+    }
+    else
+    {
+        closed = true;
+    }
+    if (closed)
+    {
+        lwip_close(fd);
+#if HAVE_MPOLL
+        mpoll_ctl(fd, NULL);
+#endif
+        httpd_req_t* req = reqs[fd - LWIP_SOCKET_OFFSET];
+        if (req)
+        {
+            free(req->user_ctx);
+            free(req);
+        }
+#if HAVE_MPOLL == 0
+        fds[fd - LWIP_SOCKET_OFFSET] = -1;
+#endif
+        reqs[fd - LWIP_SOCKET_OFFSET] = NULL;
+//      ESP_LOGI(TAG, "%d is disconnected", fd);
+    }
+    return revents;
+}
+
+static int httpd_accept(int fd, int revents)
+{
+    if (revents & POLLIN)
+    {
+        struct sockaddr_in sockaddr = {};
+        socklen_t sockaddr_len = sizeof(sockaddr);
+        int accept_fd = lwip_accept(fd, (struct sockaddr*)&sockaddr, &sockaddr_len);
+        if (accept_fd >= 0)
+        {
+#if HAVE_MPOLL == 0
+            fds[accept_fd - LWIP_SOCKET_OFFSET] = accept_fd;
+#endif
+            reqs[accept_fd - LWIP_SOCKET_OFFSET] = calloc(1, sizeof(httpd_req_t));
+#if HAVE_MPOLL
+            mpoll_ctl(accept_fd, httpd_recv);
+#endif
+        }
+    }
+    return revents;
+}
+
+#if HAVE_MPOLL
+#else
 static void httpd_handler(void* arg)
 {
-    int listen_fd = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (listen_fd < 0)
-        goto final;
-
-    struct sockaddr_in sockaddr = {};
-    sockaddr.sin_len = sizeof(sockaddr);
-    sockaddr.sin_family = AF_INET;
-    sockaddr.sin_port = htons(80);
-    sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    if (lwip_bind(listen_fd, (struct sockaddr*)&sockaddr, sizeof(sockaddr)) < 0)
-        goto final;
-    if (lwip_listen(listen_fd, HTTPD_MAX_CONNECTIONS) < 0)
-        goto final;
-
-    int fds[HTTPD_MAX_CONNECTIONS];
-    httpd_req_t* reqs[HTTPD_MAX_CONNECTIONS] = {};
-    memset(fds, 0xFF, sizeof(fds));
-
     for (;;)
     {
         fd_set set;
@@ -43,7 +181,7 @@ static void httpd_handler(void* arg)
         FD_SET(listen_fd, &set);
 
         int max_fd = listen_fd;
-        for (int i = 0; i < HTTPD_MAX_CONNECTIONS; ++i)
+        for (int i = 0; i < CONFIG_LWIP_MAX_SOCKETS; ++i)
         {
             int fd = fds[i];
             if (fd >= 0)
@@ -61,176 +199,57 @@ static void httpd_handler(void* arg)
 
         if (FD_ISSET(listen_fd, &set))
         {
-            socklen_t sockaddr_len = sizeof(sockaddr);
-            int fd = lwip_accept(listen_fd, (struct sockaddr*)&sockaddr, &sockaddr_len);
-            if (fd >= 0)
-            {
-                for (int i = 0; i < HTTPD_MAX_CONNECTIONS; ++i)
-                {
-                    if (fds[i] < 0)
-                    {
-                        fds[i] = fd;
-                        reqs[i] = calloc(1, sizeof(httpd_req_t));
-                        fd = -1;
-                        break;
-                    }
-                }
-                if (fd >= 0)
-                {
-                    lwip_close(fd);
-                    ESP_LOGE(TAG, "httpd is full (%d)", fd);
-                }
-            }
+            httpd_accept(listen_fd, POLLIN);
         }
 
-        const int buf_size = 1440;
-        char* buf = malloc(buf_size);
-        for (int i = 0; i < HTTPD_MAX_CONNECTIONS; ++i)
+        for (int i = 0; i < CONFIG_LWIP_MAX_SOCKETS; ++i)
         {
             int fd = fds[i];
             if (fd >= 0)
             {
                 if (FD_ISSET(fd, &set))
                 {
-                    bool closed = false;
-                    int length = lwip_recv(fd, buf, buf_size, 0);
-                    if (length <= 0)
-                    {
-                        closed = true;
-                    }
-                    else
-                    {
-                        httpd_req_t* req = reqs[i];
-                        if (req->sess_ctx == NULL)
-                        {
-                            if (strncmp(buf, "GET", 3) != 0)
-                            {
-                                closed = true;
-                            }
-                            else
-                            {
-                                req->method = fd;
-                                for (int i = 0; i < CONFIG_HTTPD_MAX_URI_LEN; ++i)
-                                {
-                                    length = i;
-                                    char c = buf[i + 4];
-                                    if (c == ' ')
-                                        c = 0;
-                                    ((char*)req->uri)[i] = c;
-                                    if (c == 0)
-                                        break;
-                                }
-                                struct httpd_uri_node* node = uri_node;
-                                if (strstr(req->uri, "..") == NULL)
-                                {
-                                    int ext = 0;
-                                    if (strstr(req->uri, ".css"))
-                                        ext = '.css';
-                                    else if (strstr(req->uri, ".svg"))
-                                        ext = '.svg';
-                                    if (ext)
-                                    {
-                                        snprintf(buf, buf_size, "www%s", req->uri);
-                                        httpd_req_url_decode(buf);
-                                        FILE* file = fopen(buf, "rb");
-                                        if (file)
-                                        {
-                                            httpd_uri_t dummy = {};
-                                            req->sess_ctx = &dummy;
-                                            switch (ext)
-                                            {
-                                            case '.css':
-                                                httpd_resp_set_type(req, "text/css");
-                                                break;
-                                            case '.svg':
-                                                httpd_resp_set_type(req, "image/svg+xml");
-                                                break;
-                                            }
-                                            for (;;)
-                                            {
-                                                int length = fread(buf, 1, buf_size, file);
-                                                if (length == 0)
-                                                    break;
-                                                httpd_resp_send_chunk(req, buf, length);
-                                            }
-                                            fclose(file);
-                                            httpd_resp_send_chunk(req, NULL, 0);
-                                            req->sess_ctx = NULL;
-                                            node = NULL;
-                                        }
-                                    }
-                                }
-                                while (node)
-                                {
-                                    int left = length;
-                                    int right = strlen(node->uri_handler.uri);
-                                    if ((left == right || right > 1) && strncmp(req->uri, node->uri_handler.uri, right) == 0)
-                                    {
-                                        req->sess_ctx = &node->uri_handler;
-                                        break;
-                                    }
-                                    node = node->next;
-                                }
-                            }
-                        }
-                        if (req->sess_ctx == NULL)
-                        {
-                            closed = true;
-                        }
-                        if (req->sess_ctx)
-                        {
-                            httpd_uri_t* uri = req->sess_ctx;
-                            if (uri->handler(req) != ESP_FAIL)
-                            {
-                                closed = true;
-                            }
-                        }
-                    }
-                    if (closed)
-                    {
-                        lwip_close(fd);
-                        httpd_req_t* req = reqs[i];
-                        if (req)
-                        {
-                            free(req->user_ctx);
-                            free(req);
-                        }
-                        fds[i] = -1;
-                        reqs[i] = NULL;
-//                      ESP_LOGI(TAG, "%d is disconnected", fd);
-                    }
+                    httpd_recv(fd, POLLIN);
                 }
             }
         }
-        free(buf);
     }
-
-final:
-    for (int i = 0; i < HTTPD_MAX_CONNECTIONS; ++i)
-    {
-        int fd = fds[i];
-        if (fd >= 0)
-        {
-            lwip_close(fd);
-        }
-        httpd_req_t* req = reqs[i];
-        if (req)
-        {
-            free(req->user_ctx);
-            free(req);
-        }
-    }
-    if (listen_fd >= 0)
-    {
-        lwip_close(listen_fd);
-    }
-    ESP_LOGI(TAG, "%s is closed", "httpd");
-    vTaskDelete(NULL);
 }
+#endif
 
 esp_err_t httpd_start(httpd_handle_t* handle, const httpd_config_t* config)
 {
+#if HAVE_MPOLL == 0
+    memset(fds, 0xFF, sizeof(fds));
+#endif
+    listen_fd = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (listen_fd < 0)
+    {
+        ESP_LOGI(TAG, "socket failed : %s (%d)", errno, strerror(errno));
+        return ESP_FAIL;
+    }
+
+    struct sockaddr_in sockaddr = {};
+    sockaddr.sin_len = sizeof(struct sockaddr_in);
+    sockaddr.sin_family = AF_INET;
+    sockaddr.sin_port = htons(80);
+    sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    if (lwip_bind(listen_fd, (struct sockaddr*)&sockaddr, sizeof(sockaddr)) < 0)
+    {
+        ESP_LOGI(TAG, "bind failed : %s (%d)", errno, strerror(errno));
+        return ESP_FAIL;
+    }
+    if (lwip_listen(listen_fd, CONFIG_LWIP_MAX_SOCKETS) < 0)
+    {
+        ESP_LOGI(TAG, "listen failed : %s (%d)", errno, strerror(errno));
+        return ESP_FAIL;
+    }
+
+#if HAVE_MPOLL
+    mpoll_ctl(listen_fd, httpd_accept);
+#else
     (*handle) = (httpd_handle_t)xTaskCreate(httpd_handler, "httpd", HTTPD_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
+#endif
     return ESP_OK;
 }
 

@@ -150,7 +150,7 @@ static void ota_handler(TimerHandle_t timer)
                 lwip_ioctl(context->tcp_socket, FIONBIO, &mode);
 
                 struct sockaddr_in sockaddr = {};
-                sockaddr.sin_len = sizeof(sockaddr);
+                sockaddr.sin_len = sizeof(struct sockaddr_in);
                 sockaddr.sin_family = AF_INET;
                 sockaddr.sin_port = htons(strtol(remote_port, NULL, 10));
                 sockaddr.sin_addr = ((struct sockaddr_in*)&from)->sin_addr;
@@ -187,7 +187,7 @@ void ota_init(int port)
         context->tcp_socket = -1;
 
         struct sockaddr_in sockaddr = {};
-        sockaddr.sin_len = sizeof(sockaddr);
+        sockaddr.sin_len = sizeof(struct sockaddr_in);
         sockaddr.sin_family = AF_INET;
         sockaddr.sin_port = htons(port);
         sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);

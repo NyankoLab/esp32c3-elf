@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 
 #include <esp_log.h>
+#include <driver/gpio.h>
 
 #include "mpoll.h"
 
@@ -66,4 +67,51 @@ void mpoll_wait(int timeout)
             ESP_LOGI("mpoll", "%d : %s", fd, "close");
         }
     }
+}
+
+uint32_t mpoll_gpio_mask = 0;
+static TaskHandle_t mpoll_isr_task_handle = NULL;
+static struct sockaddr_in const sockaddr_udp =
+{
+    .sin_len = sizeof(struct sockaddr_in),
+    .sin_family = AF_INET,
+    .sin_port = htons(65535),
+    .sin_addr = { .s_addr = htonl(INADDR_LOOPBACK) },
+};
+
+static void IRAM_ATTR mpoll_isr_trigger(void* arg)
+{
+    gpio_ll_intr_disable_mask(mpoll_gpio_mask);
+    vTaskNotifyGiveFromISR(mpoll_isr_task_handle, NULL);
+}
+
+static void mpoll_isr_task(void* arg)
+{
+    for (;;)
+    {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        lwip_sendto((int)arg, "", 1, MSG_DONTWAIT, (struct sockaddr*)&sockaddr_udp, sizeof(sockaddr_udp));
+    }
+}
+
+static int mpoll_isr_recv(int fd, int revents)
+{
+    struct sockaddr_in sockaddr;
+    socklen_t len = sizeof(sockaddr);
+    lwip_recvfrom(fd, &sockaddr, sizeof(sockaddr), MSG_DONTWAIT, (struct sockaddr*)&sockaddr, &len);
+    return revents;
+}
+
+void mpoll_isr(int pin)
+{
+    if (mpoll_isr_task_handle == NULL)
+    {
+        int wakeup_socket = lwip_socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+        lwip_bind(wakeup_socket, (struct sockaddr*)&sockaddr_udp, sizeof(sockaddr_udp));
+        mpoll_ctl(wakeup_socket, mpoll_isr_recv);
+        xTaskCreate(mpoll_isr_task, "mpoll_isr_task", 2048, (void*)wakeup_socket, tskIDLE_PRIORITY, &mpoll_isr_task_handle);
+        gpio_isr_register(mpoll_isr_trigger, NULL, 0, NULL);
+    }
+    mpoll_gpio_mask |= BIT(pin);
+    gpio_set_intr_type((gpio_num_t)pin, GPIO_INTR_ANYEDGE);
 }

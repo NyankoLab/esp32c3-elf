@@ -5,13 +5,19 @@
 #include <sys/socket.h>
 
 #include <esp_log.h>
-#include <driver/gpio.h>
+#include <hal/gpio_ll.h>
+#include <hal/uart_ll.h>
 
 #include "mpoll.h"
 
 static int mpollfd_count = 0;
+static sys_sem_t* mpollfd_sem = NULL;
 static struct pollfd mpollfd[CONFIG_LWIP_MAX_SOCKETS];
 static mpoll_callback mpollfd_callback[CONFIG_LWIP_MAX_SOCKETS];
+
+uint32_t mpoll_gpio_mask = 0;
+uint8_t mpoll_uart_mask = 0;
+static intr_handle_t mpoll_isr_trigger_handle;
 
 void mpoll_ctl(int fd, mpoll_callback callback)
 {
@@ -50,8 +56,33 @@ void mpoll_ctl(int fd, mpoll_callback callback)
 
 void mpoll_wait(int timeout)
 {
-    if (lwip_poll(mpollfd, mpollfd_count, timeout) <= 0)
+    sys_sem_t* sem = sys_thread_sem_get();
+    if (timeout)
+    {
+        if ((mpoll_uart_mask & BIT(0)) && uart_ll_get_rxfifo_len(&UART0))
+            timeout = 0;
+        else if ((mpoll_uart_mask & BIT(1)) && uart_ll_get_rxfifo_len(&UART1))
+            timeout = 0;
+    }
+    if (timeout)
+    {
+        mpollfd_sem = sem;
+        gpio_ll_clear_intr_status(&GPIO, mpoll_gpio_mask);
+        gpio_ll_intr_enable_mask(mpoll_gpio_mask);
+    }
+    int count = lwip_poll(mpollfd, mpollfd_count, timeout);
+    if (timeout)
+    {
+        gpio_ll_intr_disable_mask(mpoll_gpio_mask);
+        mpollfd_sem = NULL;
+
+        xSemaphoreTake((QueueHandle_t)sem, 0);
+    }
+    if (count <= 0)
+    {
+        vTaskDelay(1);
         return;
+    }
 
     for (int i = 0; i < mpollfd_count; ++i)
     {
@@ -69,49 +100,30 @@ void mpoll_wait(int timeout)
     }
 }
 
-uint32_t mpoll_gpio_mask = 0;
-static TaskHandle_t mpoll_isr_task_handle = NULL;
-static struct sockaddr_in const sockaddr_udp =
-{
-    .sin_len = sizeof(struct sockaddr_in),
-    .sin_family = AF_INET,
-    .sin_port = htons(65535),
-    .sin_addr = { .s_addr = htonl(INADDR_LOOPBACK) },
-};
-
 static void IRAM_ATTR mpoll_isr_trigger(void* arg)
 {
     gpio_ll_intr_disable_mask(mpoll_gpio_mask);
-    vTaskNotifyGiveFromISR(mpoll_isr_task_handle, NULL);
-}
-
-static void mpoll_isr_task(void* arg)
-{
-    for (;;)
+    sys_sem_t* sem = mpollfd_sem;
+    if (sem)
     {
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-        lwip_sendto((int)arg, "", 1, MSG_DONTWAIT, (struct sockaddr*)&sockaddr_udp, sizeof(sockaddr_udp));
+        xSemaphoreGiveFromISR((QueueHandle_t)sem, NULL);
     }
 }
 
-static int mpoll_isr_recv(int fd, int revents)
+static void mpoll_isr_shutdown(void)
 {
-    struct sockaddr_in sockaddr;
-    socklen_t len = sizeof(sockaddr);
-    lwip_recvfrom(fd, &sockaddr, sizeof(sockaddr), MSG_DONTWAIT, (struct sockaddr*)&sockaddr, &len);
-    return revents;
+    esp_intr_disable(mpoll_isr_trigger_handle);
+    esp_intr_free(mpoll_isr_trigger_handle);
 }
 
-void mpoll_isr(int pin)
+void mpoll_isr(int gpio, int uart)
 {
-    if (mpoll_isr_task_handle == NULL)
+    if (mpoll_isr_trigger_handle == NULL)
     {
-        int wakeup_socket = lwip_socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-        lwip_bind(wakeup_socket, (struct sockaddr*)&sockaddr_udp, sizeof(sockaddr_udp));
-        mpoll_ctl(wakeup_socket, mpoll_isr_recv);
-        xTaskCreate(mpoll_isr_task, "mpoll_isr_task", 2048, (void*)wakeup_socket, tskIDLE_PRIORITY, &mpoll_isr_task_handle);
-        gpio_isr_register(mpoll_isr_trigger, NULL, 0, NULL);
+        esp_intr_alloc(GPIO_LL_INTR_SOURCE0, 0, mpoll_isr_trigger, NULL, &mpoll_isr_trigger_handle);
+        esp_register_shutdown_handler(mpoll_isr_shutdown);
     }
-    mpoll_gpio_mask |= BIT(pin);
-    gpio_set_intr_type((gpio_num_t)pin, GPIO_INTR_ANYEDGE);
+    mpoll_gpio_mask |= BIT(gpio);
+    mpoll_uart_mask |= BIT(uart);
+    gpio_ll_set_intr_type(&GPIO, gpio, GPIO_INTR_ANYEDGE);
 }

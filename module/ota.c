@@ -91,6 +91,7 @@ static void ota_handler(TimerHandle_t timer)
                 }
 
                 lwip_send(context->tcp_socket, "OK", 2, 0);
+
                 vTaskDelay(1000 / portTICK_PERIOD_MS);
                 esp_restart();
             }

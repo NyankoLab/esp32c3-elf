@@ -29,7 +29,7 @@ extern uint32_t mpoll_gpio_mask;
   } \
 }
 
-void mpoll_isr(int pin);
+void mpoll_isr(int gpio, int uart);
 
 #ifdef __cplusplus
 }

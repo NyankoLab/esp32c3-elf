@@ -1,5 +1,6 @@
 #include "esp32c3.h"
 #include <sys/lock.h>
+#include <sys/queue.h>
 #include <esp_private/esp_clk.h>
 #include <esp_rom_gpio.h>
 #include <esp_rom_serial_output.h>
@@ -11,11 +12,21 @@
 #include <hal/usb_serial_jtag_ll.h>
 #include <lwip/sockets.h>
 
-#define USE_ESP_ROM 0
+#define USE_ESP_ROM         0
+#define USE_TASK_FOR_UDP    1
 
 static int udp_fd IRAM_BSS_ATTR = -1;
 static struct sockaddr_in udp_sockaddr IRAM_BSS_ATTR;
 static SemaphoreHandle_t g_mutex IRAM_BSS_ATTR = NULL;
+
+typedef struct udp_message_t {
+    STAILQ_ENTRY(udp_message_t) next;
+    int size;
+    char data[1];
+} udp_message_t;
+STAILQ_HEAD(udp_message_list_t, udp_message_t);
+static struct udp_message_list_t* udp_message;
+static TaskHandle_t udp_task_handle;
 
 #define USBSERIAL_TIMEOUT_MAX_US 50000
 static int s_usbserial_timeout IRAM_BSS_ATTR = 0;
@@ -32,6 +43,20 @@ static void usb_serial_jtag_ll_write(const uint8_t c)
     }
 }
 
+void udp_task(void* arg)
+{
+    for (;;) {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        udp_message_t* message = STAILQ_FIRST(udp_message);
+        if (message == NULL)
+            continue;
+        STAILQ_REMOVE_HEAD(udp_message, next);
+
+        lwip_sendto(udp_fd, message->data, message->size, MSG_DONTWAIT, (struct sockaddr*)&udp_sockaddr, sizeof(udp_sockaddr));
+        free(message);
+    }
+}
+
 void init_udp_console(const char* ip)
 {
     if (udp_fd >= 0)
@@ -44,14 +69,15 @@ void init_udp_console(const char* ip)
     char* step = temp;
     char* address = strsep(&step, ":");
     char* port = strsep(&step, ":");
-    udp_sockaddr.sin_len = sizeof(udp_sockaddr);
+    udp_sockaddr.sin_len = sizeof(struct sockaddr_in);
     udp_sockaddr.sin_family = AF_INET;
     udp_sockaddr.sin_port = htons(port ? atoi(port) : 8888);
-    udp_sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    int mode = 1;
-    lwip_ioctl(udp_fd, FIONBIO, &mode);
-    lwip_bind(udp_fd, (struct sockaddr*)&udp_sockaddr, sizeof(udp_sockaddr));
     lwip_inet_pton(AF_INET, address, &udp_sockaddr.sin_addr);
+#if USE_TASK_FOR_UDP
+    udp_message = calloc(1, sizeof(struct udp_message_list_t));
+    STAILQ_INIT(udp_message);
+    xTaskCreate(udp_task, "udp_task", 2048, NULL, tskIDLE_PRIORITY, &udp_task_handle);
+#endif
 }
 
 void vfs_init(void)
@@ -67,8 +93,18 @@ ssize_t __wrap__read_r_console(struct _reent* r, int fd, const void* data, size_
 ssize_t __wrap__write_r_console(struct _reent* r, int fd, const void* data, size_t size)
 {
     SemaphoreHandle_t mutex = g_mutex;
-    if (fd >= 0) {
-        lwip_sendto(udp_fd, data, size, 0, (struct sockaddr*)&udp_sockaddr, sizeof(udp_sockaddr));
+    if (udp_fd >= 0 && size) {
+#if USE_TASK_FOR_UDP
+        udp_message_t* message = malloc(sizeof(udp_message_t) + size - 1);
+        if (message) {
+            message->size = size;
+            memcpy(message->data, data, size);
+            STAILQ_INSERT_TAIL(udp_message, message, next);
+            vTaskNotifyGiveFromISR(udp_task_handle, NULL);
+        }
+#else
+        lwip_sendto(udp_fd, data, size, MSG_DONTWAIT, (struct sockaddr*)&udp_sockaddr, sizeof(udp_sockaddr));
+#endif
     }
     uint32_t baudrate = 0;
     if (mutex && uart0_tx != U0TXD_GPIO_NUM) {

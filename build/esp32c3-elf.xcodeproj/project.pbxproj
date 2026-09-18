@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		D6170A7B2CF22403001C8439 /* dlfcn.c in Sources */ = {isa = PBXBuildFile; fileRef = D6170A7A2CF22403001C8439 /* dlfcn.c */; };
 		D65A9C032CE848CC0022B1E0 /* symbols.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D65A9C022CE848CC0022B1E0 /* symbols.cpp */; settings = {COMPILER_FLAGS = "-I../elf_loader/include"; }; };
-		D6619E452DA2303F001C8599 /* homekit.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E422DA2303F001C8599 /* homekit.c */; };
-		D6619E462DA2303F001C8599 /* nvs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E432DA2303F001C8599 /* nvs.c */; };
 		D6619E472DA2303F001C8599 /* vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E442DA2303F001C8599 /* vfs.c */; };
 		D6619E482DA2303F001C8599 /* cxx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6619E402DA2303F001C8599 /* cxx.cpp */; };
 		D6619E492DA2303F001C8599 /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E412DA2303F001C8599 /* file.c */; };
@@ -41,10 +39,8 @@
 		F50FFF0C3035F9C800DF502C /* cxx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6619E402DA2303F001C8599 /* cxx.cpp */; };
 		F50FFF0D3035F9C800DF502C /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E412DA2303F001C8599 /* file.c */; };
 		F50FFF0E3035F9C800DF502C /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FA569B2FA0915A008340EA /* hash.cpp */; };
-		F50FFF0F3035F9C800DF502C /* homekit.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E422DA2303F001C8599 /* homekit.c */; };
 		F50FFF103035F9C800DF502C /* mbedtls.c in Sources */ = {isa = PBXBuildFile; fileRef = F543D84E2FBAF05B00DE9187 /* mbedtls.c */; };
 		F50FFF113035F9C800DF502C /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FA569D2FA09182008340EA /* memory.cpp */; };
-		F50FFF123035F9C800DF502C /* nvs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E432DA2303F001C8599 /* nvs.c */; };
 		F50FFF133035F9C800DF502C /* vfs.c in Sources */ = {isa = PBXBuildFile; fileRef = D6619E442DA2303F001C8599 /* vfs.c */; };
 		F543D84F2FBAF06600DE9187 /* mbedtls.c in Sources */ = {isa = PBXBuildFile; fileRef = F543D84E2FBAF05B00DE9187 /* mbedtls.c */; };
 		F543D8502FC5530E00DE9187 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FA569D2FA09182008340EA /* memory.cpp */; };
@@ -62,26 +58,8 @@
 		D6170A792CF22403001C8439 /* dlfcn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dlfcn.h; path = ../module/dlfcn.h; sourceTree = "<group>"; };
 		D6170A7A2CF22403001C8439 /* dlfcn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dlfcn.c; path = ../module/dlfcn.c; sourceTree = "<group>"; };
 		D65A9C022CE848CC0022B1E0 /* symbols.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = symbols.cpp; sourceTree = "<group>"; };
-		D6619E202DA23013001C8599 /* aes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
-		D6619E212DA23013001C8599 /* aes.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = aes.c; sourceTree = "<group>"; };
-		D6619E222DA23013001C8599 /* aes-cbc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-cbc.c"; sourceTree = "<group>"; };
-		D6619E232DA23013001C8599 /* aes-ccm.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-ccm.c"; sourceTree = "<group>"; };
-		D6619E242DA23013001C8599 /* aes-ctr.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-ctr.c"; sourceTree = "<group>"; };
-		D6619E252DA23013001C8599 /* aes-gcm.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-gcm.c"; sourceTree = "<group>"; };
-		D6619E262DA23013001C8599 /* aes-internal-dec.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-internal-dec.c"; sourceTree = "<group>"; };
-		D6619E272DA23013001C8599 /* aes-internal-enc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-internal-enc.c"; sourceTree = "<group>"; };
-		D6619E282DA23013001C8599 /* aes-omac1.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-omac1.c"; sourceTree = "<group>"; };
-		D6619E292DA23013001C8599 /* aes-unwrap.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-unwrap.c"; sourceTree = "<group>"; };
-		D6619E2A2DA23013001C8599 /* aes-wrap.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "aes-wrap.c"; sourceTree = "<group>"; };
-		D6619E2B2DA23013001C8599 /* bignum.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bignum.c; sourceTree = "<group>"; };
-		D6619E2C2DA23013001C8599 /* sha.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sha.h; sourceTree = "<group>"; };
-		D6619E2D2DA23013001C8599 /* sha.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = sha.c; sourceTree = "<group>"; };
-		D6619E2E2DA23013001C8599 /* sha1-internal.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "sha1-internal.c"; sourceTree = "<group>"; };
-		D6619E2F2DA23013001C8599 /* sha256-internal.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "sha256-internal.c"; sourceTree = "<group>"; };
 		D6619E402DA2303F001C8599 /* cxx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cxx.cpp; sourceTree = "<group>"; };
 		D6619E412DA2303F001C8599 /* file.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = file.c; sourceTree = "<group>"; };
-		D6619E422DA2303F001C8599 /* homekit.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = homekit.c; sourceTree = "<group>"; };
-		D6619E432DA2303F001C8599 /* nvs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = nvs.c; sourceTree = "<group>"; };
 		D6619E442DA2303F001C8599 /* vfs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = vfs.c; sourceTree = "<group>"; };
 		D66C4B1829A860C100F27A29 /* ClangPlatform.esp32c3.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ClangPlatform.esp32c3.xcconfig; sourceTree = "<group>"; };
 		D66C4B1929A860D000F27A29 /* sdkconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sdkconfig.h; path = light/build/config/sdkconfig.h; sourceTree = "<group>"; };
@@ -166,29 +144,6 @@
 			name = Configs;
 			sourceTree = "<group>";
 		};
-		D6170A512CEF73EA001C8439 /* crypto */ = {
-			isa = PBXGroup;
-			children = (
-				D6619E212DA23013001C8599 /* aes.c */,
-				D6619E202DA23013001C8599 /* aes.h */,
-				D6619E222DA23013001C8599 /* aes-cbc.c */,
-				D6619E232DA23013001C8599 /* aes-ccm.c */,
-				D6619E242DA23013001C8599 /* aes-ctr.c */,
-				D6619E252DA23013001C8599 /* aes-gcm.c */,
-				D6619E262DA23013001C8599 /* aes-internal-dec.c */,
-				D6619E272DA23013001C8599 /* aes-internal-enc.c */,
-				D6619E282DA23013001C8599 /* aes-omac1.c */,
-				D6619E292DA23013001C8599 /* aes-unwrap.c */,
-				D6619E2A2DA23013001C8599 /* aes-wrap.c */,
-				D6619E2B2DA23013001C8599 /* bignum.c */,
-				D6619E2D2DA23013001C8599 /* sha.c */,
-				D6619E2C2DA23013001C8599 /* sha.h */,
-				D6619E2E2DA23013001C8599 /* sha1-internal.c */,
-				D6619E2F2DA23013001C8599 /* sha256-internal.c */,
-			);
-			path = crypto;
-			sourceTree = "<group>";
-		};
 		D644A038231ED82900B75B77 = {
 			isa = PBXGroup;
 			children = (
@@ -215,7 +170,6 @@
 			isa = PBXGroup;
 			children = (
 				F5F5E4142DA42D2200BA4DF0 /* ethernet */,
-				D6170A512CEF73EA001C8439 /* crypto */,
 				D6741A7C2CE610470024FB04 /* patch */,
 				D6170A7A2CF22403001C8439 /* dlfcn.c */,
 				D6170A792CF22403001C8439 /* dlfcn.h */,
@@ -253,14 +207,24 @@
 				D6619E402DA2303F001C8599 /* cxx.cpp */,
 				D6619E412DA2303F001C8599 /* file.c */,
 				F5FA569B2FA0915A008340EA /* hash.cpp */,
-				D6619E422DA2303F001C8599 /* homekit.c */,
 				F543D84E2FBAF05B00DE9187 /* mbedtls.c */,
 				F5FA569D2FA09182008340EA /* memory.cpp */,
-				D6619E432DA2303F001C8599 /* nvs.c */,
 				D6619E442DA2303F001C8599 /* vfs.c */,
 			);
 			path = patch;
 			sourceTree = "<group>";
+		};
+		F5E6823B2FA9E58700871C10 /* preboot */ = {
+			isa = PBXGroup;
+			children = (
+				F5E682382FA9E58700871C10 /* fota.cpp */,
+				F5E682372FA9E58700871C10 /* fota.h */,
+				F5E682392FA9E58700871C10 /* update.cpp */,
+				F5E6823A2FA9E58700871C10 /* Update.h */,
+			);
+			name = preboot;
+			path = ../preboot;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5F5E4142DA42D2200BA4DF0 /* ethernet */ = {
 			isa = PBXGroup;
@@ -385,10 +349,8 @@
 				D6619E482DA2303F001C8599 /* cxx.cpp in Sources */,
 				D6619E492DA2303F001C8599 /* file.c in Sources */,
 				F5FA569C2FA0915A008340EA /* hash.cpp in Sources */,
-				D6619E452DA2303F001C8599 /* homekit.c in Sources */,
 				F543D84F2FBAF06600DE9187 /* mbedtls.c in Sources */,
 				F543D8502FC5530E00DE9187 /* memory.cpp in Sources */,
-				D6619E462DA2303F001C8599 /* nvs.c in Sources */,
 				D6619E472DA2303F001C8599 /* vfs.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,10 +376,8 @@
 				F50FFF0C3035F9C800DF502C /* cxx.cpp in Sources */,
 				F50FFF0D3035F9C800DF502C /* file.c in Sources */,
 				F50FFF0E3035F9C800DF502C /* hash.cpp in Sources */,
-				F50FFF0F3035F9C800DF502C /* homekit.c in Sources */,
 				F50FFF103035F9C800DF502C /* mbedtls.c in Sources */,
 				F50FFF113035F9C800DF502C /* memory.cpp in Sources */,
-				F50FFF123035F9C800DF502C /* nvs.c in Sources */,
 				F50FFF133035F9C800DF502C /* vfs.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

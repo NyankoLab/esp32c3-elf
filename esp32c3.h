@@ -7,6 +7,8 @@
 #define HAVE_MPOLL 1
 #define HAVE_PREPATCH 0
 
+#define vTaskSystemRestart() xTaskCreate((TaskFunction_t)esp_restart, "Reboot Task", 4096, NULL, 5, NULL);
+
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>

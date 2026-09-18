@@ -41,5 +41,5 @@ void operator delete[](void* pointer)
 
 extern "C" void __cxa_pure_virtual()
 {
-    esp_restart();
+    vTaskSystemRestart();
 }

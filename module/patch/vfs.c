@@ -46,10 +46,11 @@ static void usb_serial_jtag_ll_write(const uint8_t c)
 void udp_task(void* arg)
 {
     for (;;) {
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         udp_message_t* message = STAILQ_FIRST(udp_message);
-        if (message == NULL)
+        if (message == NULL) {
+            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
             continue;
+        }
         STAILQ_REMOVE_HEAD(udp_message, next);
 
         lwip_sendto(udp_fd, message->data, message->size, MSG_DONTWAIT, (struct sockaddr*)&udp_sockaddr, sizeof(udp_sockaddr));

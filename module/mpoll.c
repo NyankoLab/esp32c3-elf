@@ -112,8 +112,14 @@ static void IRAM_ATTR mpoll_isr_trigger(void* arg)
 
 static void mpoll_isr_shutdown(void)
 {
+    gpio_ll_intr_disable_mask(mpoll_gpio_mask);
     esp_intr_disable(mpoll_isr_trigger_handle);
     esp_intr_free(mpoll_isr_trigger_handle);
+    sys_sem_t* sem = mpollfd_sem;
+    if (sem)
+    {
+        xSemaphoreTake((QueueHandle_t)sem, 0);
+    }
 }
 
 void mpoll_isr(int gpio, int uart)

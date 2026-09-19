@@ -8,8 +8,8 @@ extern "C" {
 
 typedef int (*mpoll_callback)(int, int);
 
-extern uint32_t mpoll_intr_gpio_mask;
-extern uint8_t mpoll_intr_uart_mask;
+extern uint32_t mpoll_gpio_intr_mask;
+extern uint8_t mpoll_uart_intr_mask;
 
 void mpoll_ctl(int fd, mpoll_callback callback);
 void mpoll_wait(int timeout);

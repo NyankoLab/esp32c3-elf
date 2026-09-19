@@ -10,6 +10,11 @@
 
 #include "mpoll.h"
 
+#define HAVE_GPIO_INTR  0
+#define HAVE_UART_INTR  1
+
+#define gpio_ll_clear_intr_status_mask(mask) \
+    gpio_ll_clear_intr_status(&GPIO, mask)
 #define gpio_ll_intr_enable_mask(mask) \
 { \
     int status = mask; \
@@ -31,14 +36,71 @@
     } \
 }
 
+
+#define uart_ll_clear_intr_status_mask(mask) \
+{ \
+    int status = mask; \
+    while (status) \
+    { \
+        int uart = __builtin_ffs(status) - 1; \
+        status &= ~BIT(uart); \
+        uart_ll_clr_intsts_mask(UART[uart], UART_INTR_RXFIFO_TOUT); \
+    } \
+}
+#define uart_ll_intr_enable_mask(mask) \
+{ \
+    int status = mask; \
+    while (status) \
+    { \
+        int uart = __builtin_ffs(status) - 1; \
+        status &= ~BIT(uart); \
+        uart_ll_ena_intr_mask(UART[uart], UART_INTR_RXFIFO_TOUT); \
+    } \
+}
+#define uart_ll_intr_disable_mask(mask) \
+{ \
+    int status = mask; \
+    while (status) \
+    { \
+        int uart = __builtin_ffs(status) - 1; \
+        status &= ~BIT(uart); \
+        uart_ll_disable_intr_mask(UART[uart], UART_INTR_RXFIFO_TOUT); \
+    } \
+}
+
 static int mpollfd_count = 0;
+static sys_sem_t* mpollfd_sem = NULL;
 static struct pollfd mpollfd[CONFIG_LWIP_MAX_SOCKETS];
 static mpoll_callback mpollfd_callback[CONFIG_LWIP_MAX_SOCKETS];
 
-uint32_t mpoll_intr_gpio_mask = 0;
-uint8_t mpoll_intr_uart_mask = 0;
-static sys_sem_t* mpollfd_sem = NULL;
-static intr_handle_t mpoll_intr_handle;
+uint32_t mpoll_gpio_intr_mask = 0;
+uint8_t mpoll_uart_intr_mask = 0;
+
+#if HAVE_GPIO_INTR
+static intr_handle_t mpoll_gpio_intr_handle;
+#endif
+
+#if HAVE_UART_INTR
+static uart_dev_t* const UART[SOC_UART_NUM] =
+{
+#if SOC_UART_NUM > 0
+    &UART0,
+#endif
+#if SOC_UART_NUM > 1
+    &UART1,
+#endif
+#if SOC_UART_NUM > 2
+    &UART2,
+#endif
+#if SOC_UART_NUM > 3
+    &UART3,
+#endif
+#if SOC_UART_NUM > 4
+    &UART4,
+#endif
+};
+static intr_handle_t mpoll_uart_intr_handle[SOC_UART_NUM];
+#endif
 
 void mpoll_ctl(int fd, mpoll_callback callback)
 {
@@ -78,23 +140,38 @@ void mpoll_ctl(int fd, mpoll_callback callback)
 void mpoll_wait(int timeout)
 {
     sys_sem_t* sem = sys_thread_sem_get();
+#if HAVE_UART_INTR
     if (timeout)
     {
-        if ((mpoll_intr_uart_mask & BIT(0)) && uart_ll_get_rxfifo_len(&UART0))
-            timeout = 0;
-        else if ((mpoll_intr_uart_mask & BIT(1)) && uart_ll_get_rxfifo_len(&UART1))
-            timeout = 0;
+        for (int i = 0; i < SOC_UART_NUM; ++i)
+        {
+            if ((mpoll_uart_intr_mask & BIT(i)) && uart_ll_get_rxfifo_len(UART[i]))
+            {
+                timeout = 0;
+                break;
+            }
+        }
     }
+#endif
     if (timeout)
     {
         mpollfd_sem = sem;
-        gpio_ll_clear_intr_status(&GPIO, mpoll_intr_gpio_mask);
-        gpio_ll_intr_enable_mask(mpoll_intr_gpio_mask);
+#if HAVE_GPIO_INTR
+        gpio_ll_clear_intr_status_mask(mpoll_gpio_intr_mask);
+        gpio_ll_intr_enable_mask(mpoll_gpio_intr_mask);
+#endif
+        uart_ll_clear_intr_status_mask(mpoll_uart_intr_mask);
+        uart_ll_intr_enable_mask(mpoll_uart_intr_mask);
     }
     int count = lwip_poll(mpollfd, mpollfd_count, timeout);
     if (timeout)
     {
-        gpio_ll_intr_disable_mask(mpoll_intr_gpio_mask);
+#if HAVE_GPIO_INTR
+        gpio_ll_intr_disable_mask(mpoll_gpio_intr_mask);
+#endif
+#if HAVE_UART_INTR
+        uart_ll_intr_disable_mask(mpoll_uart_intr_mask);
+#endif
         mpollfd_sem = NULL;
 
         xSemaphoreTake((QueueHandle_t)sem, 0);
@@ -122,10 +199,11 @@ void mpoll_wait(int timeout)
     }
 }
 
-static void IRAM_ATTR mpoll_intr_isr(void* arg)
+#if HAVE_GPIO_INTR
+static void IRAM_ATTR mpoll_gpio_intr_isr(gpio_dev_t* gpio)
 {
-    gpio_ll_clear_intr_status(&GPIO, mpoll_intr_gpio_mask);
-    gpio_ll_intr_disable_mask(mpoll_intr_gpio_mask);
+    gpio_ll_clear_intr_status_mask(mpoll_gpio_intr_mask);
+    gpio_ll_intr_disable_mask(mpoll_gpio_intr_mask);
     sys_sem_t* sem = mpollfd_sem;
     if (sem)
     {
@@ -139,11 +217,11 @@ static void IRAM_ATTR mpoll_intr_isr(void* arg)
 }
 
 __attribute__((unused))
-static void mpoll_intr_shutdown(void)
+static void mpoll_gpio_intr_shutdown(void)
 {
-    gpio_ll_intr_disable_mask(mpoll_intr_gpio_mask);
-    esp_intr_disable(mpoll_intr_handle);
-    esp_intr_free(mpoll_intr_handle);
+    gpio_ll_intr_disable_mask(mpoll_gpio_intr_mask);
+    esp_intr_disable(mpoll_gpio_intr_handle);
+    esp_intr_free(mpoll_gpio_intr_handle);
     sys_sem_t* sem = mpollfd_sem;
     if (sem)
     {
@@ -151,20 +229,78 @@ static void mpoll_intr_shutdown(void)
     }
 }
 
-void mpoll_intr(int gpio, int uart)
+static mpoll_gpio_intr(int gpio)
 {
-    if (mpoll_intr_handle == NULL)
-    {
-        esp_intr_alloc(ETS_GPIO_INTR_SOURCE, 0, mpoll_intr_isr, NULL, &mpoll_intr_handle);
-//      esp_register_shutdown_handler(mpoll_intr_shutdown);
-    }
     if (gpio >= 0 && gpio < SOC_GPIO_PIN_COUNT)
     {
-        mpoll_intr_gpio_mask |= BIT(gpio);
+        if (mpoll_gpio_intr_handle == NULL)
+        {
+            esp_intr_alloc(ETS_GPIO_INTR_SOURCE, 0, (intr_handler_t)mpoll_gpio_intr_isr, NULL, &mpoll_gpio_intr_handle);
+//          esp_register_shutdown_handler(mpoll_gpio_intr_shutdown);
+        }
+        mpoll_gpio_intr_mask |= BIT(gpio);
         gpio_ll_set_intr_type(&GPIO, gpio, GPIO_INTR_ANYEDGE);
     }
-    if (uart >= 0 && uart < SOC_UART_NUM)
+}
+#endif
+
+#if HAVE_UART_INTR
+static void IRAM_ATTR mpoll_uart_intr_isr(uart_dev_t* uart)
+{
+    uart_ll_clr_intsts_mask(uart, UART_INTR_RXFIFO_TOUT);
+    uart_ll_disable_intr_mask(uart, UART_INTR_RXFIFO_TOUT);
+    sys_sem_t* sem = mpollfd_sem;
+    if (sem)
     {
-        mpoll_intr_uart_mask |= BIT(uart);
+        BaseType_t taskWoken = pdFALSE;
+        xSemaphoreGiveFromISR((QueueHandle_t)sem, &taskWoken);
+        if (taskWoken)
+        {
+            portYIELD_FROM_ISR();
+        }
     }
+}
+
+static void mpoll_uart_intr(int uart)
+{
+//  if (uart >= 0 && uart < SOC_UART_NUM)   // TODO
+    if (uart >= 1 && uart < SOC_UART_NUM)
+    {
+        if (mpoll_uart_intr_handle[uart] == NULL)
+        {
+            int source = 0;
+            switch (uart)
+            {
+#if SOC_UART_NUM > 0
+            case 0: source = ETS_UART0_INTR_SOURCE; break;
+#endif
+#if SOC_UART_NUM > 1
+            case 1: source = ETS_UART1_INTR_SOURCE; break;
+#endif
+#if SOC_UART_NUM > 2
+            case 2: source = ETS_UART2_INTR_SOURCE; break;
+#endif
+#if SOC_UART_NUM > 3
+            case 3: source = ETS_UART3_INTR_SOURCE; break;
+#endif
+#if SOC_UART_NUM > 4
+            case 4: source = ETS_UART4_INTR_SOURCE; break;
+#endif
+            }
+            esp_intr_alloc(source, 0, (intr_handler_t)mpoll_uart_intr_isr, (void*)UART[uart], &mpoll_uart_intr_handle[uart]);
+        }
+        mpoll_uart_intr_mask |= BIT(uart);
+        uart_ll_set_rx_tout(UART[uart], 10);
+    }
+}
+#endif
+
+void mpoll_intr(int gpio, int uart)
+{
+#if HAVE_GPIO_INTR
+    mpoll_gpio_intr(gpio);
+#endif
+#if HAVE_UART_INTR
+    mpoll_uart_intr(uart);
+#endif
 }

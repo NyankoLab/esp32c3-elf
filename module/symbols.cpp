@@ -302,8 +302,8 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     // mpoll
     ESP_ELFSYM_EXPORT(mpoll_ctl),
     ESP_ELFSYM_EXPORT(mpoll_wait),
-    ESP_ELFSYM_EXPORT(mpoll_intr_gpio_mask),
-    ESP_ELFSYM_EXPORT(mpoll_intr_uart_mask),
+    ESP_ELFSYM_EXPORT(mpoll_gpio_intr_mask),
+    ESP_ELFSYM_EXPORT(mpoll_uart_intr_mask),
     ESP_ELFSYM_EXPORT(mpoll_intr),
 
     // mqtt

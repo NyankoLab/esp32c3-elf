@@ -64,7 +64,7 @@
     { \
         int uart = __builtin_ffs(status) - 1; \
         status &= ~BIT(uart); \
-        uart_ll_disable_intr_mask(UART[uart], UART_INTR_RXFIFO_TOUT); \
+        uart_ll_disable_intr_mask(UART[uart], UART_LL_INTR_MASK); \
     } \
 }
 
@@ -202,8 +202,8 @@ void mpoll_wait(int timeout)
 #if HAVE_GPIO_INTR
 static void IRAM_ATTR mpoll_gpio_intr_isr(gpio_dev_t* gpio)
 {
-    gpio_ll_clear_intr_status_mask(mpoll_gpio_intr_mask);
     gpio_ll_intr_disable_mask(mpoll_gpio_intr_mask);
+    gpio_ll_clear_intr_status_mask(mpoll_gpio_intr_mask);
     sys_sem_t* sem = mpollfd_sem;
     if (sem)
     {
@@ -247,8 +247,8 @@ static mpoll_gpio_intr(int gpio)
 #if HAVE_UART_INTR
 static void IRAM_ATTR mpoll_uart_intr_isr(uart_dev_t* uart)
 {
-    uart_ll_clr_intsts_mask(uart, UART_INTR_RXFIFO_TOUT);
-    uart_ll_disable_intr_mask(uart, UART_INTR_RXFIFO_TOUT);
+    uart_ll_disable_intr_mask(uart, UART_LL_INTR_MASK);
+    uart_ll_clr_intsts_mask(uart, UART_LL_INTR_MASK);
     sys_sem_t* sem = mpollfd_sem;
     if (sem)
     {
@@ -263,33 +263,16 @@ static void IRAM_ATTR mpoll_uart_intr_isr(uart_dev_t* uart)
 
 static void mpoll_uart_intr(int uart)
 {
-//  if (uart >= 0 && uart < SOC_UART_NUM)   // TODO
-    if (uart >= 1 && uart < SOC_UART_NUM)
+    if (uart >= 0 && uart < SOC_UART_NUM)
     {
         if (mpoll_uart_intr_handle[uart] == NULL)
         {
-            int source = 0;
-            switch (uart)
-            {
-#if SOC_UART_NUM > 0
-            case 0: source = ETS_UART0_INTR_SOURCE; break;
-#endif
-#if SOC_UART_NUM > 1
-            case 1: source = ETS_UART1_INTR_SOURCE; break;
-#endif
-#if SOC_UART_NUM > 2
-            case 2: source = ETS_UART2_INTR_SOURCE; break;
-#endif
-#if SOC_UART_NUM > 3
-            case 3: source = ETS_UART3_INTR_SOURCE; break;
-#endif
-#if SOC_UART_NUM > 4
-            case 4: source = ETS_UART4_INTR_SOURCE; break;
-#endif
-            }
+            int source = ETS_UART0_INTR_SOURCE + uart;
             esp_intr_alloc(source, 0, (intr_handler_t)mpoll_uart_intr_isr, (void*)UART[uart], &mpoll_uart_intr_handle[uart]);
         }
         mpoll_uart_intr_mask |= BIT(uart);
+        uart_ll_disable_intr_mask(UART[uart], UART_LL_INTR_MASK);
+        uart_ll_clr_intsts_mask(UART[uart], UART_LL_INTR_MASK);
         uart_ll_set_rx_tout(UART[uart], 10);
     }
 }

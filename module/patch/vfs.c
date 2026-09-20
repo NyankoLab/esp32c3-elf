@@ -43,6 +43,14 @@ static void usb_serial_jtag_ll_write(const uint8_t c)
     }
 }
 
+static void ets_delay_from_txfifo(int baudrate)
+{
+    if (baudrate == 0)
+        return;
+    uint32_t delay = (UART_LL_FIFO_DEF_LEN - uart_ll_get_txfifo_len(&UART0) + 1) * 10 * 1000000 / baudrate;
+    ets_delay_us(delay);
+}
+
 void udp_task(void* arg)
 {
     for (;;) {
@@ -109,11 +117,12 @@ ssize_t __wrap__write_r_console(struct _reent* r, int fd, const void* data, size
     }
     uint32_t baudrate = 0;
     if (mutex && uart0_tx != U0TXD_GPIO_NUM) {
+        uart_ll_disable_intr_mask(&UART0, UART_LL_INTR_MASK);
+        uart_ll_clr_intsts_mask(&UART0, UART_LL_INTR_MASK);
         xSemaphoreTake(mutex, portMAX_DELAY);
         baudrate = uart_ll_get_baudrate(&UART0, esp_clk_apb_freq());
         baudrate = ((baudrate + 150) / 300) * 300;
-        while (uart_ll_get_txfifo_len(&UART0) < UART_LL_FIFO_DEF_LEN);
-        ets_delay_us(1000);
+        ets_delay_from_txfifo(baudrate);
         esp_rom_gpio_connect_out_signal(U0TXD_GPIO_NUM, UART_PERIPH_SIGNAL(UART_NUM_0, SOC_UART_PERIPH_SIGNAL_TX), 0, 0);
         uart_ll_set_baudrate(&UART0, 115200, esp_clk_apb_freq());
         uart_ll_txfifo_rst(&UART0);
@@ -145,8 +154,7 @@ ssize_t __wrap__write_r_console(struct _reent* r, int fd, const void* data, size
     usb_serial_jtag_ll_txfifo_flush();
 #endif
     if (baudrate != 0) {
-        while (uart_ll_get_txfifo_len(&UART0) < UART_LL_FIFO_DEF_LEN);
-        ets_delay_us(1000);
+        ets_delay_from_txfifo(115200);
         esp_rom_gpio_connect_out_signal(uart0_tx, UART_PERIPH_SIGNAL(UART_NUM_0, SOC_UART_PERIPH_SIGNAL_TX), 0, 0);
         uart_ll_set_baudrate(&UART0, baudrate, esp_clk_apb_freq());
         uart_ll_txfifo_rst(&UART0);

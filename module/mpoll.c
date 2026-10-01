@@ -36,7 +36,6 @@
     } \
 }
 
-
 #define uart_ll_clear_intr_status_mask(mask) \
 { \
     int status = mask; \
@@ -160,8 +159,10 @@ void mpoll_wait(int timeout)
         gpio_ll_clear_intr_status_mask(mpoll_gpio_intr_mask);
         gpio_ll_intr_enable_mask(mpoll_gpio_intr_mask);
 #endif
+#if HAVE_UART_INTR
         uart_ll_clear_intr_status_mask(mpoll_uart_intr_mask);
         uart_ll_intr_enable_mask(mpoll_uart_intr_mask);
+#endif
     }
     int count = lwip_poll(mpollfd, mpollfd_count, timeout);
     if (timeout)
@@ -199,11 +200,8 @@ void mpoll_wait(int timeout)
     }
 }
 
-#if HAVE_GPIO_INTR
-static void IRAM_ATTR mpoll_gpio_intr_isr(gpio_dev_t* gpio)
+void IRAM_ATTR mpoll_wakeup(void)
 {
-    gpio_ll_intr_disable_mask(mpoll_gpio_intr_mask);
-    gpio_ll_clear_intr_status_mask(mpoll_gpio_intr_mask);
     sys_sem_t* sem = mpollfd_sem;
     if (sem)
     {
@@ -216,27 +214,30 @@ static void IRAM_ATTR mpoll_gpio_intr_isr(gpio_dev_t* gpio)
     }
 }
 
-__attribute__((unused))
-static void mpoll_gpio_intr_shutdown(void)
+#if HAVE_GPIO_INTR
+static void IRAM_ATTR mpoll_gpio_intr_isr(gpio_dev_t* gpio)
 {
     gpio_ll_intr_disable_mask(mpoll_gpio_intr_mask);
-    esp_intr_disable(mpoll_gpio_intr_handle);
-    esp_intr_free(mpoll_gpio_intr_handle);
-    sys_sem_t* sem = mpollfd_sem;
-    if (sem)
-    {
-        xSemaphoreTake((QueueHandle_t)sem, 0);
-    }
+    gpio_ll_clear_intr_status_mask(mpoll_gpio_intr_mask);
+    mpoll_wakeup();
 }
 
-static mpoll_gpio_intr(int gpio)
+static void mpoll_gpio_intr_shutdown(void)
+{
+    mpollfd_sem = NULL;
+    esp_intr_disable(mpoll_gpio_intr_handle);
+    gpio_ll_intr_disable_mask(mpoll_gpio_intr_mask);
+    gpio_ll_clear_intr_status_mask(mpoll_gpio_intr_mask);
+}
+
+static void mpoll_gpio_intr(int gpio)
 {
     if (gpio >= 0 && gpio < SOC_GPIO_PIN_COUNT)
     {
         if (mpoll_gpio_intr_handle == NULL)
         {
             esp_intr_alloc(ETS_GPIO_INTR_SOURCE, 0, (intr_handler_t)mpoll_gpio_intr_isr, NULL, &mpoll_gpio_intr_handle);
-//          esp_register_shutdown_handler(mpoll_gpio_intr_shutdown);
+            esp_register_shutdown_handler(mpoll_gpio_intr_shutdown);
         }
         mpoll_gpio_intr_mask |= BIT(gpio);
         gpio_ll_set_intr_type(&GPIO, gpio, GPIO_INTR_ANYEDGE);
@@ -249,16 +250,7 @@ static void IRAM_ATTR mpoll_uart_intr_isr(uart_dev_t* uart)
 {
     uart_ll_disable_intr_mask(uart, UART_LL_INTR_MASK);
     uart_ll_clr_intsts_mask(uart, UART_LL_INTR_MASK);
-    sys_sem_t* sem = mpollfd_sem;
-    if (sem)
-    {
-        BaseType_t taskWoken = pdFALSE;
-        xSemaphoreGiveFromISR((QueueHandle_t)sem, &taskWoken);
-        if (taskWoken)
-        {
-            portYIELD_FROM_ISR();
-        }
-    }
+    mpoll_wakeup();
 }
 
 static void mpoll_uart_intr(int uart)

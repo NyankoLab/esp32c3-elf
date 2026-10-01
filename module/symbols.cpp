@@ -52,10 +52,10 @@ struct hashed_elfsym
     }
 };
 
-// Base     217
+// Base     218
 // ESPHome  7
 // Matter   28
-#define BASE_COUNT      217
+#define BASE_COUNT      218
 #define ESPHOME_COUNT   (HAVE_ESPHOME ? 7 : 0)
 #define MATTER_COUNT    (HAVE_MATTER ? 28 : 0)
 #define ARRAY_COUNT     BASE_COUNT + ESPHOME_COUNT + MATTER_COUNT
@@ -302,6 +302,7 @@ consteval std::array<hashed_elfsym, ARRAY_COUNT> create_customer_table()
     // mpoll
     ESP_ELFSYM_EXPORT(mpoll_ctl),
     ESP_ELFSYM_EXPORT(mpoll_wait),
+    ESP_ELFSYM_EXPORT(mpoll_wakeup),
     ESP_ELFSYM_EXPORT(mpoll_gpio_intr_mask),
     ESP_ELFSYM_EXPORT(mpoll_uart_intr_mask),
     ESP_ELFSYM_EXPORT(mpoll_intr),
